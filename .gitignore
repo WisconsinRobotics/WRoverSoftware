@@ -6,3 +6,4 @@ venv/
 .vscode/
 src/arm_test/bin/
 /launch/__pycache__/
+src/relaxed_ik_ros2

@@ -62,10 +62,18 @@ public:
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = .02; // A position error of 0.2 rotations results in 12 V output
-        slot0.kI = 0; // No output for integrated error
+        slot0.kP = .04; // A position error of 0.2 rotations results in 12 V output
+        slot0.kI = 0.15; // No output for integrated error
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
+        configs::Slot1Configs &slot1 = cfg.Slot1;
+        slot1.kS = 0.0; // Add 0.25 V output to overcome static friction
+        slot1.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
+        slot1.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
+        slot1.kP = .0355; // A position error of 0.2 rotations results in 12 V output
+        slot1.kI = 0.15; // No output for integrated error
+        slot1.kD = 0.03; // A velocity error of 1 rps results in 0.5 V output
+
         ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
         ctre::phoenix::StatusCode statusS = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
         // Configure elbow motor
@@ -93,9 +101,15 @@ private:
     void timer_callback_shoulder()
     {
         ctre::phoenix::unmanaged::FeedEnable(10);
-        elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(0));
-        std::cout << "Pos: " << shoulderMotor.GetPosition() << std::endl;
-        shoulderMotor.SetControl(shoulderOut.WithPosition(shoulder_position * 1_tr).WithSlot(0));
+        //if (abs(shoulderMotor.GetPosition() - shoulder_position) < .1 && abs(elbowMotor.GetPosition() - shoulder_position) < .1 ){
+            
+        //}else{
+        elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(1).WithOverrideBrakeDurNeutral(true));
+        shoulderMotor.SetControl(shoulderOut.WithPosition(shoulder_position * 1_tr).WithSlot(0).WithOverrideBrakeDurNeutral(true));
+        //}
+        std::cout << "Shoulder: " << shoulderMotor.ToString() << std::endl;
+        std::cout << "Pos Elbow: " << elbowMotor.ToString() << std::endl;
+
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
