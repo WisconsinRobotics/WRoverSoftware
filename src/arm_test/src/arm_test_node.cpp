@@ -16,13 +16,14 @@ public:
           elbowMotor(1, "can0"),
           shoulderMotor(0, "can0"),
           shoulderOut(0),
-          elbowOut(0_tps),
+          elbowOut(units::angular_velocity::turns_per_second_t(0)),
           shoulder_speed(0), // Initialize speeds to 0
           elbow_speed(0)
     {
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
             "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
 
+        // fx_cfg is the default config with inverted output
         configs::TalonFXConfiguration fx_cfg{};
 
         /* the left motor is CCW+ */
@@ -42,11 +43,11 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-        mm.MotionMagicCruiseVelocity = 2_tps; // 5 (mechanism) rotations per second cruise
-        mm.MotionMagicAcceleration = 5_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
+        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2).value(); // 5 (mechanism) rotations per second cruise
+        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
-        mm.MotionMagicJerk = 100_tr_per_s_cu;
-        
+        mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
+
         configs::Slot0Configs &slot0 = cfg.Slot0;
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
@@ -56,6 +57,7 @@ public:
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
         ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
+        // Configure elbow motor
         for (int i = 0; i < 5; ++i) {
             status = elbowMotor.GetConfigurator().Apply(cfg);
             if (status.IsOK()) break;
@@ -71,11 +73,13 @@ private:
         ctre::phoenix::unmanaged::FeedEnable(20);
         shoulderOut.Output = shoulder_speed;
         // Convert Output to double before printing
-        std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
-                   << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
-        std::cout << elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0))) << std::endl;
+        //std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
+        //           << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
+        // NOTE speed 0
+        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 0_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
         std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
         std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        RCLCPP_INFO(get_logger(), "Elbow Speed: '%f'", elbow_speed);    
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
@@ -88,7 +92,7 @@ private:
 
         // Store values as class members for periodic updates
         shoulder_speed = msg.data[1];
-        elbow_speed = static_cast<double>(msg.data[2]* 5_tps); // Go for plus/minus 1 rotations per second
+        elbow_speed = static_cast<double>(msg.data[0]* 5_tps); // Go for plus/minus 1 rotations per second
         
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
                   //<< ", Elbow: " << elbow_speed << '\n';
