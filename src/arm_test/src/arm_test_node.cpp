@@ -23,6 +23,7 @@ public:
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
             "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
 
+        // fx_cfg is the default config with inverted output
         configs::TalonFXConfiguration fx_cfg{};
 
         /* the left motor is CCW+ */
@@ -42,13 +43,10 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-        // mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2); // 5 (mechanism) rotations per second cruise
-        // mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5); // Take approximately 0.5 seconds to reach max vel
-        mm.MotionMagicCruiseVelocity = 2;
-        mm.MotionMagicAcceleration = 5;
+        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2).value(); // 5 (mechanism) rotations per second cruise
+        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
-        // mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100);
-        mm.MotionMagicJerk = 100;
+        mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
 
         configs::Slot0Configs &slot0 = cfg.Slot0;
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
@@ -59,8 +57,17 @@ public:
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
         ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
+        // Configure elbow motor
         for (int i = 0; i < 5; ++i) {
             status = elbowMotor.GetConfigurator().Apply(cfg);
+            if (status.IsOK()) break;
+        }
+        if (!status.IsOK()) {
+            std::cout << "Could not configure device. Error: " << status.GetName() << std::endl;
+        }
+        // Configure shoulder motor
+        for (int i = 0; i < 5; ++i) {
+            status = shoulderMotor.GetConfigurator().Apply(cfg);
             if (status.IsOK()) break;
         }
         if (!status.IsOK()) {
