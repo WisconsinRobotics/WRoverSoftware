@@ -15,7 +15,7 @@ class CANSubscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        #self.get_logger().info('I heard: "%s"' % msg.data)
+        self.get_logger().info('I heard: "%s"' % msg.data)
         # Parse message for data
         # NOTE: Assuming "vesc_id COMMAND value value_type"
         can_msg = msg.data.split(' ')
@@ -136,10 +136,10 @@ def build_msg(command: str, value: int, vesc_id: int, raw: bool = False):
     int_id = int(id, 2)
 
     # build data
-    int_data = value * scaling
+    int_data = int(value) * scaling
     int_data = int(int_data)
     # VESC uses big endian, and we need 4 bytes
-    data = int_data.to_bytes(4, byteorder='big')
+    data = int_data.to_bytes(4, byteorder='big', signed= True)
 
     # build pycan msg
     if raw:
