@@ -87,8 +87,10 @@ private:
     {
         ctre::phoenix::unmanaged::FeedEnable(10);
         elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0));
-        //std::cout << "Vel: " << shoulderMotor.GetVelocity() << std::endl;
+        std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
         shoulderMotor.SetControl(shoulderOut.WithVelocity(shoulder_speed * 1_tps).WithSlot(0));
+
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
