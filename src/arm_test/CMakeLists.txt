@@ -25,7 +25,7 @@ find_package(phoenix6 REQUIRED) # Ensure this is the correct package name
 add_executable(ik_test_node src/ik_test_node.cpp)
 ament_target_dependencies(ik_test_node rclcpp std_msgs)
 
-add_executable(arm_test_node src/ik_test_node.cpp)
+add_executable(arm_test_node src/arm_test_node.cpp)
 ament_target_dependencies(arm_test_node rclcpp std_msgs)
 
 target_include_directories(ik_test_node PUBLIC

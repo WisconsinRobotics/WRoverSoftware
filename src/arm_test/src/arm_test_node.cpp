@@ -57,7 +57,7 @@ public:
         slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
         slot0.kP = .01; // A position error of 0.2 rotations results in 12 V output
-        slot0.kI = 0; // No output for integrated error
+        slot0.kI = 0.0001; // No output for integrated error
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
         ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;

@@ -53,8 +53,8 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(20).value(); // 5 (mechanism) rotations per second cruise
-        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(100).value(); // Take approximately 0.5 seconds to reach max vel
+        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(30).value(); // 5 (mechanism) rotations per second cruise
+        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(500).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
         mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
 
@@ -62,7 +62,7 @@ public:
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = .01; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = .02; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
