@@ -1,22 +1,30 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
+from std_msgs.msg import String, Float32
 import can
+import time
 
 # See https://github.com/vedderb/bldc/blob/master/documentation/comm_can.md
 class CANSubscriber(Node):
 
     def __init__(self):
         super().__init__('can_subscriber')
+        # Subscriber for CAN requests
         self.subscription = self.create_subscription(
             String,
             'can_msg',
             self.listener_callback,
             10)
+        
+        # Publishers for canbus data
         # NOTE: This may need to be tuned
         max_queue = 10
-        self.status_publisher = self.create_publisher(String, 'status_command', max_queue)
-        self.subscription  # prevent unused variable warning
+        timer_freq = 0.01 # seconds
+        self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
+        self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
+        self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
+        self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
+        self.timer = self.create_timer(timer_freq, self.timer_callback)
 
     def listener_callback(self, msg):
         #self.get_logger().info('I heard: "%s"' % msg.data)
@@ -42,11 +50,41 @@ class CANSubscriber(Node):
         # TODO: Add capability to synchronize message consumption
         # Send message
         send_msg(compiled_msg=compiled_msg)
-        
-        # If the message was a status message, we'll need to record what kind. 
-        # The canbus will only receive a bitarray, no indication of what it means. 
-        if is_status:
-            self.status_publisher.publish(command)
+
+        # TODO if someone needs to manually send status commands, deal with that here
+
+    def timer_callback(self):
+        receive_canbus(2)
+
+def receive_canbus(num_messages: int, infty: bool = False):
+    """
+    Queries the canbus for data. 
+
+    Args:
+        num_messages: Number of messages to parse before exiting. 
+        infty: Whether to query the canbus until it runs out of messages. 
+    """
+    channel = 'can0'
+    with can.Bus(channel=channel, interface='socketcan') as bus:
+        # if you try to query for all messages in the canbus,
+        # the canbus publishes more messages than you can parse
+        i = 0
+        for msg in bus:
+            if i == num_messages and not infty:
+                break
+
+            # Parse arbitration id
+            arbitration_id = bin(msg.arbitration_id)[2:].zfill(29)
+            command_id = int(arbitration_id[13:21], 2)
+            vesc_id = int(arbitration_id[21:], 2)
+            print(f"command id {command_id} with vesc id {vesc_id}")
+            # time.sleep(0.1)
+
+            # Find the correct command
+            # match command_id:
+            #     case 16: # 
+
+            i += 1
 
 def send_msg(compiled_msg: can.message.Message):
     """Immediately send a compiled CAN message"""
@@ -231,7 +269,6 @@ def build_msg(command: str, value: int, vesc_id: int, raw: bool = False):
         return id, data
     # VESC uses extended ids
     return can.Message(arbitration_id=int_id, data=data, is_extended_id=True), is_status
-
 
 def main(args=None):
     rclpy.init(args=args)
