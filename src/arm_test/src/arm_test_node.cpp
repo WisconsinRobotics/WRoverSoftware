@@ -42,11 +42,14 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2); // 5 (mechanism) rotations per second cruise
-        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5); // Take approximately 0.5 seconds to reach max vel
+        // mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2); // 5 (mechanism) rotations per second cruise
+        // mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5); // Take approximately 0.5 seconds to reach max vel
+        mm.MotionMagicCruiseVelocity = 2;
+        mm.MotionMagicAcceleration = 5;
         // Take approximately 0.1 seconds to reach max accel 
-        mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100);
-        
+        // mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100);
+        mm.MotionMagicJerk = 100;
+
         configs::Slot0Configs &slot0 = cfg.Slot0;
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
@@ -73,10 +76,11 @@ private:
         // Convert Output to double before printing
         //std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
         //           << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
-        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
-        //std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
-        //std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
-        //RCLCPP_INFO(get_logger(), "Elbow Speed: '%f'", elbow_speed);    
+        // NOTE speed 0
+        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 0_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
+        std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
+        std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        RCLCPP_INFO(get_logger(), "Elbow Speed: '%f'", elbow_speed);    
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
