@@ -65,14 +65,6 @@ public:
         if (!status.IsOK()) {
             std::cout << "Could not configure device. Error: " << status.GetName() << std::endl;
         }
-        // Configure shoulder motor
-        for (int i = 0; i < 5; ++i) {
-            status = shoulderMotor.GetConfigurator().Apply(cfg);
-            if (status.IsOK()) break;
-        }
-        if (!status.IsOK()) {
-            std::cout << "Could not configure device. Error: " << status.GetName() << std::endl;
-        }
     }
 
 private:
