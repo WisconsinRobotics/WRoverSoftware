@@ -30,7 +30,7 @@ class XboxPublisher(Node):
         if len(self.joysticks) > 1:
             #TODO: Check inputs for armself.joysticks[1].joy 
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-            motion = [-self.joysticks[1].get_axis(4), #Right stick y-axis (hopefully)
+            motion = [self.joysticks[1].get_axis(4), #Right stick y-axis (hopefully)
                         -self.joysticks[1].get_axis(1), #Left stick y-axis
                         self.joysticks[1].get_axis(2), #Left trigger
                         self.joysticks[1].get_axis(5)] #Right trigger

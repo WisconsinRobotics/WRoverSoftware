@@ -13,9 +13,4 @@ def generate_launch_description():
             executable='arm_test_neo',
             name='arm_test_neo'
         ),
-        Node(
-            package='arm_test',
-            executable='arm_test_node',
-            name='arm_test_node'
-        )
     ])

@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Float64
+from custom_msgs_srvs.msg import GripperPosition
 import math
 
 class SwerveControlSubsrciber(Node):
@@ -9,10 +10,10 @@ class SwerveControlSubsrciber(Node):
     def __init__(self):
         super().__init__('swerve_control')
         #TODO:CHANGE IDS
-        self.vesc_ids = {"BASE":["78"],
+        self.vesc_ids = {"BASE":["79"],
                          "WRIST_LEFT":["80"],
                          "WRIST_RIGHT":["81"],
-                         "GRIPPER":["79"]
+                         "GRIPPER":["78"]
                         }
         self.max_rpm = 6000
         self.limit_rotation = 0
@@ -24,13 +25,13 @@ class SwerveControlSubsrciber(Node):
             10)
 
         self.subscription_wrist_left = self.create_subscription(
-            Float64,
+            GripperPosition,
             'arm_wrist_left',
             self.arm_listener_wrist_left,
             10)
         
         self.subscription_wrist_right = self.create_subscription(
-            Float64,
+            GripperPosition,
             'arm_wrist_right',
             self.arm_listener_wrist_right,
             10)
@@ -54,21 +55,21 @@ class SwerveControlSubsrciber(Node):
 
     def arm_listener_wrist_left(self, msg):
         can_msg_angle = String()
-        turn_amount = (msg.data)
+        turn_amount = (msg.left_position)
        
         can_msg_angle.data = self.vesc_ids["WRIST_LEFT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
         self.publisher_.publish(can_msg_angle)
-        #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
+        self.get_logger().info('Publishing Angle WRIST_LEFT: "%s"' % can_msg_angle)
 
     def arm_listener_wrist_right(self, msg):
         can_msg_angle = String()
-        turn_amount = (msg.data)
+        turn_amount = (msg.right_position)
         
         can_msg_angle.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
         self.publisher_.publish(can_msg_angle)
-        #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
+        self.get_logger().info('Publishing Angle WRIST_RIGHT: "%s"' % can_msg_angle)
 
     def arm_listener_gripper(self, msg):
         can_msg_rpm = String()
