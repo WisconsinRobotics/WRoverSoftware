@@ -26,7 +26,6 @@ class XboxPublisher(Node):
     def timer_callback(self):
         #We have button capability, yippee. 
         running = True
-<<<<<<< HEAD
         while running:
             #print(len(self.joysticks))
             if len(self.joysticks) > 0:

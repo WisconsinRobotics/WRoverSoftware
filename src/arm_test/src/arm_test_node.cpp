@@ -13,9 +13,9 @@ class MinimalSubscriber : public rclcpp::Node
 public:
     MinimalSubscriber()
         : Node("arm_test"),
-          elbowMotor(1, "can0"),
-          shoulderMotor(0, "can0"),
-          shoulderOut(0),
+          elbowMotor(4, "can0"),
+          shoulderMotor(5, "can0"),
+          shoulderOut(units::angular_velocity::turns_per_second_t(0)),
           elbowOut(units::angular_velocity::turns_per_second_t(0)),
           shoulder_speed(0), // Initialize speeds to 0
           elbow_speed(0)
@@ -43,8 +43,8 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2).value(); // 5 (mechanism) rotations per second cruise
-        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5).value(); // Take approximately 0.5 seconds to reach max vel
+        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(20).value(); // 5 (mechanism) rotations per second cruise
+        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(10).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
         mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
 
@@ -52,7 +52,7 @@ public:
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
         slot0.kV = 0.0; // A velocity target of 1 rps results in 0.12 V output
         slot0.kA = 0.00; // An acceleration of 1 rps/s requires 0.01 V output
-        slot0.kP = .3; // A position error of 0.2 rotations results in 12 V output
+        slot0.kP = .01; // A position error of 0.2 rotations results in 12 V output
         slot0.kI = 0; // No output for integrated error
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
@@ -71,15 +71,18 @@ private:
     void timer_callback()
     {
         ctre::phoenix::unmanaged::FeedEnable(20);
-        shoulderOut.Output = shoulder_speed;
         // Convert Output to double before printing
         //std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
         //           << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
         // NOTE speed 0
-        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 0_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
-        std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
-        std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
-        RCLCPP_INFO(get_logger(), "Elbow Speed: '%f'", elbow_speed);    
+        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
+        shoulderMotor.SetControl(shoulderOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
+        //std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
+        //std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        RCLCPP_INFO(get_logger(), "Elbow Pos: '%f'", elbowMotor.GetPosition() );    
+    
+        RCLCPP_INFO(get_logger(), "Shoulder Speed: '%f'", shoulderMotor.GetPosition() );    
+    
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
@@ -92,7 +95,9 @@ private:
 
         // Store values as class members for periodic updates
         shoulder_speed = msg.data[1];
-        elbow_speed = static_cast<double>(msg.data[0]* 5_tps); // Go for plus/minus 1 rotations per second
+        elbow_speed = static_cast<double>(msg.data[1]* 20_tps); // Go for plus/minus 1 rotations per second
+        
+        shoulder_speed = static_cast<double>(msg.data[0]* 20_tps); // Go for plus/minus 1 rotations per second
         
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
                   //<< ", Elbow: " << elbow_speed << '\n';
@@ -103,7 +108,7 @@ private:
 
     hardware::TalonFX elbowMotor;
     hardware::TalonFX shoulderMotor;
-    controls::DutyCycleOut shoulderOut;
+    controls::MotionMagicVelocityVoltage shoulderOut;
     controls::MotionMagicVelocityVoltage elbowOut;
 
     // Moved speeds to class members
