@@ -77,12 +77,11 @@ def receive_canbus(num_messages: int, infty: bool = False):
             arbitration_id = bin(msg.arbitration_id)[2:].zfill(29)
             command_id = int(arbitration_id[13:21], 2)
             vesc_id = int(arbitration_id[21:], 2)
+            # TODO for now, the values are strangely off by ~1-2, and sometimes 58 instead of 28.
+            # Not sure why, might need to investigate electrical. 
             print(f"command id {command_id} with vesc id {vesc_id}")
-            # time.sleep(0.1)
 
             # Find the correct command
-            # match command_id:
-            #     case 16: # 
 
             i += 1
 
