@@ -9,6 +9,7 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     # y component is vehicle_translation +/- rot_vel*body_height/2
     # + or - depends on what wheel it is
 
+
     # Kohler added code here to handle triggers
 
     rotational_velocity = -((float(rotational_velocity[0]) + 1) / 2.0) + ((float(rotational_velocity[1]) + 1.0) / 2.0)
@@ -29,6 +30,7 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     FR_vector = [B, C]
     BL_vector = [A, D]
     BR_vector = [A, C]
+
     return [FL_vector, FR_vector, BL_vector, BR_vector]
 
 def get_wheel_speed(wheel_vector):
@@ -76,6 +78,14 @@ class SwerveSubscriber(Node):
         wheel_angles  = get_wheel_angles(wheel_vectors)
         #print("Wheel Speeds", wheel_speeds)
         #print("Wheel Angles", wheel_angles)
+        for i in range (0, 3):
+            if wheel_angles[i] < -90.0:
+                wheel_angles[i] += 180.0
+                wheel_speeds[i] *= -1.0
+            elif wheel_angles[i] > 90.0: 
+                wheel_angles[i] -= 180.0
+                wheel_speeds[i] *= -1.0
+
 
         # TODO: Make this more abstract for actual control
         if len(wheel_speeds) == 4 and len(wheel_angles) == 4:

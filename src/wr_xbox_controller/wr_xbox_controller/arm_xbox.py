@@ -26,6 +26,7 @@ class XboxPublisher(Node):
     def timer_callback(self):
         #We have button capability, yippee. 
         running = True
+<<<<<<< HEAD
         while running:
             #print(len(self.joysticks))
             if len(self.joysticks) > 0:
@@ -82,7 +83,7 @@ class XboxPublisher(Node):
                 buttons_command = Int16MultiArray()
                 buttons_command.data = self.buttons  
                 self.buttons_publisher_.publish(buttons_command)          
-                        
+                
 
                 # Handle hotplugging
                 if event.type == pygame.JOYDEVICEADDED:
