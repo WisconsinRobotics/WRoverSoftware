@@ -18,7 +18,7 @@ sudo docker build -t urc-container . # Don't use sudo if on windows
 sudo docker run -it --e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/workspace --net=host urc-container
 
 # If you are on windows, run the following instead
-docker run -it -e DISPLAY=host.docker.internal:0.0 -v $(pwd):/workspace --net=host urc-container
+docker run -it -e DISPLAY=host.docker.internal:0.0 -v ${PWD}:/workspace --net=host urc-container
 
 
 ```
