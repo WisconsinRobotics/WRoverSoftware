@@ -1,34 +1,46 @@
 # URC
 
 ## Setup
-Make sure you have installed docker.
+We have only tested these instructions on Ubuntu and Windows.
 
-If you are on windows, don't do the following and instead install https://sourceforge.net/projects/vcxsrv/. Start XLaunch (from the VcXsrv program group), choose the display settings (e.g., multiple windows), and ensure "Disable access control" is checked.
+### Install Docker
+Make sure you have installed docker. You can install docker [here for windows](https://docs.docker.com/desktop/install/windows-install/) or [here for linux](https://docs.docker.com/desktop/install/linux/)
 
+### First you need to setup display forwarding
+
+**If you are on windows...**
+Install https://sourceforge.net/projects/vcxsrv/. Start XLaunch (from the VcXsrv program group), choose the display settings (e.g., multiple windows), and ensure "Disable access control" is checked.
+
+**If you are windows...**
 First set up display forwarding:
 ```bash
 xhost +local:
 ```
+### Build and Start The Container
+Now  build the container image and start the container. Make sure you are in this directories root directory. These commands use the current directory as the containers file system so any changes you make to the files on your host machine will be mirrored in the container. These commands also allow the containers display to be forwarded to your host machine so that you can see it.
 
-Now  build the container image and start the container. Make sure you are in this directories root directory. These commands use the current directory as the containers file system so any changes you make to the files on your host machine will be mirrored in the container. TJese commands also allow the containers display to be forwarded to your host machine so that you can see it.
+**If you are on linux...**
 ```bash
-sudo docker build -t urc-container . # Don't use sudo if on windows
-
-# If you are on linux run
+sudo docker build -t urc-container .
 sudo docker run -it --e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/workspace --net=host urc-container
+```
 
-# If you are on windows, run the following instead
+**If you are on Windows...**
+```bash
+docker build -t urc-container .
 docker run -it -e DISPLAY=host.docker.internal:0.0 -v ${PWD}:/workspace --net=host urc-container
 
 
 ```
 
+### Setup Container
+Now your container should be running and you should be in your container's terminal.
 ```bash
 source /opt/ros/jazzy/setup.bash
 cd workspace
 ```
 
-Now you can run everything in README.md
+Now you are ready to run everything in README.md.
 
 
 ## Notes
