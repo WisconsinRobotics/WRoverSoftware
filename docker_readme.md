@@ -9,10 +9,10 @@ Make sure you have installed docker. You can install docker [here for windows](h
 ### First you need to setup display forwarding
 
 **If you are on windows...**
-Install https://sourceforge.net/projects/vcxsrv/. Start XLaunch (from the VcXsrv program group), choose the display settings (e.g., multiple windows), and ensure "Disable access control" is checked.
+Install https://sourceforge.net/projects/vcxsrv/. Start XLaunch (from the VcXsrv program group), set display settings to multiple windows, and ensure "Disable access control" is checked.
 
-**If you are windows...**
-First set up display forwarding:
+**If you are linux...**
+Set up display forwarding by running:
 ```bash
 xhost +local:
 ```
@@ -29,8 +29,6 @@ sudo docker run -it --e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(p
 ```bash
 docker build -t urc-container .
 docker run -it -e DISPLAY=host.docker.internal:0.0 -v ${PWD}:/workspace --net=host urc-container
-
-
 ```
 
 ### Setup Container
