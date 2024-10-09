@@ -53,8 +53,6 @@ Rebase the branch you intend to merge onto the target branch. Unclean branches c
 - Bug fixes and preformance enchancements should be seperated into different commits.
 - Use the `Depends-on` footer tag to indicate a commit
 
-
-#
 #### Opening Pull requests
 
 With your clean branch, open a pull request on github. This can be done through the github issue if applicable. 
