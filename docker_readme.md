@@ -22,7 +22,7 @@ Now  build the container image and start the container. Make sure you are in thi
 **If you are on linux...**
 ```bash
 sudo docker build -t urc-container .
-sudo docker run -it --e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/workspace --net=host urc-container
+sudo docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/workspace --net=host urc-container
 ```
 
 **If you are on Windows...**
