@@ -6,20 +6,7 @@
   name="urdf_visualization/urdf">
   <link
     name="base_link">
-    <inertial>
-      <origin
-        xyz="9.1830074983592E-19 -9.80159456515381E-19 0.015606490089144"
-        rpy="0 0 0" />
-      <mass
-        value="0.93972387307473" />
-      <inertia
-        ixx="0.00251429022255044"
-        ixy="7.37485241366082E-20"
-        ixz="8.66637218064247E-21"
-        iyy="0.0021336882069818"
-        iyz="1.14091331088149E-19"
-        izz="0.0044229329573873" />
-    </inertial>
+
     <visual>
       <origin
         xyz="0 0 0"

@@ -28,3 +28,9 @@ Add all the doc changes... (replaced urdf_test with urdf_visualization)
 colcon build
 source install/setup.bash
 ros2 launch urdf_visualization display.launch.py
+
+
+The last step is to adjust the RViz parameters. Under “Global Options”, find “Fixed Frame”, and type “base_link”. This is the name of the link from the URDF file. Then, click on the add button and find “RobotModel ”. Under RobotModel, find “Description Source”, and select Topic. Then, under “Description Topic”, select “/robot_description”. The graph is shown below.
+
+
+https://automaticaddison.com/how-to-load-a-urdf-file-into-rviz-ros-2/
