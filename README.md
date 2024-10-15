@@ -4,7 +4,7 @@ This is our repo for testing the arm inverse kinematics and control.
 
 
 ## Setup
-If you want to run this repo on a docker container (recommended), please follow the instructions in [DOCKER_README.md](DOCKER_README.md). If you do not want to run this on docker, please first go to the [Dockerfile](Dockerfile) and install all the packages listed in the `INSTALL PACKAGES` section.
+If you want to run this repo on a docker container (recommended), please follow the instructions in [DOCKER_README.md](DOCKER_README.md). If you do not want to run this on docker, please first follow the instruction in  [NON_DOCKER_README.md](/NON_DOCKER_README.md).
 
 Now build and source ros:
 ```bash
