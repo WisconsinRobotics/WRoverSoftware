@@ -5,8 +5,8 @@ Codebase for the URC rover at UW-Madison, 2024-2025.
 
 ### Branches
 
-- The `main` Branch is protected and will only accept changes through a peer reviewed merge request. `main` should include fully functionally, hardware compatable code. If hardware or software archeture changes make the branch unviable, the commit will be marked at deprecated with the date on the change.
-- The `development` branch is unprotected and to be used for untested changes. The branch will be rebased on any changes to `main`.
+- The `master` Branch is protected and will only accept changes through a peer reviewed merge request. `master` should include fully functionally, hardware compatable code. If hardware or software archeture changes make the branch unviable, the commit will be marked at deprecated with the date on the change.
+- The `development` branch is unprotected and to be used for untested changes. The branch will be rebased on any changes to `master`.
 - Public branches will be named
 `<dev type>/<project|misc>-[issue number]-<brief description>`
 	- `feature/` branches are clean, buildable, and only rebased before a pull request or when nescessary
@@ -40,7 +40,7 @@ Codebase for the URC rover at UW-Madison, 2024-2025.
     - `Depends-on <Commit Hash>`
 
 ### Pull Requests
-Code will be merged into either `main` or an upstream development branch with a pull request.
+Code will be merged into either `master` or an upstream development branch with a pull request.
 
 #### Atomic Commits
 
