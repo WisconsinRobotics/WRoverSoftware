@@ -4,7 +4,7 @@ FROM osrf/ros:jazzy-desktop-full
 # Set noninteractive to avoid prompts during the build
 ARG DEBIAN_FRONTEND=noninteractive
 
-###### INSTALL PACKAGES ######
+# INSTALL PACKAGES
 RUN apt-get update && \
     apt-get install -y \
     curl\
@@ -14,7 +14,11 @@ RUN apt-get update && \
     ros-jazzy-joint-state-publisher-gui \
     ros-jazzy-xacro 
 
-##############################
+
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 WORKDIR /workspace/
 
