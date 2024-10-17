@@ -29,7 +29,7 @@ ros2 launch urdf_visualization display.launch.py
 * Visualizing URDF in RVIZ:
     * https://aleksandarhaber.com/how-to-create-urdf-and-launch-files-in-ros2-and-display-them-in-rviz/
     * https://www.learnros2.com/ros/ros2-building-blocks/configurations/rviz-configuration
-
+* Relaxed IK: https://github.com/uwgraphics/relaxed_ik_ros2
 
 ## Mya notes please ignore
 ```bash
