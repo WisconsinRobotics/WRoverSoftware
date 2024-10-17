@@ -29,3 +29,18 @@ ros2 launch urdf_visualization display.launch.py
 * Visualizing URDF in RVIZ:
     * https://aleksandarhaber.com/how-to-create-urdf-and-launch-files-in-ros2-and-display-them-in-rviz/
     * https://www.learnros2.com/ros/ros2-building-blocks/configurations/rviz-configuration
+
+
+## Mya notes please ignore
+```bash
+cd src/relaxed_ik_ros2/relaxed_ik_core
+cargo build
+cd ../../..
+
+cd ../..
+. install/setup.bash  # source install/setup.bash
+ros2 launch relaxed_ik_ros2 demo.launch.py
+```
+
+
+[ERROR] [launch]: Caught exception in launch (see debug for traceback): executable 'relaxed_ik_rust.py' not found on the libexec directory '/workspace/install/relaxed_ik_ros2/lib/relaxed_ik_ros2' 
