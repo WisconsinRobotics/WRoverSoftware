@@ -5,8 +5,8 @@ Codebase for the URC rover at UW-Madison, 2024-2025.
 
 ### Branches
 
-- The `main` Branch is protected and will only accept changes through a peer reviewed merge request. `main` should include fully functionally, hardware compatable code. If hardware or software archeture changes make the branch unviable, the commit will be marked at deprecated with the date on the change.
-- The `development` branch is unprotected and to be used for untested changes. The branch will be rebased on any changes to `main`.
+- The `master` Branch is protected and will only accept changes through a peer reviewed merge request. `master` should include fully functionally, hardware compatable code. If hardware or software archeture changes make the branch unviable, the commit will be marked at deprecated with the date on the change.
+- The `development` branch is unprotected and to be used for untested changes. The branch will be rebased on any changes to `master`.
 - Public branches will be named
 `<dev type>/<project|misc>-[issue number]-<brief description>`
 	- `feature/` branches are clean, buildable, and only rebased before a pull request or when nescessary
@@ -40,7 +40,7 @@ Codebase for the URC rover at UW-Madison, 2024-2025.
     - `Depends-on <Commit Hash>`
 
 ### Pull Requests
-Code will be merged into either `main` or an upstream development branch with a pull request.
+Code will be merged into either `master` or an upstream development branch with a pull request.
 
 #### Atomic Commits
 
@@ -61,3 +61,15 @@ With your clean branch, open a pull request on github. This can be done through 
 Overarching system details will be described through Software Projects files.
 
 There is no particular code style guide that we use, however there are specific requirments that we would like to see while developing, such as giving each function a docstring that describes how the function works, its parameters, as well as the return. Code should be commented often, a good rule of thumb is about every 3 to 5 lines of code there should be a line of comment minimum. Also, it is also helpful to type the arguements and return of the function, for example: def add_2_nums(int: a, int: b) -> int: this function specifies that it takes 2 ints and has a return that is also of type int. Additionally, you should make sure your code is readable and sensible; if there's anything that's confusing or unintuitive, use comments to clarify it for future maintainers.
+
+An example of this would look like this function below.\
+def add_2_nums(int: a, int: b) -> int:\
+&emsp;&emsp;"""\
+&emsp;&emsp;Computes the sum of 2 numbers\
+&emsp;&emsp;Args:\
+&emsp;&emsp;&emsp;&emsp;a (int): Number that will be added onto\
+&emsp;&emsp;&emsp;&emsp;b (int): The number you are adding\
+&emsp;&emsp;Returns:\
+&emsp;&emsp;&emsp;&emsp;int: the summed number\
+&emsp;&emsp;"""\
+&emsp;&emsp;return a + b
