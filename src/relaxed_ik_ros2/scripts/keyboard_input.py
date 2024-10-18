@@ -49,32 +49,35 @@ class KeyboardInput(Node):
         self.linear = [0.0,0.0,0.0]
         self.angular = [0.0,0.0,0.0]
 
-        if key.char == 'w':
-            self.linear[0] += self.pos_stride
-        elif key.char == 'x':
-            self.linear[0] -= self.pos_stride
-        elif key.char == 'a':
-            self.linear[1] += self.pos_stride
-        elif key.char == 'd':
-            self.linear[1] -= self.pos_stride
-        elif key.char == 'q':
-            self.linear[2] += self.pos_stride
-        elif key.char == 'z':
-            self.linear[2] -= self.pos_stride
-        elif key.char == '1':
-            self.angular[0] += self.rot_stride
-        elif key.char == '2':
-            self.angular[0] -= self.rot_stride
-        elif key.char == '3':
-            self.angular[1] += self.rot_stride
-        elif key.char == '4':
-            self.angular[1] -= self.rot_stride
-        elif key.char == '5':
-            self.angular[2] += self.rot_stride
-        elif key.char == '6':
-            self.angular[2] -= self.rot_stride
-        elif key.char == 'c':
-            rclpy.shutdown()
+        try:
+            if key.char == 'w':
+                self.linear[0] += self.pos_stride
+            elif key.char == 'x':
+                self.linear[0] -= self.pos_stride
+            elif key.char == 'a':
+                self.linear[1] += self.pos_stride
+            elif key.char == 'd':
+                self.linear[1] -= self.pos_stride
+            elif key.char == 'q':
+                self.linear[2] += self.pos_stride
+            elif key.char == 'z':
+                self.linear[2] -= self.pos_stride
+            elif key.char == '1':
+                self.angular[0] += self.rot_stride
+            elif key.char == '2':
+                self.angular[0] -= self.rot_stride
+            elif key.char == '3':
+                self.angular[1] += self.rot_stride
+            elif key.char == '4':
+                self.angular[1] -= self.rot_stride
+            elif key.char == '5':
+                self.angular[2] += self.rot_stride
+            elif key.char == '6':
+                self.angular[2] -= self.rot_stride
+            elif key.char == 'c':
+                rclpy.shutdown()
+        except AttributeError:
+            pass
         
         print("   Linear Vel: {}, Angular Vel: {}".format(self.linear, self.angular))
 
