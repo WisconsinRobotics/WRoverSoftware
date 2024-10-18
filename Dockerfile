@@ -12,9 +12,18 @@ RUN apt-get update && \
     wget\
     ros-jazzy-joint-state-publisher \
     ros-jazzy-joint-state-publisher-gui \
-    ros-jazzy-xacro 
+    ros-jazzy-xacro\
+    python3-pykdl
 
 
+# Install python packages
+
+
+# Install python packages (WARNING: Only use break-system-packages in container!!!!)
+RUN pip install --break-system-packages urdf-parser-py\
+    readchar\
+    pynput\
+    pandas
 
 # Install Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y

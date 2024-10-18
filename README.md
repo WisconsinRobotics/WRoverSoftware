@@ -40,6 +40,16 @@ cd ../../..
 cd ../..
 . install/setup.bash  # source install/setup.bash
 ros2 launch relaxed_ik_ros2 demo.launch.py
+
+
+chmod +x /workspace/src/relaxed_ik_ros2/scripts/relaxed_ik_rust.py 
+chmod +x /workspace/src/relaxed_ik_ros2/scripts/relaxed_ik_rust.py 
+
+
+
+ros2 launch urdf_visualization demo.launch.py
+
+
 ```
 
 

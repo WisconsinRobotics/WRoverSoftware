@@ -18,7 +18,8 @@ sudo apt-get install -y \
     wget\
     ros-jazzy-joint-state-publisher \
     ros-jazzy-joint-state-publisher-gui \
-    ros-jazzy-xacro
+    ros-jazzy-xacro\
+    python3-pykdl
 ```
 
 You're a supestar, now you are ready to continue to [README.md](/README.md).
