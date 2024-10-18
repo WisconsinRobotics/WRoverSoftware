@@ -13,7 +13,8 @@ RUN apt-get update && \
     ros-jazzy-joint-state-publisher \
     ros-jazzy-joint-state-publisher-gui \
     ros-jazzy-xacro\
-    python3-pykdl
+    python3-pykdl\
+    vim
 
 
 # Install python packages
