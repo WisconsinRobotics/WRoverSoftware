@@ -7,4 +7,3 @@ cd relaxed_ik_core
 cargo build
 cd /workspace/src
 colcon build --symlink-install
-. install/setup.bash
