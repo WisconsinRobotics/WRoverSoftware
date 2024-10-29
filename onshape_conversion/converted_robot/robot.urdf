@@ -1,0 +1,86 @@
+<robot name="onshape">
+<link name="bevel_gear">
+<visual>
+<origin xyz="5.0076378346770959859e-18 -3.0854704527232397225e-18 0.049570249871069158032" rpy="1.5707963267948961139 2.8874728363842332049e-16 -1.6147872782251229129" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+<material name="bevel_gear_material">
+<color rgba="0.71372549019607844922 0.76078431372549015776 0.80000000000000004441 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="5.0076378346770959859e-18 -3.0854704527232397225e-18 0.049570249871069158032" rpy="1.5707963267948961139 2.8874728363842332049e-16 -1.6147872782251229129" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-2.5894163532206739618e-19 0.049570249871069158032 -7.4224509473234691085e-18" rpy="-3.1415926535897789051 1.5268053753646710913 -3.1415926535897775729" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+<material name="bevel_gear_material">
+<color rgba="0.71372549019607844922 0.76078431372549015776 0.80000000000000004441 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-2.5894163532206739618e-19 0.049570249871069158032 -7.4224509473234691085e-18" rpy="-3.1415926535897789051 1.5268053753646710913 -3.1415926535897775729" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="1.7347234759768070944e-18 0.049163849871069163766 -3.4694469519536141888e-18" rpy="0 -0 0" />
+<geometry>
+<mesh filename="package:///housing.stl"/>
+</geometry>
+<material name="housing_material">
+<color rgba="0.64705882352941179736 0.64705882352941179736 0.64705882352941179736 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="1.7347234759768070944e-18 0.049163849871069163766 -3.4694469519536141888e-18" rpy="0 -0 0" />
+<geometry>
+<mesh filename="package:///housing.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="-6.8045116612781901857e-18 -1.2466995949282903293e-18 -0.049570249871069158032" rpy="-1.5707963267948961139 1.7949179802829327585e-16 1.6147872782251224688" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+<material name="bevel_gear_material">
+<color rgba="0.71372549019607844922 0.76078431372549015776 0.80000000000000004441 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-6.8045116612781901857e-18 -1.2466995949282903293e-18 -0.049570249871069158032" rpy="-1.5707963267948961139 1.7949179802829327585e-16 1.6147872782251224688" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+</collision>
+<visual>
+<origin xyz="9.5807547546996427251e-18 -0.049570249871069164971 -4.8874584349340099298e-19" rpy="6.8580834838513599182e-15 -1.5268053753646710913 3.1415926535897873428" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+<material name="bevel_gear_material">
+<color rgba="0.71372549019607844922 0.76078431372549015776 0.80000000000000004441 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="9.5807547546996427251e-18 -0.049570249871069164971 -4.8874584349340099298e-19" rpy="6.8580834838513599182e-15 -1.5268053753646710913 3.1415926535897873428" />
+<geometry>
+<mesh filename="package:///bevel_gear.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0 0 0" rpy="0 0 0"/>
+<mass value="0" />
+<inertia ixx="0" ixy="0"  ixz="0" iyy="0" iyz="0" izz="0" />
+</inertial>
+</link>
+
+
+</robot>
