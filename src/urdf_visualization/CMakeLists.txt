@@ -16,10 +16,6 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(
-  FILES scripts/relaxed_ik_rust.py scripts/rviz_viewer.py
-  DESTINATION lib/${PROJECT_NAME}
-)
 
 
 
