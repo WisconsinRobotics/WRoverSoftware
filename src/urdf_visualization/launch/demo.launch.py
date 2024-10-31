@@ -10,11 +10,11 @@ setting_file_path = path_to_src + '/config/arm.yaml'
 def generate_launch_description():
     # Load the infomation
     setting_file = open(setting_file_path, 'r')
+    
     settings = yaml.load(setting_file, Loader=yaml.FullLoader)
 
     # urdf_path = path_to_src + '/relaxed_ik_core/configs/urdfs/' + settings["urdf"]
     urdf_path = path_to_src + '/urdf/' + settings["urdf"]
-
     urdf_file = open(urdf_path, 'r')
     urdf_string = urdf_file.read()
 

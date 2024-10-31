@@ -8,6 +8,10 @@ If you want to run this repo on a docker container (recommended), please follow 
 
 Now build and source ros:
 ```bash
+cd src/relaxed_ik_ros2/relaxed_ik_core
+cargo build
+cd ../../..
+
 source /opt/ros/jazzy/setup.bash
 colcon build
 source install/setup.bash
@@ -16,6 +20,11 @@ source install/setup.bash
 To run the RVIZ visualization, do the following
 ```bash
 ros2 launch urdf_visualization display.launch.py
+```
+
+To run the IK (currently broken), run the following:
+```bash
+ros2 launch urdf_visualization demo.launch.py
 ```
 
 ## Notes
@@ -32,25 +41,7 @@ ros2 launch urdf_visualization display.launch.py
 * Relaxed IK: https://github.com/uwgraphics/relaxed_ik_ros2
 
 ## Mya notes please ignore
-```bash
-cd src/relaxed_ik_ros2/relaxed_ik_core
-cargo build
-cd ../../..
 
-cd ../..
-. install/setup.bash  # source install/setup.bash
-# ros2 launch relaxed_ik_ros2 demo.launch.py
-
-
-chmod +x /workspace/src/relaxed_ik_ros2/scripts/relaxed_ik_rust.py 
-chmod +x /workspace/src/relaxed_ik_ros2/scripts/relaxed_ik_rust.py 
-
-
-
-ros2 launch urdf_visualization demo.launch.py
 
 
 ```
-
-
-[ERROR] [launch]: Caught exception in launch (see debug for traceback): executable 'relaxed_ik_rust.py' not found on the libexec directory '/workspace/install/relaxed_ik_ros2/lib/relaxed_ik_ros2' 

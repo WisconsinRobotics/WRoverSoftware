@@ -10,10 +10,19 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
 install(
   DIRECTORY launch urdf config
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(
+  FILES scripts/relaxed_ik_rust.py scripts/rviz_viewer.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

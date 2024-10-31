@@ -342,7 +342,7 @@
     </collision>
   </link>
   <joint
-    name="wristRoll_link"
+    name="wristRoll_joint"
     type="revolute">
     <origin
       xyz="0 0 0"
