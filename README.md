@@ -13,8 +13,9 @@ cargo build
 cd ../../..
 
 source /opt/ros/jazzy/setup.bash
-colcon build
-source install/setup.bash
+colcon build --symlink-install
+. install/setup.bash
+chmod +x /workspace/install/relaxed_ik_ros2/lib/relaxed_ik_ros2/*
 ```
 ## Running
 To run the RVIZ visualization, do the following
@@ -24,7 +25,8 @@ ros2 launch urdf_visualization display.launch.py
 
 To run the IK (currently broken), run the following:
 ```bash
-ros2 launch urdf_visualization demo.launch.py
+ros2 launch relaxed_ik_ros2 demo.launch.py
+ros2 launch relaxed_ik_ros2 demo.launch.py setting_file_path:=/Workspace/src/relaxed_ik_ros2/relaxed_ik_core/configs/example_settings/arm.yaml
 ```
 
 ## Notes

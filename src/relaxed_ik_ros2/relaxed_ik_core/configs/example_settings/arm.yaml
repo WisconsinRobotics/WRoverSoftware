@@ -1,8 +1,0 @@
-urdf: model.urdf
-link_radius: 0.05 
-base_links:
-  - base_link
-ee_links:
-  - endEffector_link
-starting_config: [3.14, -1.95, -1.2, -3.14, -1.57, 1]
-obstacles:

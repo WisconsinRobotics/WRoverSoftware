@@ -92,7 +92,6 @@ class RvizViewer(Node):
 
     def ee_pose_goal_cb(self, msg):
         assert len(msg.ee_poses) == self.robot.num_chain
-
         for i in range(self.robot.num_chain):
             self.ee_poses[i] = msg.ee_poses[i]
         # self.update_marker()
