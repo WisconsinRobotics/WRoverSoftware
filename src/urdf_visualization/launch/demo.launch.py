@@ -34,7 +34,7 @@ def generate_launch_description():
             name='rviz2',
             executable='rviz2',
             output='screen',
-            arguments=['-d', path_to_src + "/rviz/relaxed_ik_viewer.rviz"],
+            arguments=['-d', path_to_current_package + "/config/relaxed_config.rviz"],
         ),
         Node(
             package='robot_state_publisher',
