@@ -20,7 +20,7 @@ chmod +x /workspace/install/relaxed_ik_ros2/lib/relaxed_ik_ros2/*
 ## Running
 To run the RVIZ visualization, do the following
 ```bash
-ros2 launch urdf_visualization display.launch.py
+ros2 launch urdf_visualization displayBot.launch.py
 ```
 
 To run the IK with keyboard controls, run the following:
