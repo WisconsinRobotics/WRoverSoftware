@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheels Control</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- create canvas and data panel -->
+    <div class="canvas-container">
+        <canvas id="canvas" width="1000" height="500" style="border: 5px solid black;"></canvas>
+        <div class="panels-container">
+            <div class="info-panel">
+                <h3>Wheel Information</h3>
+                <p><strong>Speed:</strong> <span id="speed-info">0</span></p>
+                <p><strong>Angle:</strong> <span id="angle-info">0</span></p>
+                <p><strong>Position (x, y):</strong> <span id="position-info">(0, 0)</span></p>
+            </div>
+            <div class="info-panel" id="gamepad-info">
+                <h3>Gamepad Information</h3>
+                <p><strong>Connected:</strong> <span id="gamepad-connected-info">False</span></p>
+                <p><strong>Name:</strong> <span id="gamepad-name-info">---</span></p>
+                <p><strong>Left Joystick X:</strong> <span id="ljx">0</span></p>
+                <p><strong>Left Joystick Y:</strong> <span id="ljy">0</span></p>
+                <p><strong>Right Joystick X:</strong> <span id="rjx">0</span></p>
+                <p><strong>Right Joystick Y:</strong> <span id="rjy">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- for ever wheel have a slider for angle and speed -->
+    <div class="container">
+        <div>
+            <h3>Front Wheels</h3>
+            <label>Front Left Wheel Angle: <input type="range" id="FL_angle" min="-1.57" max="1.57" step="0.01" value="0"></label><br>
+            <label>Front Left Wheel Speed: <input type="range" id="FL_speed" min="0" max="5" step="0.1" value="0"></label><br>
+            <label>Front Right Wheel Angle: <input type="range" id="FR_angle" min="-1.57" max="1.57" step="0.01" value="0"></label><br>
+            <label>Front Right Wheel Speed: <input type="range" id="FR_speed" min="0" max="5" step="0.1" value="0"></label>
+        </div>
+
+        <div>
+            <h3>Back Wheels</h3>
+            <label>Back Left Wheel Angle: <input type="range" id="BL_angle" min="-1.57" max="1.57" step="0.01" value="0"></label><br>
+            <label>Back Left Wheel Speed: <input type="range" id="BL_speed" min="0" max="5" step="0.1" value="0"></label><br>
+            <label>Back Right Wheel Angle: <input type="range" id="BR_angle" min="-1.57" max="1.57" step="0.01" value="0"></label><br>
+            <label>Back Right Wheel Speed: <input type="range" id="BR_speed" min="0" max="5" step="0.1" value="0"></label>
+        </div>
+        <div>  
+            <h3>Rotational and Translational Velocity</h3>
+            <label>Rotational Velocity: <input type="range" id="rotational_velocity" min="-1.57" max="1.57" step="0.01" value="0"></label><br>
+            <label>Translational Velocity: <input type="range" id="translational_velocity" min="0" max="5" step="0.1" value="0"></label><br>
+            <button type="button" onclick="reset_velocities()">Reset</button>
+        </div>
+    </div>
+
+    <script src="script.js" type="application/javascript"></script>
+
+</body>
+</html>

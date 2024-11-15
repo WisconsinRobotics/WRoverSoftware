@@ -1,0 +1,27 @@
+/* flex horizontal */
+.canvas-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px; 
+    margin-bottom: 20px;
+}
+
+/* create panel for data */
+.info-panel {
+    border: 1px solid #8ee806;
+    padding: 15px;
+    width: 300px;
+    border-radius: 8px;
+    background-color: #8183ba;
+}
+
+/* flex horizontal */
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.panels-container{
+    display: flex;
+    flex-direction: column;
+}
