@@ -4,7 +4,8 @@ RUN apt-get update && \
     apt-get install -y \
     python3-pip \
     openscad \
-    meshlab
+    meshlab \
+    vim
 RUN pip install onshape-to-robot --break-system-packages
 
 WORKDIR /workspace
