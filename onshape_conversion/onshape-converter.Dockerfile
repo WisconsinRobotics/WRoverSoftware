@@ -4,7 +4,8 @@ RUN apt-get update && \
     apt-get install -y \
     python3-pip \
     openscad \
-    meshlab
+    meshlab \
+    vim
 RUN pip install onshape-to-robot --break-system-packages
 
 WORKDIR /workspace
@@ -14,4 +15,4 @@ ENV ONSHAPE_ACCESS_KEY=""
 ENV ONSHAPE_SECRET_KEY=""
 ENV DOCUMENT_ID=""
 
-CMD ["python3", "run_onshape_conversion.py"]
+# CMD ["python3", "run_onshape_conversion.py"]
