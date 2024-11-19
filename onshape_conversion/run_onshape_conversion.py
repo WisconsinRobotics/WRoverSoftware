@@ -8,7 +8,12 @@ if __name__ == '__main__':
     onshape_secret = os.getenv("ONSHAPE_SECRET_KEY")
     document_id = os.getenv("DOCUMENT_ID")
     # NOTE: This may need to be updated if the assembly name changes
-    config = r'{"documentId": "' + document_id + '", "outputFormat": "urdf", "assemblyName": "ARM-PROTOTYPE"}'
+    config = '{' + f"""
+        "documentId": "{document_id}",
+        "outputFormat": "urdf",
+        "assemblyName": "ARM-PROTOTYPE",
+        "simplifySTLs": "all"
+    """ + '}'
     
     subprocess.run(['rm', '-f', 'converted_robot/*'])
     with open('converted_robot/config.json', 'w') as f:
