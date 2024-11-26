@@ -10,6 +10,8 @@ RUN pip install onshape-to-robot --break-system-packages
 
 WORKDIR /workspace
 
+COPY . .
+
 # These will be passed at runtime instead of build time
 ENV ONSHAPE_ACCESS_KEY=""
 ENV ONSHAPE_SECRET_KEY=""
