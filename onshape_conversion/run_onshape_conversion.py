@@ -6,13 +6,20 @@ if __name__ == '__main__':
     onshape_api = 'https://cad.onshape.com'
     onshape_key = os.getenv("ONSHAPE_ACCESS_KEY")
     onshape_secret = os.getenv("ONSHAPE_SECRET_KEY")
-    document_id = os.getenv("DOCUMENT_ID")
-    # NOTE: This may need to be updated if the assembly name changes
+    # NOTE: This may need to be updated if the document ID, workspaceID, orassembly name changes
+    # config = '{' + f"""
+    #     "documentId": "ef0f52aab7142cfef52a3b84",
+    #     "workspaceId": "aa6d735e54988a365f576f12",
+    #     "outputFormat": "urdf",
+    #     "assemblyName": "ARM-PROTOTYPE",
+    #     "simplifySTLs": "all"
+    # """ + '}'
+
     config = '{' + f"""
-        "documentId": "{document_id}",
+        "documentId": "ef0f52aab7142cfef52a3b84",
+        "workspaceId": "aa6d735e54988a365f576f12",
         "outputFormat": "urdf",
         "assemblyName": "ARM-PROTOTYPE",
-        "simplifySTLs": "all"
     """ + '}'
     
     subprocess.run(['rm', '-f', 'converted_robot/*'])

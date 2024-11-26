@@ -2,10 +2,15 @@ First, run these commands with the keys replaced:
 ```bash
 export ONSHAPE_ACCESS_KEY={our onshape key}
 export ONSHAPE_SECRET_KEY={our onshape secret}
-export DOCUMENT_ID={our document id}
 ```
 
 Then, run this command. 
 ```bash
-docker build -f onshape-converter.Dockerfile -t onshape-converter . && docker run -e ONSHAPE_ACCESS_KEY=$ONSHAPE_ACCESS_KEY -e ONSHAPE_SECRET_KEY=$ONSHAPE_SECRET_KEY -e DOCUMENT_ID=$DOCUMENT_ID -v $(pwd):/workspace onshape-converter
+docker build -f onshape-converter.Dockerfile -t onshape-converter . && docker run -e ONSHAPE_ACCESS_KEY=$ONSHAPE_ACCESS_KEY -e ONSHAPE_SECRET_KEY=$ONSHAPE_SECRET_KEY -v $(pwd):/workspace onshape-converter
 ```
+
+
+Note, this is setup for the following link:
+https://wirobotics.onshape.com/documents/ef0f52aab7142cfef52a3b84/w/aa6d735e54988a365f576f12/e/d87fc1d8e359617d16750c0b
+
+
