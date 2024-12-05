@@ -21,6 +21,14 @@ if __name__ == '__main__':
         "outputFormat": "urdf",
         "assemblyName": "ARM-PROTOTYPE",
     """ + '}'
+
+
+    # config = '{' + f"""
+    #     "documentId": "11a7f59e37f711d732274fca",
+    #     "workspaceId": "7807518dc67487ad405722c8",
+    #     "outputFormat": "urdf",
+    #     "assemblyName": "Robot",
+    # """ + '}'
     
     subprocess.run(['rm', '-f', 'converted_robot/*'])
     with open('converted_robot/config.json', 'w') as f:
