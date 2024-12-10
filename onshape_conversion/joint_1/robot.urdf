@@ -1,18 +1,18 @@
 <robot name="onshape">
-<link name="part_1">
+<link name="link_arm_hinge">
 <visual>
 <origin xyz="0 0 -3.5236570605778894105e-18" rpy="0 -0 0" />
 <geometry>
-<mesh filename="package:///part_1.stl"/>
+<mesh filename="package:///link_arm_hinge.stl"/>
 </geometry>
-<material name="part_1_material">
+<material name="link_arm_hinge_material">
 <color rgba="0.61568627450980395466 0.81176470588235294379 0.92941176470588238168 1.0"/>
 </material>
 </visual>
 <collision>
 <origin xyz="0 0 -3.5236570605778894105e-18" rpy="0 -0 0" />
 <geometry>
-<mesh filename="package:///part_1.stl"/>
+<mesh filename="package:///link_arm_hinge.stl"/>
 </geometry>
 </collision>
 <inertial>
@@ -22,33 +22,33 @@
 </inertial>
 </link>
 
-<link name="part_1__list_bssx4km84nfaeg_default">
+<link name="link_arm__list_bssx4km84nfaeg_default">
 <visual>
-<origin xyz="-1.1664760761878536966e-18 1.1664760761878542743e-18 -0.01905000000000000096" rpy="3.141592653589793116 -1.570796326794896558 0" />
+<origin xyz="-1.1664760761878565855e-18 1.166476076187853504e-18 -0.01905000000000000096" rpy="3.141592653589793116 -1.570796326794896558 0" />
 <geometry>
-<mesh filename="package:///part_1__list_bssx4km84nfaeg_default.stl"/>
+<mesh filename="package:///link_arm__list_bssx4km84nfaeg_default.stl"/>
 </geometry>
-<material name="part_1__list_bssx4km84nfaeg_default_material">
+<material name="link_arm__list_bssx4km84nfaeg_default_material">
 <color rgba="0.70196078431372543882 0.70196078431372543882 0.70196078431372543882 1.0"/>
 </material>
 </visual>
 <collision>
-<origin xyz="-1.1664760761878536966e-18 1.1664760761878542743e-18 -0.01905000000000000096" rpy="3.141592653589793116 -1.570796326794896558 0" />
+<origin xyz="-1.1664760761878565855e-18 1.166476076187853504e-18 -0.01905000000000000096" rpy="3.141592653589793116 -1.570796326794896558 0" />
 <geometry>
-<mesh filename="package:///part_1__list_bssx4km84nfaeg_default.stl"/>
+<mesh filename="package:///link_arm__list_bssx4km84nfaeg_default.stl"/>
 </geometry>
 </collision>
 <inertial>
-<origin xyz="0.31749999999999994893 -3.7628418502473689297e-18 -0.019050000000000021777" rpy="0 0 0"/>
+<origin xyz="0.31749999999999989342 -1.7514094317903331726e-17 -0.019050000000000021777" rpy="0 0 0"/>
 <mass value="0.35393517414960223855" />
-<inertia ixx="0.00010882057682981095879" ixy="1.5680316009796616924e-19"  ixz="7.2490205255864722639e-19" iyy="0.01194736950478768843" iyz="-2.7043181731814350465e-35" izz="0.01194736950478768843" />
+<inertia ixx="0.00010882057682981093169" ixy="-8.7483526765923018965e-19"  ixz="7.2490205255864722639e-19" iyy="0.01194736950478768843" iyz="-9.4948383294427786032e-36" izz="0.01194736950478768843" />
 </inertial>
 </link>
 
 <joint name="joint_1" type="revolute">
-<origin xyz="7.8901370748533069908e-22 0 -1.3781194271668015741e-21" rpy="1.570796326794896558 -0.34724469202426838654 3.141592653589793116" />
-<parent link="part_1" />
-<child link="part_1__list_bssx4km84nfaeg_default" />
+<origin xyz="8.444870276581051764e-18 0 3.043347475119349751e-17" rpy="-1.570796326794896558 -0.9525144260775928462 3.2195723437558716655e-21" />
+<parent link="link_arm_hinge" />
+<child link="link_arm__list_bssx4km84nfaeg_default" />
 <axis xyz="0 0 1"/>
 <limit effort="1" velocity="20" />
 <joint_properties friction="0.0"/>

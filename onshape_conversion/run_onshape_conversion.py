@@ -7,13 +7,6 @@ if __name__ == '__main__':
     onshape_key = os.getenv("ONSHAPE_ACCESS_KEY")
     onshape_secret = os.getenv("ONSHAPE_SECRET_KEY")
     # NOTE: This may need to be updated if the document ID, workspaceID, orassembly name changes
-    # config = '{' + f"""
-    #     "documentId": "ef0f52aab7142cfef52a3b84",
-    #     "workspaceId": "aa6d735e54988a365f576f12",
-    #     "outputFormat": "urdf",
-    #     "assemblyName": "ARM-PROTOTYPE",
-    #     "simplifySTLs": "all"
-    # """ + '}'
 
     config = '{' + f"""
         "documentId": "ef0f52aab7142cfef52a3b84",
@@ -22,13 +15,14 @@ if __name__ == '__main__':
         "assemblyName": "ARM-PROTOTYPE",
     """ + '}'
 
-
     # config = '{' + f"""
-    #     "documentId": "11a7f59e37f711d732274fca",
-    #     "workspaceId": "7807518dc67487ad405722c8",
+    #     "documentId": "11c3398e78edfadf952cbdbc",
     #     "outputFormat": "urdf",
     #     "assemblyName": "Robot",
+    #     "useScads": "true",
+    #     "drawCollisions": "true"
     # """ + '}'
+
     
     subprocess.run(['rm', '-f', 'converted_robot/*'])
     with open('converted_robot/config.json', 'w') as f:
