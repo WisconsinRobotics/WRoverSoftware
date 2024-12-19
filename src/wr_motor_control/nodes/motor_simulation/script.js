@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("rjx").innerHTML = axes[2]
             document.getElementById("rjy").innerHTML = axes[3]
             STR_AXIS = axes[0]
-            FWD_AXIS = -axes[1]
+            FWD_AXIS = axes[1]
             RCW = axes[2]
             rotational_velocity = RCW * 0.5
             translational_velocity[0] = STR_AXIS * 5
@@ -221,9 +221,10 @@ function move_rover(wheels_group) {
 
     // update pos and angle
     body_angle += (rotational_velocity * 0.05);
-    body_angle %= 2 * Math.PI;
-    body_x += (translational_velocity[0] * Math.cos(body_angle) - translational_velocity[1] * Math.sin(body_angle)) * 0.5;
-    body_y += (translational_velocity[0] * Math.sin(body_angle) + translational_velocity[1] * Math.cos(body_angle)) * 0.5;
+    // body_x += (translational_velocity[0] * Math.cos(body_angle) - translational_velocity[1] * Math.sin(body_angle)) * 0.5;
+    // body_y += (translational_velocity[0] * Math.sin(body_angle) + translational_velocity[1] * Math.cos(body_angle)) * 0.5;
+    body_x += (translational_velocity[0]);
+    body_y += (translational_velocity[1]);
 
     /* below is quality of life stuff, keep to make things easier, change it as necessary */
 
@@ -248,14 +249,17 @@ function move_rover(wheels_group) {
     if (trailPositions.length > trailLength) {
         trailPositions.shift();
     }
+
 }
 
 // draw wheels
 function draw_wheel(context, width, height, x_translation, y_translation, color, angle, speed, label_displacement) {
     // draw and rotate wheel
+    context.save();
     context.translate(x_translation, y_translation);
     context.translate(width / 2, height / 2);
-    context.rotate(angle);
+
+    // context.rotate(angle);
     context.fillStyle = color;
     context.fillRect(-width / 2, -height / 2, width, height);
 
@@ -265,6 +269,8 @@ function draw_wheel(context, width, height, x_translation, y_translation, color,
     context.textAlign = "center"; 
     context.fillText("Angle: " + angle.toFixed(2), label_displacement, height / 2); // First line
     context.fillText("Speed: " + speed.toFixed(2), label_displacement, height / 2 + 15); // Second line
+
+    context.restore();
 }
 
 function draw() {
@@ -272,26 +278,26 @@ function draw() {
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    // move rover so we can see it
+    // // move rover so we can see it
     if(reset == 1) {
         body_x = start_pos_x;
         body_y = start_pos_y;
         reset = 0;
     }
 
-    // clear and save for current iteration
+    // // clear and save for current iteration
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
+    // ctx.save();
 
-    // calculate next position of the robot based on the directions of the wheels and their speeds
+    // // calculate next position of the robot based on the directions of the wheels and their speeds
     move_rover(wheels);
 
-    // path out trail
+    // // path out trail
     ctx.beginPath();
     ctx.strokeStyle = "#00FF00";
     ctx.lineWidth = 2;
 
-    // make link and stroke
+    // // make link and stroke
     for (let i = 0; i < trailPositions.length; i++) {
         const pos = trailPositions[i];
         if (i === 0) {
@@ -302,20 +308,22 @@ function draw() {
     }
     ctx.stroke();
 
-    // create body
+    // // create body
+    ctx.save();
     ctx.translate(body_x, body_y);
     ctx.rotate(body_angle);
     ctx.fillStyle = "#FF0000";
     ctx.fillRect(-body_width / 2, -body_height / 2, body_width, body_height);
+    // ctx.resetore();
 
-    // add the label
+    // // add the label
     ctx.fillStyle = "black";
     ctx.font = "12px Arial";
     ctx.textAlign = "center"; 
     ctx.fillText("Front", 0, body_height / 2 - 5);
 
-    // front right wheel
-    ctx.save();
+    // // front right wheel
+    // ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -327,10 +335,10 @@ function draw() {
         wheels.FR_wheel_speed,
         -50
     );
-    ctx.restore();
+    // ctx.restore();
 
-    // front left wheel
-    ctx.save();
+    // // front left wheel
+    // ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -342,10 +350,10 @@ function draw() {
         wheels.FL_wheel_speed,
         50
     );
-    ctx.restore();
+    // ctx.restore();
 
-    // back left wheel
-    ctx.save();
+    // // back left wheel
+    // ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -357,16 +365,16 @@ function draw() {
         wheels.BL_wheel_speed,
         50
     );
-    ctx.restore();
+    // ctx.restore();
 
-    // back right wheel
-    ctx.save();
+    // // back right wheel
+    // ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
         wheel_height, 
-        (-wheel_width / 2) - (body_width / 2), 
-        (-wheel_height / 2) - (body_height / 2), 
+        -(wheel_width / 2) - (body_width / 2), 
+        -(wheel_height / 2) - (body_height / 2), 
         "#0000FF", 
         wheels.BR_wheel_angle, 
         wheels.BR_wheel_speed,
@@ -374,8 +382,8 @@ function draw() {
     );
     ctx.restore();  
 
-    // restore back to original
-    ctx.restore();
+    // // restore back to original
+    // ctx.restore();
 
     // draw
     window.requestAnimationFrame(draw);
