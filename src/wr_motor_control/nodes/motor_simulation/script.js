@@ -77,16 +77,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         wheels.FL_wheel_speed = speeds[0];
-        wheels.FL_wheel_angle=  get_wheel_angle(wheel_vectors[0]);
+        wheels.FL_wheel_angle = get_wheel_angle(wheel_vectors[0]);
         
         wheels.FR_wheel_speed = speeds[1];
         wheels.FR_wheel_angle = get_wheel_angle(wheel_vectors[1]);
 
         wheels.BL_wheel_speed = speeds[2];
-        wheels.BL_wheel_angle= get_wheel_angle(wheel_vectors[2]);
+        wheels.BL_wheel_angle = get_wheel_angle(wheel_vectors[2]);
         
         wheels.BR_wheel_speed = speeds[3];
-        wheels.BR_wheel_angle= get_wheel_angle(wheel_vectors[3]);
+        wheels.BR_wheel_angle = get_wheel_angle(wheel_vectors[3]);
     }
     // loop always
     function continuousUpdate() {
@@ -201,7 +201,7 @@ function get_wheel_speed(wheel_vector){
 function get_wheel_angle(wheel_vector){
     // arctan2(x_component, y_component)
     // zero is straight ahead (need to verify what angle range in radians is)
-    return Math.atan2(wheel_vector[1], wheel_vector[0]);
+    return Math.atan2(wheel_vector[0], wheel_vector[1]);
 }
 
 // TODO: complete the function to simulate rover
@@ -258,8 +258,7 @@ function draw_wheel(context, width, height, x_translation, y_translation, color,
     context.save();
     context.translate(x_translation, y_translation);
     context.translate(width / 2, height / 2);
-
-    // context.rotate(angle);
+    context.rotate(angle - body_angle);
     context.fillStyle = color;
     context.fillRect(-width / 2, -height / 2, width, height);
 
@@ -323,7 +322,7 @@ function draw() {
     ctx.fillText("Front", 0, body_height / 2 - 5);
 
     // // front right wheel
-    // ctx.save();
+    ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -335,10 +334,10 @@ function draw() {
         wheels.FR_wheel_speed,
         -50
     );
-    // ctx.restore();
+    ctx.restore();
 
     // // front left wheel
-    // ctx.save();
+    ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -350,10 +349,10 @@ function draw() {
         wheels.FL_wheel_speed,
         50
     );
-    // ctx.restore();
+    ctx.restore();
 
     // // back left wheel
-    // ctx.save();
+    ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -365,10 +364,10 @@ function draw() {
         wheels.BL_wheel_speed,
         50
     );
-    // ctx.restore();
+    ctx.restore();
 
     // // back right wheel
-    // ctx.save();
+    ctx.save();
     draw_wheel(
         ctx, 
         wheel_width, 
@@ -383,7 +382,7 @@ function draw() {
     ctx.restore();  
 
     // // restore back to original
-    // ctx.restore();
+    ctx.restore();
 
     // draw
     window.requestAnimationFrame(draw);
