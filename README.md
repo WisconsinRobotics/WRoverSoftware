@@ -25,7 +25,7 @@ ros2 launch urdf_visualization displayBot.launch.py
 
 To run the RVIZ visualization for the new bot, do the following
 ```bash
-ros2 launch urdf_visualization displayBot4.launch.py
+ros2 launch urdf_visualization displayBot2.launch.py
 ```
 
 To run the IK with keyboard controls, run the following:
