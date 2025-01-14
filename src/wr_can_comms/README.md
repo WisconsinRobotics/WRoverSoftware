@@ -1,4 +1,4 @@
-Currently, publishing a message will print an encoded CAN-VESC message, although uncommenting some code will enable the node to also send the message to can0. 
+Currently, publishing a message to "can_msg" topic will print an encoded CAN-VESC message, although uncommenting some code will enable the node to also send the message to can0. 
 
 For example:
 
