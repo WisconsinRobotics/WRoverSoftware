@@ -12,7 +12,6 @@ class CANSubscriber(Node):
             'can_msg',
             self.listener_callback,
             10)
-        self.interface = 'socketcan'
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
@@ -31,20 +30,19 @@ class CANSubscriber(Node):
         else:
             raise TypeError(f"Type {value_type} not known/used.")
 
-        # Send message
-        self.send_msg(vesc_id=vesc_id, command=command, value=value)
-
-    def send_msg(self, vesc_id: int, command: str, value: int | float):
-        """Immediately send a CAN message"""
-        channel = 'can0'
-        compiled_msg = build_msg(command=command, 
-                                 value=value, 
-                                 vesc_id=vesc_id)
-        print(compiled_msg)
+        # Build message
+        compiled_msg = build_msg(command=command, value=value, vesc_id=vesc_id)
 
         # TODO: Add capability to synchronize message consumption
-        # with can.Bus(channel=channel, interface=interface) as bus:
-        #     bus.send(msg)
+        # Send message
+        send_msg(compiled_msg=compiled_msg)
+
+def send_msg(compiled_msg: can.message.Message):
+    """Immediately send a compiled CAN message"""
+    channel = 'can0'
+    print(f"Sending {compiled_msg.arbitration_id} with {compiled_msg.data}")
+    with can.Bus(channel=channel, interface='socketcan') as bus:
+        bus.send(compiled_msg)
 
 def build_msg(command: str, value: int, vesc_id: int, raw: bool = False):
     """
@@ -154,9 +152,8 @@ def main(args=None):
 
     can_subscriber = CANSubscriber()
 
-    print('step 1')
+    print("Starting CAN subscriber...")
     rclpy.spin(can_subscriber)
-    print('step 2')
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
