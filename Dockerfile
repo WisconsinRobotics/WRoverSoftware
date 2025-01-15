@@ -1,9 +1,13 @@
 ### INSTRUCTIONS
+# NOTE: ON WINDOWS, ROS2 commands work fine, but compiling with colcon build has many issues. 
+#
 # 1: Install docker
 # 2: Ensure you're in the WRoverSoftware dir (with Dockerfile)
+# 2.5: ON WINDOWS, make sure docker engine is running (launch Docker Desktop and leave open)
 # 3: Build the image:
 #     $ docker build . -t wr_ros2
 # 4: Run the image:
+#     NOTE: ON WINDOWS, replace $(pwd) with full path
 #     $ docker run -it -v $(pwd):/workspace --net=host wr_ros2
 #
 #
@@ -36,7 +40,8 @@ RUN apt-get update && \
 # Install python packages
 RUN pip install --upgrade pip
 RUN pip install --break-system-packages urdf-parser-py\
-    python-can
+    python-can\
+    pygame
 
 # Set ROS2 dir to /workspace
 WORKDIR /workspace/
