@@ -29,13 +29,11 @@ class XboxPublisher(Node):
                 self.publisher_.publish(msg)
                 self.get_logger().info('Publishing: "%s"' % msg.data)
 
-
             if event.type == pygame.JOYBUTTONUP:
                 print(f"{event.button} released.")
                 msg.data = f"{event.button} 0"
                 self.publisher_.publish(msg)
                 self.get_logger().info('Publishing: "%s"' % msg.data)
-
 
             # Handle hotplugging
             if event.type == pygame.JOYDEVICEADDED:

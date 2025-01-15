@@ -19,6 +19,7 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
+            'xbox_controller = wr_xbox_controller.xbox_controller:main'
         ],
     },
 )
