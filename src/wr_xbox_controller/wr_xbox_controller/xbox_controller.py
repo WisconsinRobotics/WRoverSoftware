@@ -1,11 +1,11 @@
 import rclpy
 from rclpy.node import Node
 import pygame
+from std_msgs.msg import String
 
 # NOTE: This might cause problems if called multiple times
 pygame.init()
 
-from std_msgs.msg import String
 
 class XboxPublisher(Node):
 
@@ -18,23 +18,8 @@ class XboxPublisher(Node):
         self.joysticks = {}
 
     def timer_callback(self):
-        # Message will be formatted as "{button} {value}"
-        msg = String()
-
-        # TODO: add stick capability
+        # No button capability, but doesn't sound like we need it. 
         for event in pygame.event.get():
-            if event.type == pygame.JOYBUTTONDOWN:
-                print(f"{event.button} pressed.")
-                msg.data = f"{event.button} 1"
-                self.publisher_.publish(msg)
-                self.get_logger().info('Publishing: "%s"' % msg.data)
-
-            if event.type == pygame.JOYBUTTONUP:
-                print(f"{event.button} released.")
-                msg.data = f"{event.button} 0"
-                self.publisher_.publish(msg)
-                self.get_logger().info('Publishing: "%s"' % msg.data)
-
             # Handle hotplugging
             if event.type == pygame.JOYDEVICEADDED:
                 # This event will be generated when the program starts for every
@@ -47,12 +32,25 @@ class XboxPublisher(Node):
                 del self.joysticks[event.instance_id]
                 print(f"Joystick {event.instance_id} disconnected")
 
-        # Get count of joysticks.
-        joystick_count = pygame.joystick.get_count()
+        # TODO: Currently movement is binary. Could make it marginal for finer control
+        # Target joystick 0 for swerve
+        sticks = list(self.joysticks.values())
+        if sticks:
+            swerve_stick = sticks[0]
+            # Axis 1 is left stick
+            sstick_axis = swerve_stick.get_axis(1)
+            # -1 means up, 1 means down
+            if sstick_axis <= -0.5:
+                swerve_command = String()
+                swerve_command.data = ""
+                # Command is "value"
+                self.publisher_.publish("1.0")
+            elif sstick_axis >= 0.5:
+                swerve_command = String()
+                swerve_command.data = ""
+                # Command is "value"
+                self.publisher_.publish("-1.0")
 
-        # For each joystick:
-        for joystick in self.joysticks.values():
-            jid = joystick.get_instance_id()
 
 def main(args=None):
     rclpy.init(args=args)
