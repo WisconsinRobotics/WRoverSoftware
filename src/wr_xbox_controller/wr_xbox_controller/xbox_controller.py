@@ -11,7 +11,7 @@ class XboxPublisher(Node):
 
     def __init__(self):
         super().__init__('xbox_publisher')
-        self.publisher_ = self.create_publisher(String, 'xbox', 10)
+        self.swerve_publisher_ = self.create_publisher(String, 'swerve', 10)
         # NOTE: This might need to be tuned
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -44,12 +44,12 @@ class XboxPublisher(Node):
                 swerve_command = String()
                 swerve_command.data = ""
                 # Command is "value"
-                self.publisher_.publish("1.0")
+                self.swerve_publisher_.publish("1.0")
             elif sstick_axis >= 0.5:
                 swerve_command = String()
                 swerve_command.data = ""
                 # Command is "value"
-                self.publisher_.publish("-1.0")
+                self.swerve_publisher_.publish("-1.0")
 
 
 def main(args=None):
