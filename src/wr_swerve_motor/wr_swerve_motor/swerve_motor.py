@@ -23,7 +23,7 @@ class SwerveSubscriber(Node):
         if data == 4.0:
             can_msg = String()
             can_msg.data = "41 CAN_PACKET_SET_CURRENT 4 int"
-            self.publisher_.publish(msg)
+            self.publisher_.publish(can_msg)
 
 
 def main(args=None):
