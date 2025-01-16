@@ -42,14 +42,14 @@ class XboxPublisher(Node):
             # -1 means up, 1 means down
             if sstick_axis <= -0.5:
                 swerve_command = String()
-                swerve_command.data = ""
+                swerve_command.data = "4.0"
                 # Command is "value"
-                self.swerve_publisher_.publish("1.0")
+                self.swerve_publisher_.publish(swerve_command)
             elif sstick_axis >= 0.5:
                 swerve_command = String()
-                swerve_command.data = ""
+                swerve_command.data = "4.0"
                 # Command is "value"
-                self.swerve_publisher_.publish("-1.0")
+                self.swerve_publisher_.publish(swerve_command)
 
 
 def main(args=None):
