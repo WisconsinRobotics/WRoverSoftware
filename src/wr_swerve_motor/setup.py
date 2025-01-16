@@ -19,6 +19,7 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
+            'swerve_motor = wr_swerve_motor.swerve_motor:main'
         ],
     },
 )
