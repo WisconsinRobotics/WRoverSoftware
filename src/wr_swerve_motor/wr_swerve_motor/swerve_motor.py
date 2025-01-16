@@ -18,13 +18,11 @@ class SwerveSubscriber(Node):
 
     def listener_callback(self, msg):
         self.get_logger().info('I heard: "%s"' % msg.data)
-        # TODO: Just buttons for now, but this will change to joysticks later
-        button_log = msg.data.split(' ')
-        button = int(button_log[0])
-        pressed = int(button_log[1])
-        if pressed and button == 2:
+        data = float(msg.data)
+        # TODO: Make this more abstract for actual control
+        if data == 4.0:
             can_msg = String()
-            can_msg.data = "41 CAN_PACKET_SET_CURRENT 3 int"
+            can_msg.data = "41 CAN_PACKET_SET_CURRENT 4 int"
             self.publisher_.publish(msg)
 
 
