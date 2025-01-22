@@ -1,0 +1,37 @@
+[4.676s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_avoidance': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/object_avoidance/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/object_avoidance build --build-base /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build install --record /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/install.log --single-version-externally-managed install_data
+[5.623s] running egg_info
+[5.623s] creating ../../../build/object_avoidance/object_avoidance.egg-info
+[5.719s] writing ../../../build/object_avoidance/object_avoidance.egg-info/PKG-INFO
+[5.719s] writing dependency_links to ../../../build/object_avoidance/object_avoidance.egg-info/dependency_links.txt
+[5.719s] writing entry points to ../../../build/object_avoidance/object_avoidance.egg-info/entry_points.txt
+[5.719s] writing requirements to ../../../build/object_avoidance/object_avoidance.egg-info/requires.txt
+[5.720s] writing top-level names to ../../../build/object_avoidance/object_avoidance.egg-info/top_level.txt
+[5.720s] writing manifest file '../../../build/object_avoidance/object_avoidance.egg-info/SOURCES.txt'
+[5.808s] reading manifest file '../../../build/object_avoidance/object_avoidance.egg-info/SOURCES.txt'
+[5.809s] adding license file 'LICENSE'
+[5.845s] writing manifest file '../../../build/object_avoidance/object_avoidance.egg-info/SOURCES.txt'
+[5.845s] running build
+[5.845s] running build_py
+[5.845s] creating /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build
+[5.846s] creating /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build/lib
+[5.847s] creating /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build/lib/object_avoidance
+[5.847s] copying object_avoidance/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build/lib/object_avoidance
+[5.847s] copying object_avoidance/object_avoidance.py -> /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build/lib/object_avoidance
+[5.847s] running install
+[5.847s] running install_lib
+[5.884s] creating /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages/object_avoidance
+[5.884s] copying /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build/lib/object_avoidance/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages/object_avoidance
+[5.885s] copying /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build/lib/object_avoidance/object_avoidance.py -> /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages/object_avoidance
+[5.891s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages/object_avoidance/__init__.py to __init__.cpython-312.pyc
+[5.913s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages/object_avoidance/object_avoidance.py to object_avoidance.cpython-312.pyc
+[5.913s] running install_data
+[5.913s] creating /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/ament_index
+[5.913s] creating /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/ament_index/resource_index
+[5.913s] creating /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/ament_index/resource_index/packages
+[5.913s] copying resource/object_avoidance -> /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/ament_index/resource_index/packages
+[5.914s] copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance
+[5.932s] running install_egg_info
+[5.996s] Copying ../../../build/object_avoidance/object_avoidance.egg-info to /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages/object_avoidance-0.0.0-py3.12.egg-info
+[5.996s] running install_scripts
+[6.397s] Installing object_avoidance script to /home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/object_avoidance
+[6.398s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/object_avoidance/install.log'

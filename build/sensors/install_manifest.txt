@@ -1,0 +1,16 @@
+/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors/gps_reading
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/package_run_dependencies/sensors
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/parent_prefix_path/sensors
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/ament_prefix_path.sh
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/ament_prefix_path.dsv
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/path.sh
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/path.dsv
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.bash
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.sh
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.zsh
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.dsv
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.dsv
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/packages/sensors
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/cmake/sensorsConfig.cmake
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/cmake/sensorsConfig-version.cmake
+/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.xml

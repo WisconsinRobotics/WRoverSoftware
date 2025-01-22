@@ -1,0 +1,32 @@
+running egg_info
+creating ../../../build/sensors/sensors.egg-info
+writing ../../../build/sensors/sensors.egg-info/PKG-INFO
+writing dependency_links to ../../../build/sensors/sensors.egg-info/dependency_links.txt
+writing entry points to ../../../build/sensors/sensors.egg-info/entry_points.txt
+writing requirements to ../../../build/sensors/sensors.egg-info/requires.txt
+writing top-level names to ../../../build/sensors/sensors.egg-info/top_level.txt
+writing manifest file '../../../build/sensors/sensors.egg-info/SOURCES.txt'
+reading manifest file '../../../build/sensors/sensors.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../../build/sensors/sensors.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/balabalu/workspace/WRoverSoftware/build/sensors/build
+creating /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib
+creating /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib/sensors
+copying sensors/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib/sensors
+running install
+running install_lib
+creating /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors
+copying /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib/sensors/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors
+byte-compiling /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors/__init__.py to __init__.cpython-312.pyc
+running install_data
+copying resource/sensors -> /home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/packages
+copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors
+running install_egg_info
+Copying ../../../build/sensors/sensors.egg-info to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors-0.0.0-py3.12.egg-info
+running install_scripts
+Installing gps_heading script to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors
+Installing gps_reading script to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors
+Installing imu_heading script to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors
+writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/sensors/install.log'

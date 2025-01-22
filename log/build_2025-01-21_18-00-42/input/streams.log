@@ -1,0 +1,22 @@
+[4.856s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/input': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/input/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/input/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/input build --build-base /home/balabalu/workspace/WRoverSoftware/build/input/build install --record /home/balabalu/workspace/WRoverSoftware/build/input/install.log --single-version-externally-managed install_data
+[5.706s] running egg_info
+[5.769s] writing ../../../build/input/input.egg-info/PKG-INFO
+[5.770s] writing dependency_links to ../../../build/input/input.egg-info/dependency_links.txt
+[5.770s] writing entry points to ../../../build/input/input.egg-info/entry_points.txt
+[5.770s] writing requirements to ../../../build/input/input.egg-info/requires.txt
+[5.770s] writing top-level names to ../../../build/input/input.egg-info/top_level.txt
+[5.902s] reading manifest file '../../../build/input/input.egg-info/SOURCES.txt'
+[5.902s] adding license file 'LICENSE'
+[5.902s] writing manifest file '../../../build/input/input.egg-info/SOURCES.txt'
+[5.903s] running build
+[5.903s] running build_py
+[5.903s] running install
+[5.903s] running install_lib
+[5.964s] running install_data
+[5.964s] running install_egg_info
+[6.045s] removing '/home/balabalu/workspace/WRoverSoftware/install/input/lib/python3.12/site-packages/input-0.0.0-py3.12.egg-info' (and everything under it)
+[6.046s] Copying ../../../build/input/input.egg-info to /home/balabalu/workspace/WRoverSoftware/install/input/lib/python3.12/site-packages/input-0.0.0-py3.12.egg-info
+[6.046s] running install_scripts
+[6.378s] Installing joystick_input script to /home/balabalu/workspace/WRoverSoftware/install/input/lib/input
+[6.379s] Installing xbox_input script to /home/balabalu/workspace/WRoverSoftware/install/input/lib/input
+[6.382s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/input/install.log'

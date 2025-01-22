@@ -1,0 +1,34 @@
+[3.155s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/sensors/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/sensors build --build-base /home/balabalu/workspace/WRoverSoftware/build/sensors/build install --record /home/balabalu/workspace/WRoverSoftware/build/sensors/install.log --single-version-externally-managed install_data
+[3.921s] running egg_info
+[3.921s] creating ../../../build/sensors/sensors.egg-info
+[3.963s] writing ../../../build/sensors/sensors.egg-info/PKG-INFO
+[3.965s] writing dependency_links to ../../../build/sensors/sensors.egg-info/dependency_links.txt
+[3.966s] writing entry points to ../../../build/sensors/sensors.egg-info/entry_points.txt
+[3.966s] writing requirements to ../../../build/sensors/sensors.egg-info/requires.txt
+[3.967s] writing top-level names to ../../../build/sensors/sensors.egg-info/top_level.txt
+[4.001s] writing manifest file '../../../build/sensors/sensors.egg-info/SOURCES.txt'
+[4.068s] reading manifest file '../../../build/sensors/sensors.egg-info/SOURCES.txt'
+[4.068s] adding license file 'LICENSE'
+[4.069s] writing manifest file '../../../build/sensors/sensors.egg-info/SOURCES.txt'
+[4.071s] running build
+[4.072s] running build_py
+[4.072s] creating /home/balabalu/workspace/WRoverSoftware/build/sensors/build
+[4.073s] creating /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib
+[4.073s] creating /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib/sensors
+[4.074s] copying sensors/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib/sensors
+[4.074s] running install
+[4.084s] running install_lib
+[4.133s] creating /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors
+[4.133s] copying /home/balabalu/workspace/WRoverSoftware/build/sensors/build/lib/sensors/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors
+[4.143s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors/__init__.py to __init__.cpython-312.pyc
+[4.143s] running install_data
+[4.143s] copying resource/sensors -> /home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/packages
+[4.143s] copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors
+[4.143s] running install_egg_info
+[4.211s] Copying ../../../build/sensors/sensors.egg-info to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages/sensors-0.0.0-py3.12.egg-info
+[4.212s] running install_scripts
+[4.527s] Installing gps_heading script to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors
+[4.531s] Installing gps_reading script to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors
+[4.531s] Installing imu_heading script to /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors
+[4.531s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/sensors/install.log'
+[4.580s] Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/sensors/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/sensors build --build-base /home/balabalu/workspace/WRoverSoftware/build/sensors/build install --record /home/balabalu/workspace/WRoverSoftware/build/sensors/install.log --single-version-externally-managed install_data

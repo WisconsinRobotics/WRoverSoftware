@@ -1,0 +1,4 @@
+[console_scripts]
+gps_heading = sensors.gps_heading:main
+gps_reading = sensors.gps_reading:main
+imu_heading = sensors.imu_heading:main

@@ -1,0 +1,648 @@
+[0.369s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.369s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=5, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x78ff945fa120>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x78ff94cdf230>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x78ff94cdf230>>, mixin_verb=('build',))
+[0.469s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.470s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.470s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.470s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.470s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.470s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.470s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/balabalu/workspace/WRoverSoftware'
+[0.470s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.471s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.532s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.532s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.532s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.532s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.533s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.533s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.533s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.533s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.534s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['ignore', 'ignore_ament_install']
+[0.534s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'ignore'
+[0.534s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'ignore_ament_install'
+[0.534s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['colcon_pkg']
+[0.534s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'colcon_pkg'
+[0.534s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['colcon_meta']
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'colcon_meta'
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['ros']
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'ros'
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['cmake', 'python']
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'cmake'
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'python'
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['python_setup_py']
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'python_setup_py'
+[0.535s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.536s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.537s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['ignore', 'ignore_ament_install']
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'ignore'
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'ignore_ament_install'
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['colcon_pkg']
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'colcon_pkg'
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['colcon_meta']
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'colcon_meta'
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['ros']
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'ros'
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['cmake', 'python']
+[0.538s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'cmake'
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'python'
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['python_setup_py']
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'python_setup_py'
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['ignore', 'ignore_ament_install']
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'ignore'
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'ignore_ament_install'
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['colcon_pkg']
+[0.539s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'colcon_pkg'
+[0.540s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['colcon_meta']
+[0.540s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'colcon_meta'
+[0.540s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['ros']
+[0.540s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'ros'
+[0.545s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/auto_implementation' with type 'ros.ament_python' and name 'auto_implementation'
+[0.545s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['ignore', 'ignore_ament_install']
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'ignore'
+[0.546s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'ignore_ament_install'
+[0.547s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['colcon_pkg']
+[0.547s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'colcon_pkg'
+[0.547s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['colcon_meta']
+[0.547s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'colcon_meta'
+[0.547s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['ros']
+[0.547s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'ros'
+[0.548s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/object_avoidance' with type 'ros.ament_python' and name 'object_avoidance'
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['ignore', 'ignore_ament_install']
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'ignore'
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'ignore_ament_install'
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['colcon_pkg']
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'colcon_pkg'
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['colcon_meta']
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'colcon_meta'
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['ros']
+[0.549s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'ros'
+[0.550s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/object_detection' with type 'ros.ament_python' and name 'object_detection'
+[0.550s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['ignore', 'ignore_ament_install']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'ignore'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'ignore_ament_install'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['colcon_pkg']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'colcon_pkg'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['colcon_meta']
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'colcon_meta'
+[0.551s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['ros']
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'ros'
+[0.552s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/path_planning' with type 'ros.ament_python' and name 'path_planning'
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['ignore', 'ignore_ament_install']
+[0.552s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'ignore'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'ignore_ament_install'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['colcon_pkg']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'colcon_pkg'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['colcon_meta']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'colcon_meta'
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['ros']
+[0.553s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'ros'
+[0.554s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/sensors' with type 'ros.ament_python' and name 'sensors'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['ignore', 'ignore_ament_install']
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'ignore'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'ignore_ament_install'
+[0.554s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['colcon_pkg']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'colcon_pkg'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['colcon_meta']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'colcon_meta'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['ros']
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'ros'
+[0.555s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/state_machine' with type 'ros.ament_python' and name 'state_machine'
+[0.555s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['ignore', 'ignore_ament_install']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'ignore'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'ignore_ament_install'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['colcon_pkg']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'colcon_pkg'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['colcon_meta']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'colcon_meta'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['ros']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'ros'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['cmake', 'python']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'cmake'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'python'
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['python_setup_py']
+[0.556s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'python_setup_py'
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['ignore', 'ignore_ament_install']
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'ignore'
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'ignore_ament_install'
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['colcon_pkg']
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'colcon_pkg'
+[0.557s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['colcon_meta']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'colcon_meta'
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['ros']
+[0.558s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'ros'
+[0.558s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Messages/custom_msgs_srvs' with type 'ros.ament_cmake' and name 'custom_msgs_srvs'
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['ignore', 'ignore_ament_install']
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'ignore'
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'ignore_ament_install'
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['colcon_pkg']
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'colcon_pkg'
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['colcon_meta']
+[0.559s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'colcon_meta'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['ros']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'ros'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['cmake', 'python']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'cmake'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'python'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['python_setup_py']
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'python_setup_py'
+[0.560s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['ignore', 'ignore_ament_install']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'ignore'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'ignore_ament_install'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['colcon_pkg']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'colcon_pkg'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['colcon_meta']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'colcon_meta'
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['ros']
+[0.561s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'ros'
+[0.562s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Teleop/arm' with type 'ros.ament_python' and name 'arm'
+[0.562s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['ignore', 'ignore_ament_install']
+[0.562s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'ignore'
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'ignore_ament_install'
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['colcon_pkg']
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'colcon_pkg'
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['colcon_meta']
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'colcon_meta'
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['ros']
+[0.563s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'ros'
+[0.563s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Teleop/input' with type 'ros.ament_python' and name 'input'
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['ignore', 'ignore_ament_install']
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'ignore'
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'ignore_ament_install'
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['colcon_pkg']
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'colcon_pkg'
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['colcon_meta']
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'colcon_meta'
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['ros']
+[0.564s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'ros'
+[0.565s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Teleop/swerve' with type 'ros.ament_python' and name 'swerve'
+[0.565s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.565s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.565s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.565s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.565s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.633s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.633s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.677s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 363 installed packages in /home/balabalu/ros2_jazzy/install
+[2.025s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[2.079s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_args' from command line to 'None'
+[2.079s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_target' from command line to 'None'
+[2.079s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.079s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_clean_cache' from command line to 'False'
+[2.079s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_clean_first' from command line to 'False'
+[2.080s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_force_configure' from command line to 'False'
+[2.080s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'ament_cmake_args' from command line to 'None'
+[2.080s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'catkin_cmake_args' from command line to 'None'
+[2.080s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.080s] DEBUG:colcon.colcon_core.verb:Building package 'arm' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/arm', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/arm', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm', 'symlink_install': False, 'test_result_base': None}
+[2.080s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_args' from command line to 'None'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_target' from command line to 'None'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_clean_cache' from command line to 'False'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_clean_first' from command line to 'False'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_force_configure' from command line to 'False'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'ament_cmake_args' from command line to 'None'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'catkin_cmake_args' from command line to 'None'
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.081s] DEBUG:colcon.colcon_core.verb:Building package 'auto_implementation' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/auto_implementation', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/auto_implementation', 'symlink_install': False, 'test_result_base': None}
+[2.081s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_args' from command line to 'None'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_target' from command line to 'None'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_clean_cache' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_clean_first' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_force_configure' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'ament_cmake_args' from command line to 'None'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'catkin_cmake_args' from command line to 'None'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.082s] DEBUG:colcon.colcon_core.verb:Building package 'custom_msgs_srvs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs', 'symlink_install': False, 'test_result_base': None}
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_args' from command line to 'None'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_target' from command line to 'None'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_clean_cache' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_clean_first' from command line to 'False'
+[2.082s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_force_configure' from command line to 'False'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'ament_cmake_args' from command line to 'None'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'catkin_cmake_args' from command line to 'None'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.083s] DEBUG:colcon.colcon_core.verb:Building package 'input' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/input', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/input', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Teleop/input', 'symlink_install': False, 'test_result_base': None}
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_args' from command line to 'None'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_target' from command line to 'None'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_clean_cache' from command line to 'False'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_clean_first' from command line to 'False'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_force_configure' from command line to 'False'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'ament_cmake_args' from command line to 'None'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'catkin_cmake_args' from command line to 'None'
+[2.083s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.083s] DEBUG:colcon.colcon_core.verb:Building package 'object_avoidance' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/object_avoidance', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_avoidance', 'symlink_install': False, 'test_result_base': None}
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_args' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_target' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_clean_cache' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_clean_first' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_force_configure' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'ament_cmake_args' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'catkin_cmake_args' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.084s] DEBUG:colcon.colcon_core.verb:Building package 'object_detection' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/object_detection', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/object_detection', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_detection', 'symlink_install': False, 'test_result_base': None}
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_args' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_target' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_clean_cache' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_clean_first' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_force_configure' from command line to 'False'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'ament_cmake_args' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'catkin_cmake_args' from command line to 'None'
+[2.084s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.084s] DEBUG:colcon.colcon_core.verb:Building package 'path_planning' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/path_planning', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/path_planning', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning', 'symlink_install': False, 'test_result_base': None}
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_args' from command line to 'None'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_target' from command line to 'None'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_clean_cache' from command line to 'False'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_clean_first' from command line to 'False'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_force_configure' from command line to 'False'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'ament_cmake_args' from command line to 'None'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'catkin_cmake_args' from command line to 'None'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.085s] DEBUG:colcon.colcon_core.verb:Building package 'sensors' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/sensors', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/sensors', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors', 'symlink_install': False, 'test_result_base': None}
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_args' from command line to 'None'
+[2.085s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_target' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_clean_cache' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_clean_first' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_force_configure' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'ament_cmake_args' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'catkin_cmake_args' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.086s] DEBUG:colcon.colcon_core.verb:Building package 'state_machine' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/state_machine', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/state_machine', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine', 'symlink_install': False, 'test_result_base': None}
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_args' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_target' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_clean_cache' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_clean_first' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_force_configure' from command line to 'False'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'ament_cmake_args' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'catkin_cmake_args' from command line to 'None'
+[2.086s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'catkin_skip_building_tests' from command line to 'False'
+[2.086s] DEBUG:colcon.colcon_core.verb:Building package 'swerve' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/balabalu/workspace/WRoverSoftware/build/swerve', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/balabalu/workspace/WRoverSoftware/install/swerve', 'merge_install': False, 'path': '/home/balabalu/workspace/WRoverSoftware/src/Teleop/swerve', 'symlink_install': False, 'test_result_base': None}
+[2.086s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[2.089s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[2.090s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm' with build type 'ament_python'
+[2.090s] Level 1:colcon.colcon_core.shell:create_environment_hook('arm', 'ament_prefix_path')
+[2.107s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[2.107s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/hook/ament_prefix_path.ps1'
+[2.108s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/hook/ament_prefix_path.dsv'
+[2.109s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/hook/ament_prefix_path.sh'
+[2.110s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.110s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.156s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/auto_implementation' with build type 'ament_python'
+[2.156s] Level 1:colcon.colcon_core.shell:create_environment_hook('auto_implementation', 'ament_prefix_path')
+[2.157s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/ament_prefix_path.ps1'
+[2.159s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/ament_prefix_path.dsv'
+[2.161s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/ament_prefix_path.sh'
+[2.162s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.162s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.203s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs' with build type 'ament_cmake'
+[2.203s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs'
+[2.204s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.204s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.244s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/input' with build type 'ament_python'
+[2.244s] Level 1:colcon.colcon_core.shell:create_environment_hook('input', 'ament_prefix_path')
+[2.245s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/hook/ament_prefix_path.ps1'
+[2.247s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/hook/ament_prefix_path.dsv'
+[2.248s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/hook/ament_prefix_path.sh'
+[2.250s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.250s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.298s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_avoidance' with build type 'ament_python'
+[2.299s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_avoidance', 'ament_prefix_path')
+[2.299s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/ament_prefix_path.ps1'
+[2.301s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/ament_prefix_path.dsv'
+[2.303s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/ament_prefix_path.sh'
+[2.305s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.305s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.981s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm'
+[2.982s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[2.982s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.756s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/auto_implementation'
+[3.757s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[3.757s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[3.814s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/balabalu/ros2_jazzy/install/rqt_bag_plugins:/home/balabalu/ros2_jazzy/install/rqt_bag:/home/balabalu/ros2_jazzy/install/rosbag2_examples_py:/home/balabalu/ros2_jazzy/install/launch_testing_examples:/home/balabalu/ros2_jazzy/install/ros2bag:/home/balabalu/ros2_jazzy/install/tracetools_test:/home/balabalu/ros2_jazzy/install/tracetools_launch:/home/balabalu/ros2_jazzy/install/topic_monitor:/home/balabalu/ros2_jazzy/install/tf2_tools:/home/balabalu/ros2_jazzy/install/examples_tf2_py:/home/balabalu/ros2_jazzy/install/tf2_ros_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_pointcloud_publisher:/home/balabalu/ros2_jazzy/install/sensor_msgs_py:/home/balabalu/ros2_jazzy/install/quality_of_service_demo_py:/home/balabalu/ros2_jazzy/install/rqt_plot:/home/balabalu/ros2_jazzy/install/ros2doctor:/home/balabalu/ros2_jazzy/install/lifecycle_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_subscriber:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_service:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_publisher:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_executors:/home/balabalu/ros2_jazzy/install/demo_nodes_py:/home/balabalu/ros2_jazzy/install/rqt:/home/balabalu/ros2_jazzy/install/ros2component:/home/balabalu/ros2_jazzy/install/sros2:/home/balabalu/ros2_jazzy/install/rqt_topic:/home/balabalu/ros2_jazzy/install/rqt_srv:/home/balabalu/ros2_jazzy/install/rqt_shell:/home/balabalu/ros2_jazzy/install/rqt_service_caller:/home/balabalu/ros2_jazzy/install/rqt_reconfigure:/home/balabalu/ros2_jazzy/install/rqt_py_console:/home/balabalu/ros2_jazzy/install/rqt_publisher:/home/balabalu/ros2_jazzy/install/rqt_action:/home/balabalu/ros2_jazzy/install/rqt_msg:/home/balabalu/ros2_jazzy/install/rqt_console:/home/balabalu/ros2_jazzy/install/rqt_graph:/home/balabalu/ros2_jazzy/install/rqt_gui_py:/home/balabalu/ros2_jazzy/install/rqt_gui:/home/balabalu/ros2_jazzy/install/ros2trace:/home/balabalu/ros2_jazzy/install/ros2topic:/home/balabalu/ros2_jazzy/install/ros2test:/home/balabalu/ros2_jazzy/install/ros2param:/home/balabalu/ros2_jazzy/install/ros2lifecycle:/home/balabalu/ros2_jazzy/install/ros2service:/home/balabalu/ros2_jazzy/install/ros2run:/home/balabalu/ros2_jazzy/install/ros2launch:/home/balabalu/ros2_jazzy/install/ros2pkg:/home/balabalu/ros2_jazzy/install/ros2node:/home/balabalu/ros2_jazzy/install/ros2multicast:/home/balabalu/ros2_jazzy/install/ros2interface:/home/balabalu/ros2_jazzy/install/ros2action:/home/balabalu/ros2_jazzy/install/ros2cli:/home/balabalu/ros2_jazzy/install/launch_testing_ros:/home/balabalu/ros2_jazzy/install/launch_ros:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_server:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_guard_conditions:/home/balabalu/ros2_jazzy/install/action_tutorials_py:/home/balabalu/ros2_jazzy/install/ament_uncrustify:/home/balabalu/ros2_jazzy/install/tracetools_trace:/home/balabalu/ros2_jazzy/install/tracetools_read:/home/balabalu/ros2_jazzy/install/test_tracetools_launch:/home/balabalu/ros2_jazzy/install/test_ros2trace:/home/balabalu/ros2_jazzy/install/test_launch_ros:/home/balabalu/ros2_jazzy/install/rpyutils:/home/balabalu/ros2_jazzy/install/rosidl_runtime_py:/home/balabalu/ros2_jazzy/install/rosidl_pycommon:/home/balabalu/ros2_jazzy/install/rosidl_cli:/home/balabalu/ros2_jazzy/install/launch_pytest:/home/balabalu/ros2_jazzy/install/launch_testing:/home/balabalu/ros2_jazzy/install/launch_yaml:/home/balabalu/ros2_jazzy/install/launch_xml:/home/balabalu/ros2_jazzy/install/launch:/home/balabalu/ros2_jazzy/install/osrf_pycommon:/home/balabalu/ros2_jazzy/install/domain_coordinator:/home/balabalu/ros2_jazzy/install/ament_xmllint:/home/balabalu/ros2_jazzy/install/ament_pyflakes:/home/balabalu/ros2_jazzy/install/ament_pycodestyle:/home/balabalu/ros2_jazzy/install/ament_pep257:/home/balabalu/ros2_jazzy/install/ament_pclint:/home/balabalu/ros2_jazzy/install/ament_package:/home/balabalu/ros2_jazzy/install/ament_mypy:/home/balabalu/ros2_jazzy/install/ament_lint_cmake:/home/balabalu/ros2_jazzy/install/ament_flake8:/home/balabalu/ros2_jazzy/install/ament_copyright:/home/balabalu/ros2_jazzy/install/ament_lint:/home/balabalu/ros2_jazzy/install/ament_index_python:/home/balabalu/ros2_jazzy/install/ament_cpplint:/home/balabalu/ros2_jazzy/install/ament_cppcheck:/home/balabalu/ros2_jazzy/install/ament_clang_tidy:/home/balabalu/ros2_jazzy/install/ament_clang_format DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs -- -j5 -l5
+[4.603s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/input'
+[4.604s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[4.604s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[5.393s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_avoidance'
+[5.394s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[5.394s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[5.450s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/balabalu/ros2_jazzy/install/rqt_bag_plugins:/home/balabalu/ros2_jazzy/install/rqt_bag:/home/balabalu/ros2_jazzy/install/rosbag2_examples_py:/home/balabalu/ros2_jazzy/install/launch_testing_examples:/home/balabalu/ros2_jazzy/install/ros2bag:/home/balabalu/ros2_jazzy/install/tracetools_test:/home/balabalu/ros2_jazzy/install/tracetools_launch:/home/balabalu/ros2_jazzy/install/topic_monitor:/home/balabalu/ros2_jazzy/install/tf2_tools:/home/balabalu/ros2_jazzy/install/examples_tf2_py:/home/balabalu/ros2_jazzy/install/tf2_ros_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_pointcloud_publisher:/home/balabalu/ros2_jazzy/install/sensor_msgs_py:/home/balabalu/ros2_jazzy/install/quality_of_service_demo_py:/home/balabalu/ros2_jazzy/install/rqt_plot:/home/balabalu/ros2_jazzy/install/ros2doctor:/home/balabalu/ros2_jazzy/install/lifecycle_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_subscriber:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_service:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_publisher:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_executors:/home/balabalu/ros2_jazzy/install/demo_nodes_py:/home/balabalu/ros2_jazzy/install/rqt:/home/balabalu/ros2_jazzy/install/ros2component:/home/balabalu/ros2_jazzy/install/sros2:/home/balabalu/ros2_jazzy/install/rqt_topic:/home/balabalu/ros2_jazzy/install/rqt_srv:/home/balabalu/ros2_jazzy/install/rqt_shell:/home/balabalu/ros2_jazzy/install/rqt_service_caller:/home/balabalu/ros2_jazzy/install/rqt_reconfigure:/home/balabalu/ros2_jazzy/install/rqt_py_console:/home/balabalu/ros2_jazzy/install/rqt_publisher:/home/balabalu/ros2_jazzy/install/rqt_action:/home/balabalu/ros2_jazzy/install/rqt_msg:/home/balabalu/ros2_jazzy/install/rqt_console:/home/balabalu/ros2_jazzy/install/rqt_graph:/home/balabalu/ros2_jazzy/install/rqt_gui_py:/home/balabalu/ros2_jazzy/install/rqt_gui:/home/balabalu/ros2_jazzy/install/ros2trace:/home/balabalu/ros2_jazzy/install/ros2topic:/home/balabalu/ros2_jazzy/install/ros2test:/home/balabalu/ros2_jazzy/install/ros2param:/home/balabalu/ros2_jazzy/install/ros2lifecycle:/home/balabalu/ros2_jazzy/install/ros2service:/home/balabalu/ros2_jazzy/install/ros2run:/home/balabalu/ros2_jazzy/install/ros2launch:/home/balabalu/ros2_jazzy/install/ros2pkg:/home/balabalu/ros2_jazzy/install/ros2node:/home/balabalu/ros2_jazzy/install/ros2multicast:/home/balabalu/ros2_jazzy/install/ros2interface:/home/balabalu/ros2_jazzy/install/ros2action:/home/balabalu/ros2_jazzy/install/ros2cli:/home/balabalu/ros2_jazzy/install/launch_testing_ros:/home/balabalu/ros2_jazzy/install/launch_ros:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_server:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_guard_conditions:/home/balabalu/ros2_jazzy/install/action_tutorials_py:/home/balabalu/ros2_jazzy/install/ament_uncrustify:/home/balabalu/ros2_jazzy/install/tracetools_trace:/home/balabalu/ros2_jazzy/install/tracetools_read:/home/balabalu/ros2_jazzy/install/test_tracetools_launch:/home/balabalu/ros2_jazzy/install/test_ros2trace:/home/balabalu/ros2_jazzy/install/test_launch_ros:/home/balabalu/ros2_jazzy/install/rpyutils:/home/balabalu/ros2_jazzy/install/rosidl_runtime_py:/home/balabalu/ros2_jazzy/install/rosidl_pycommon:/home/balabalu/ros2_jazzy/install/rosidl_cli:/home/balabalu/ros2_jazzy/install/launch_pytest:/home/balabalu/ros2_jazzy/install/launch_testing:/home/balabalu/ros2_jazzy/install/launch_yaml:/home/balabalu/ros2_jazzy/install/launch_xml:/home/balabalu/ros2_jazzy/install/launch:/home/balabalu/ros2_jazzy/install/osrf_pycommon:/home/balabalu/ros2_jazzy/install/domain_coordinator:/home/balabalu/ros2_jazzy/install/ament_xmllint:/home/balabalu/ros2_jazzy/install/ament_pyflakes:/home/balabalu/ros2_jazzy/install/ament_pycodestyle:/home/balabalu/ros2_jazzy/install/ament_pep257:/home/balabalu/ros2_jazzy/install/ament_pclint:/home/balabalu/ros2_jazzy/install/ament_package:/home/balabalu/ros2_jazzy/install/ament_mypy:/home/balabalu/ros2_jazzy/install/ament_lint_cmake:/home/balabalu/ros2_jazzy/install/ament_flake8:/home/balabalu/ros2_jazzy/install/ament_copyright:/home/balabalu/ros2_jazzy/install/ament_lint:/home/balabalu/ros2_jazzy/install/ament_index_python:/home/balabalu/ros2_jazzy/install/ament_cpplint:/home/balabalu/ros2_jazzy/install/ament_cppcheck:/home/balabalu/ros2_jazzy/install/ament_clang_tidy:/home/balabalu/ros2_jazzy/install/ament_clang_format DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs -- -j5 -l5
+[5.570s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/balabalu/ros2_jazzy/install/rqt_bag_plugins:/home/balabalu/ros2_jazzy/install/rqt_bag:/home/balabalu/ros2_jazzy/install/rosbag2_examples_py:/home/balabalu/ros2_jazzy/install/launch_testing_examples:/home/balabalu/ros2_jazzy/install/ros2bag:/home/balabalu/ros2_jazzy/install/tracetools_test:/home/balabalu/ros2_jazzy/install/tracetools_launch:/home/balabalu/ros2_jazzy/install/topic_monitor:/home/balabalu/ros2_jazzy/install/tf2_tools:/home/balabalu/ros2_jazzy/install/examples_tf2_py:/home/balabalu/ros2_jazzy/install/tf2_ros_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_pointcloud_publisher:/home/balabalu/ros2_jazzy/install/sensor_msgs_py:/home/balabalu/ros2_jazzy/install/quality_of_service_demo_py:/home/balabalu/ros2_jazzy/install/rqt_plot:/home/balabalu/ros2_jazzy/install/ros2doctor:/home/balabalu/ros2_jazzy/install/lifecycle_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_subscriber:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_service:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_publisher:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_executors:/home/balabalu/ros2_jazzy/install/demo_nodes_py:/home/balabalu/ros2_jazzy/install/rqt:/home/balabalu/ros2_jazzy/install/ros2component:/home/balabalu/ros2_jazzy/install/sros2:/home/balabalu/ros2_jazzy/install/rqt_topic:/home/balabalu/ros2_jazzy/install/rqt_srv:/home/balabalu/ros2_jazzy/install/rqt_shell:/home/balabalu/ros2_jazzy/install/rqt_service_caller:/home/balabalu/ros2_jazzy/install/rqt_reconfigure:/home/balabalu/ros2_jazzy/install/rqt_py_console:/home/balabalu/ros2_jazzy/install/rqt_publisher:/home/balabalu/ros2_jazzy/install/rqt_action:/home/balabalu/ros2_jazzy/install/rqt_msg:/home/balabalu/ros2_jazzy/install/rqt_console:/home/balabalu/ros2_jazzy/install/rqt_graph:/home/balabalu/ros2_jazzy/install/rqt_gui_py:/home/balabalu/ros2_jazzy/install/rqt_gui:/home/balabalu/ros2_jazzy/install/ros2trace:/home/balabalu/ros2_jazzy/install/ros2topic:/home/balabalu/ros2_jazzy/install/ros2test:/home/balabalu/ros2_jazzy/install/ros2param:/home/balabalu/ros2_jazzy/install/ros2lifecycle:/home/balabalu/ros2_jazzy/install/ros2service:/home/balabalu/ros2_jazzy/install/ros2run:/home/balabalu/ros2_jazzy/install/ros2launch:/home/balabalu/ros2_jazzy/install/ros2pkg:/home/balabalu/ros2_jazzy/install/ros2node:/home/balabalu/ros2_jazzy/install/ros2multicast:/home/balabalu/ros2_jazzy/install/ros2interface:/home/balabalu/ros2_jazzy/install/ros2action:/home/balabalu/ros2_jazzy/install/ros2cli:/home/balabalu/ros2_jazzy/install/launch_testing_ros:/home/balabalu/ros2_jazzy/install/launch_ros:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_server:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_guard_conditions:/home/balabalu/ros2_jazzy/install/action_tutorials_py:/home/balabalu/ros2_jazzy/install/ament_uncrustify:/home/balabalu/ros2_jazzy/install/tracetools_trace:/home/balabalu/ros2_jazzy/install/tracetools_read:/home/balabalu/ros2_jazzy/install/test_tracetools_launch:/home/balabalu/ros2_jazzy/install/test_ros2trace:/home/balabalu/ros2_jazzy/install/test_launch_ros:/home/balabalu/ros2_jazzy/install/rpyutils:/home/balabalu/ros2_jazzy/install/rosidl_runtime_py:/home/balabalu/ros2_jazzy/install/rosidl_pycommon:/home/balabalu/ros2_jazzy/install/rosidl_cli:/home/balabalu/ros2_jazzy/install/launch_pytest:/home/balabalu/ros2_jazzy/install/launch_testing:/home/balabalu/ros2_jazzy/install/launch_yaml:/home/balabalu/ros2_jazzy/install/launch_xml:/home/balabalu/ros2_jazzy/install/launch:/home/balabalu/ros2_jazzy/install/osrf_pycommon:/home/balabalu/ros2_jazzy/install/domain_coordinator:/home/balabalu/ros2_jazzy/install/ament_xmllint:/home/balabalu/ros2_jazzy/install/ament_pyflakes:/home/balabalu/ros2_jazzy/install/ament_pycodestyle:/home/balabalu/ros2_jazzy/install/ament_pep257:/home/balabalu/ros2_jazzy/install/ament_pclint:/home/balabalu/ros2_jazzy/install/ament_package:/home/balabalu/ros2_jazzy/install/ament_mypy:/home/balabalu/ros2_jazzy/install/ament_lint_cmake:/home/balabalu/ros2_jazzy/install/ament_flake8:/home/balabalu/ros2_jazzy/install/ament_copyright:/home/balabalu/ros2_jazzy/install/ament_lint:/home/balabalu/ros2_jazzy/install/ament_index_python:/home/balabalu/ros2_jazzy/install/ament_cpplint:/home/balabalu/ros2_jazzy/install/ament_cppcheck:/home/balabalu/ros2_jazzy/install/ament_clang_tidy:/home/balabalu/ros2_jazzy/install/ament_clang_format DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs
+[5.621s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(custom_msgs_srvs)
+[5.627s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs' for CMake module files
+[5.628s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs' for CMake config files
+[5.628s] Level 1:colcon.colcon_core.shell:create_environment_hook('custom_msgs_srvs', 'cmake_prefix_path')
+[5.628s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.ps1'
+[5.629s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.dsv'
+[5.630s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.sh'
+[5.631s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/bin'
+[5.631s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/lib/pkgconfig/custom_msgs_srvs.pc'
+[5.631s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/lib/python3.12/site-packages'
+[5.632s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/bin'
+[5.632s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.ps1'
+[5.633s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.dsv'
+[5.634s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.sh'
+[5.634s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.bash'
+[5.635s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.zsh'
+[5.636s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/colcon-core/packages/custom_msgs_srvs)
+[5.637s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/balabalu/ros2_jazzy/install/rqt_bag_plugins:/home/balabalu/ros2_jazzy/install/rqt_bag:/home/balabalu/ros2_jazzy/install/rosbag2_examples_py:/home/balabalu/ros2_jazzy/install/launch_testing_examples:/home/balabalu/ros2_jazzy/install/ros2bag:/home/balabalu/ros2_jazzy/install/tracetools_test:/home/balabalu/ros2_jazzy/install/tracetools_launch:/home/balabalu/ros2_jazzy/install/topic_monitor:/home/balabalu/ros2_jazzy/install/tf2_tools:/home/balabalu/ros2_jazzy/install/examples_tf2_py:/home/balabalu/ros2_jazzy/install/tf2_ros_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_pointcloud_publisher:/home/balabalu/ros2_jazzy/install/sensor_msgs_py:/home/balabalu/ros2_jazzy/install/quality_of_service_demo_py:/home/balabalu/ros2_jazzy/install/rqt_plot:/home/balabalu/ros2_jazzy/install/ros2doctor:/home/balabalu/ros2_jazzy/install/lifecycle_py:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_subscriber:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_service:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_publisher:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_executors:/home/balabalu/ros2_jazzy/install/demo_nodes_py:/home/balabalu/ros2_jazzy/install/rqt:/home/balabalu/ros2_jazzy/install/ros2component:/home/balabalu/ros2_jazzy/install/sros2:/home/balabalu/ros2_jazzy/install/rqt_topic:/home/balabalu/ros2_jazzy/install/rqt_srv:/home/balabalu/ros2_jazzy/install/rqt_shell:/home/balabalu/ros2_jazzy/install/rqt_service_caller:/home/balabalu/ros2_jazzy/install/rqt_reconfigure:/home/balabalu/ros2_jazzy/install/rqt_py_console:/home/balabalu/ros2_jazzy/install/rqt_publisher:/home/balabalu/ros2_jazzy/install/rqt_action:/home/balabalu/ros2_jazzy/install/rqt_msg:/home/balabalu/ros2_jazzy/install/rqt_console:/home/balabalu/ros2_jazzy/install/rqt_graph:/home/balabalu/ros2_jazzy/install/rqt_gui_py:/home/balabalu/ros2_jazzy/install/rqt_gui:/home/balabalu/ros2_jazzy/install/ros2trace:/home/balabalu/ros2_jazzy/install/ros2topic:/home/balabalu/ros2_jazzy/install/ros2test:/home/balabalu/ros2_jazzy/install/ros2param:/home/balabalu/ros2_jazzy/install/ros2lifecycle:/home/balabalu/ros2_jazzy/install/ros2service:/home/balabalu/ros2_jazzy/install/ros2run:/home/balabalu/ros2_jazzy/install/ros2launch:/home/balabalu/ros2_jazzy/install/ros2pkg:/home/balabalu/ros2_jazzy/install/ros2node:/home/balabalu/ros2_jazzy/install/ros2multicast:/home/balabalu/ros2_jazzy/install/ros2interface:/home/balabalu/ros2_jazzy/install/ros2action:/home/balabalu/ros2_jazzy/install/ros2cli:/home/balabalu/ros2_jazzy/install/launch_testing_ros:/home/balabalu/ros2_jazzy/install/launch_ros:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_server:/home/balabalu/ros2_jazzy/install/examples_rclpy_minimal_action_client:/home/balabalu/ros2_jazzy/install/examples_rclpy_guard_conditions:/home/balabalu/ros2_jazzy/install/action_tutorials_py:/home/balabalu/ros2_jazzy/install/ament_uncrustify:/home/balabalu/ros2_jazzy/install/tracetools_trace:/home/balabalu/ros2_jazzy/install/tracetools_read:/home/balabalu/ros2_jazzy/install/test_tracetools_launch:/home/balabalu/ros2_jazzy/install/test_ros2trace:/home/balabalu/ros2_jazzy/install/test_launch_ros:/home/balabalu/ros2_jazzy/install/rpyutils:/home/balabalu/ros2_jazzy/install/rosidl_runtime_py:/home/balabalu/ros2_jazzy/install/rosidl_pycommon:/home/balabalu/ros2_jazzy/install/rosidl_cli:/home/balabalu/ros2_jazzy/install/launch_pytest:/home/balabalu/ros2_jazzy/install/launch_testing:/home/balabalu/ros2_jazzy/install/launch_yaml:/home/balabalu/ros2_jazzy/install/launch_xml:/home/balabalu/ros2_jazzy/install/launch:/home/balabalu/ros2_jazzy/install/osrf_pycommon:/home/balabalu/ros2_jazzy/install/domain_coordinator:/home/balabalu/ros2_jazzy/install/ament_xmllint:/home/balabalu/ros2_jazzy/install/ament_pyflakes:/home/balabalu/ros2_jazzy/install/ament_pycodestyle:/home/balabalu/ros2_jazzy/install/ament_pep257:/home/balabalu/ros2_jazzy/install/ament_pclint:/home/balabalu/ros2_jazzy/install/ament_package:/home/balabalu/ros2_jazzy/install/ament_mypy:/home/balabalu/ros2_jazzy/install/ament_lint_cmake:/home/balabalu/ros2_jazzy/install/ament_flake8:/home/balabalu/ros2_jazzy/install/ament_copyright:/home/balabalu/ros2_jazzy/install/ament_lint:/home/balabalu/ros2_jazzy/install/ament_index_python:/home/balabalu/ros2_jazzy/install/ament_cpplint:/home/balabalu/ros2_jazzy/install/ament_cppcheck:/home/balabalu/ros2_jazzy/install/ament_clang_tidy:/home/balabalu/ros2_jazzy/install/ament_clang_format DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs
+[5.730s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(custom_msgs_srvs)
+[5.731s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs' for CMake module files
+[5.731s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs' for CMake config files
+[5.732s] Level 1:colcon.colcon_core.shell:create_environment_hook('custom_msgs_srvs', 'cmake_prefix_path')
+[5.732s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.ps1'
+[5.733s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.dsv'
+[5.735s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.sh'
+[5.736s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/bin'
+[5.736s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/lib/pkgconfig/custom_msgs_srvs.pc'
+[5.737s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/lib/python3.12/site-packages'
+[5.737s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/bin'
+[5.738s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.ps1'
+[5.739s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.dsv'
+[5.742s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.sh'
+[5.743s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.bash'
+[5.746s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.zsh'
+[5.747s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/custom_msgs_srvs/share/colcon-core/packages/custom_msgs_srvs)
+[5.751s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_detection' with build type 'ament_python'
+[5.753s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_detection', 'ament_prefix_path')
+[5.754s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/hook/ament_prefix_path.ps1'
+[5.758s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/hook/ament_prefix_path.dsv'
+[5.760s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/hook/ament_prefix_path.sh'
+[5.763s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[5.764s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.511s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_detection'
+[6.512s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.512s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[7.115s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/input': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/input/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/input/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/input build --build-base /home/balabalu/workspace/WRoverSoftware/build/input/build install --record /home/balabalu/workspace/WRoverSoftware/build/input/install.log --single-version-externally-managed install_data
+[7.222s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/arm/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/arm build --build-base /home/balabalu/workspace/WRoverSoftware/build/arm/build install --record /home/balabalu/workspace/WRoverSoftware/build/arm/install.log --single-version-externally-managed install_data
+[7.283s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_avoidance': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/object_avoidance/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/object_avoidance build --build-base /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build install --record /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/install.log --single-version-externally-managed install_data
+[7.367s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/auto_implementation': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/auto_implementation/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/auto_implementation build --build-base /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build install --record /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/install.log --single-version-externally-managed install_data
+[8.243s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_detection': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/object_detection/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/object_detection/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/object_detection build --build-base /home/balabalu/workspace/WRoverSoftware/build/object_detection/build install --record /home/balabalu/workspace/WRoverSoftware/build/object_detection/install.log --single-version-externally-managed install_data
+[8.823s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input' for CMake module files
+[8.823s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input' for CMake config files
+[8.824s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input/lib'
+[8.824s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input/bin'
+[8.824s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input/lib/pkgconfig/input.pc'
+[8.825s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input/lib/python3.12/site-packages'
+[8.825s] Level 1:colcon.colcon_core.shell:create_environment_hook('input', 'pythonpath')
+[8.825s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/hook/pythonpath.ps1'
+[8.826s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/hook/pythonpath.dsv'
+[8.827s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/input' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/input/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/input/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/input build --build-base /home/balabalu/workspace/WRoverSoftware/build/input/build install --record /home/balabalu/workspace/WRoverSoftware/build/input/install.log --single-version-externally-managed install_data
+[8.828s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/hook/pythonpath.sh'
+[8.829s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/input/bin'
+[8.829s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(input)
+[8.829s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/package.ps1'
+[8.830s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/package.dsv'
+[8.831s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/package.sh'
+[8.832s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/package.bash'
+[8.833s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/input/share/input/package.zsh'
+[8.834s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/input/share/colcon-core/packages/input)
+[8.836s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning' with build type 'ament_python'
+[8.836s] Level 1:colcon.colcon_core.shell:create_environment_hook('path_planning', 'ament_prefix_path')
+[8.837s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/hook/ament_prefix_path.ps1'
+[8.838s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/hook/ament_prefix_path.dsv'
+[8.839s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/hook/ament_prefix_path.sh'
+[8.839s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[8.839s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[8.888s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance' for CMake module files
+[8.889s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance' for CMake config files
+[8.890s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib'
+[8.899s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/bin'
+[8.899s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/pkgconfig/object_avoidance.pc'
+[8.900s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages'
+[8.900s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_avoidance', 'pythonpath')
+[8.901s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/pythonpath.ps1'
+[8.901s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/pythonpath.dsv'
+[8.902s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/pythonpath.sh'
+[8.902s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/bin'
+[8.902s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(object_avoidance)
+[8.903s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/package.ps1'
+[8.903s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/package.dsv'
+[8.904s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/package.sh'
+[8.904s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/package.bash'
+[8.904s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/object_avoidance/package.zsh'
+[8.905s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/share/colcon-core/packages/object_avoidance)
+[8.906s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors' with build type 'ament_python'
+[8.906s] Level 1:colcon.colcon_core.shell:create_environment_hook('sensors', 'ament_prefix_path')
+[8.906s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/ament_prefix_path.ps1'
+[8.906s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/ament_prefix_path.dsv'
+[8.907s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/ament_prefix_path.sh'
+[8.907s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[8.907s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[8.899s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_avoidance' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/object_avoidance/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/object_avoidance/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/object_avoidance build --build-base /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/build install --record /home/balabalu/workspace/WRoverSoftware/build/object_avoidance/install.log --single-version-externally-managed install_data
+[9.699s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning'
+[9.699s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[9.700s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[9.732s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation' for CMake module files
+[9.735s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/auto_implementation' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/auto_implementation/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/auto_implementation build --build-base /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build install --record /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/install.log --single-version-externally-managed install_data
+[9.736s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation' for CMake config files
+[9.737s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib'
+[9.737s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/bin'
+[9.737s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/pkgconfig/auto_implementation.pc'
+[9.738s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages'
+[9.738s] Level 1:colcon.colcon_core.shell:create_environment_hook('auto_implementation', 'pythonpath')
+[9.739s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/pythonpath.ps1'
+[9.740s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/pythonpath.dsv'
+[9.740s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/pythonpath.sh'
+[9.741s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/bin'
+[9.741s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(auto_implementation)
+[9.742s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/package.ps1'
+[9.742s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/package.dsv'
+[9.743s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/package.sh'
+[9.743s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/package.bash'
+[9.744s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation/package.zsh'
+[9.744s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/colcon-core/packages/auto_implementation)
+[10.341s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors'
+[10.341s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[10.341s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[10.375s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine' with build type 'ament_python'
+[10.376s] Level 1:colcon.colcon_core.shell:create_environment_hook('state_machine', 'ament_prefix_path')
+[10.377s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/hook/ament_prefix_path.ps1'
+[10.378s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/hook/ament_prefix_path.dsv'
+[10.380s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/hook/ament_prefix_path.sh'
+[10.381s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[10.381s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[10.431s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm' for CMake module files
+[10.433s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/arm/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/arm build --build-base /home/balabalu/workspace/WRoverSoftware/build/arm/build install --record /home/balabalu/workspace/WRoverSoftware/build/arm/install.log --single-version-externally-managed install_data
+[10.434s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm' for CMake config files
+[10.434s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm/lib'
+[10.434s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm/bin'
+[10.435s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm/lib/pkgconfig/arm.pc'
+[10.435s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages'
+[10.435s] Level 1:colcon.colcon_core.shell:create_environment_hook('arm', 'pythonpath')
+[10.435s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/hook/pythonpath.ps1'
+[10.436s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/hook/pythonpath.dsv'
+[10.437s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/hook/pythonpath.sh'
+[10.438s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/arm/bin'
+[10.438s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(arm)
+[10.439s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/package.ps1'
+[10.440s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/package.dsv'
+[10.440s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/package.sh'
+[10.441s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/package.bash'
+[10.441s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/arm/share/arm/package.zsh'
+[10.442s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/arm/share/colcon-core/packages/arm)
+[10.446s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/swerve' with build type 'ament_python'
+[10.446s] Level 1:colcon.colcon_core.shell:create_environment_hook('swerve', 'ament_prefix_path')
+[10.447s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/hook/ament_prefix_path.ps1'
+[10.448s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/hook/ament_prefix_path.dsv'
+[10.449s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/hook/ament_prefix_path.sh'
+[10.450s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[10.450s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[10.492s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection' for CMake module files
+[10.494s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/object_detection' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/object_detection/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/object_detection/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/object_detection build --build-base /home/balabalu/workspace/WRoverSoftware/build/object_detection/build install --record /home/balabalu/workspace/WRoverSoftware/build/object_detection/install.log --single-version-externally-managed install_data
+[10.495s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection' for CMake config files
+[10.496s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection/lib'
+[10.496s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection/bin'
+[10.497s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection/lib/pkgconfig/object_detection.pc'
+[10.497s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection/lib/python3.12/site-packages'
+[10.498s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_detection', 'pythonpath')
+[10.498s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/hook/pythonpath.ps1'
+[10.499s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/hook/pythonpath.dsv'
+[10.500s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/hook/pythonpath.sh'
+[10.501s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/object_detection/bin'
+[10.501s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(object_detection)
+[10.502s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/package.ps1'
+[10.502s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/package.dsv'
+[10.503s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/package.sh'
+[10.503s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/package.bash'
+[10.503s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/object_detection/package.zsh'
+[10.504s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/object_detection/share/colcon-core/packages/object_detection)
+[11.179s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine'
+[11.180s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[11.180s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[11.782s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/swerve'
+[11.783s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[11.783s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[12.066s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/path_planning/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/path_planning build --build-base /home/balabalu/workspace/WRoverSoftware/build/path_planning/build install --record /home/balabalu/workspace/WRoverSoftware/build/path_planning/install.log --single-version-externally-managed install_data
+[12.067s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/sensors/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/sensors build --build-base /home/balabalu/workspace/WRoverSoftware/build/sensors/build install --record /home/balabalu/workspace/WRoverSoftware/build/sensors/install.log --single-version-externally-managed install_data
+[13.384s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/state_machine/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/state_machine build --build-base /home/balabalu/workspace/WRoverSoftware/build/state_machine/build install --record /home/balabalu/workspace/WRoverSoftware/build/state_machine/install.log --single-version-externally-managed install_data
+[13.492s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors' for CMake module files
+[13.494s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors' for CMake config files
+[13.493s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/sensors' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/sensors/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/sensors build --build-base /home/balabalu/workspace/WRoverSoftware/build/sensors/build install --record /home/balabalu/workspace/WRoverSoftware/build/sensors/install.log --single-version-externally-managed install_data
+[13.503s] Level 1:colcon.colcon_core.shell:create_environment_hook('sensors', 'cmake_prefix_path')
+[13.504s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/cmake_prefix_path.ps1'
+[13.506s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/cmake_prefix_path.dsv'
+[13.509s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/cmake_prefix_path.sh'
+[13.510s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors/lib'
+[13.510s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors/bin'
+[13.510s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/pkgconfig/sensors.pc'
+[13.510s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors/lib/python3.12/site-packages'
+[13.511s] Level 1:colcon.colcon_core.shell:create_environment_hook('sensors', 'pythonpath')
+[13.515s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/pythonpath.ps1'
+[13.516s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/pythonpath.dsv'
+[13.517s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/hook/pythonpath.sh'
+[13.518s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/sensors/bin'
+[13.518s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(sensors)
+[13.518s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.ps1'
+[13.521s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.dsv'
+[13.522s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.sh'
+[13.523s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.bash'
+[13.523s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.zsh'
+[13.525s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/sensors/share/colcon-core/packages/sensors)
+[13.622s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/swerve': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/swerve/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/swerve/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/swerve build --build-base /home/balabalu/workspace/WRoverSoftware/build/swerve/build install --record /home/balabalu/workspace/WRoverSoftware/build/swerve/install.log --single-version-externally-managed install_data
+[13.641s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning' for CMake module files
+[13.642s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/path_planning/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/path_planning build --build-base /home/balabalu/workspace/WRoverSoftware/build/path_planning/build install --record /home/balabalu/workspace/WRoverSoftware/build/path_planning/install.log --single-version-externally-managed install_data
+[13.643s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning' for CMake config files
+[13.643s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib'
+[13.644s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning/bin'
+[13.644s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/pkgconfig/path_planning.pc'
+[13.644s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages'
+[13.644s] Level 1:colcon.colcon_core.shell:create_environment_hook('path_planning', 'pythonpath')
+[13.645s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/hook/pythonpath.ps1'
+[13.645s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/hook/pythonpath.dsv'
+[13.646s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/hook/pythonpath.sh'
+[13.647s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/path_planning/bin'
+[13.647s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(path_planning)
+[13.647s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/package.ps1'
+[13.648s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/package.dsv'
+[13.648s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/package.sh'
+[13.649s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/package.bash'
+[13.649s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning/package.zsh'
+[13.650s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/path_planning/share/colcon-core/packages/path_planning)
+[14.841s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine' for CMake module files
+[14.842s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/state_machine/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/state_machine build --build-base /home/balabalu/workspace/WRoverSoftware/build/state_machine/build install --record /home/balabalu/workspace/WRoverSoftware/build/state_machine/install.log --single-version-externally-managed install_data
+[14.845s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine' for CMake config files
+[14.846s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib'
+[14.846s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine/bin'
+[14.846s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/pkgconfig/state_machine.pc'
+[14.846s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages'
+[14.847s] Level 1:colcon.colcon_core.shell:create_environment_hook('state_machine', 'pythonpath')
+[14.847s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/hook/pythonpath.ps1'
+[14.847s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/hook/pythonpath.dsv'
+[14.848s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/hook/pythonpath.sh'
+[14.849s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/state_machine/bin'
+[14.849s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(state_machine)
+[14.849s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/package.ps1'
+[14.850s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/package.dsv'
+[14.851s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/package.sh'
+[14.852s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/package.bash'
+[14.852s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine/package.zsh'
+[14.853s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/state_machine/share/colcon-core/packages/state_machine)
+[15.046s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve' for CMake module files
+[15.047s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/swerve' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/swerve/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/swerve/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/swerve build --build-base /home/balabalu/workspace/WRoverSoftware/build/swerve/build install --record /home/balabalu/workspace/WRoverSoftware/build/swerve/install.log --single-version-externally-managed install_data
+[15.048s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve' for CMake config files
+[15.049s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve/lib'
+[15.049s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve/bin'
+[15.049s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve/lib/pkgconfig/swerve.pc'
+[15.050s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve/lib/python3.12/site-packages'
+[15.050s] Level 1:colcon.colcon_core.shell:create_environment_hook('swerve', 'pythonpath')
+[15.050s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/hook/pythonpath.ps1'
+[15.051s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/hook/pythonpath.dsv'
+[15.053s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/hook/pythonpath.sh'
+[15.060s] Level 1:colcon.colcon_core.environment:checking '/home/balabalu/workspace/WRoverSoftware/install/swerve/bin'
+[15.062s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(swerve)
+[15.062s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/package.ps1'
+[15.063s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/package.dsv'
+[15.064s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/package.sh'
+[15.065s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/package.bash'
+[15.067s] INFO:colcon.colcon_core.shell:Creating package script '/home/balabalu/workspace/WRoverSoftware/install/swerve/share/swerve/package.zsh'
+[15.068s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/balabalu/workspace/WRoverSoftware/install/swerve/share/colcon-core/packages/swerve)
+[15.068s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[15.070s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[15.070s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[15.070s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[15.101s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[15.102s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[15.102s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[15.136s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[15.138s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/balabalu/workspace/WRoverSoftware/install/local_setup.ps1'
+[15.143s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/balabalu/workspace/WRoverSoftware/install/_local_setup_util_ps1.py'
+[15.146s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/balabalu/workspace/WRoverSoftware/install/setup.ps1'
+[15.172s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/balabalu/workspace/WRoverSoftware/install/local_setup.sh'
+[15.173s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/balabalu/workspace/WRoverSoftware/install/_local_setup_util_sh.py'
+[15.173s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/balabalu/workspace/WRoverSoftware/install/setup.sh'
+[15.196s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/balabalu/workspace/WRoverSoftware/install/local_setup.bash'
+[15.197s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/balabalu/workspace/WRoverSoftware/install/setup.bash'
+[15.225s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/balabalu/workspace/WRoverSoftware/install/local_setup.zsh'
+[15.226s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/balabalu/workspace/WRoverSoftware/install/setup.zsh'

@@ -1,0 +1,49 @@
+[4.885s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/auto_implementation': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/auto_implementation/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/auto_implementation build --build-base /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build install --record /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/install.log --single-version-externally-managed install_data
+[5.840s] running egg_info
+[5.840s] creating ../../../build/auto_implementation/auto_implementation.egg-info
+[5.906s] writing ../../../build/auto_implementation/auto_implementation.egg-info/PKG-INFO
+[5.906s] writing dependency_links to ../../../build/auto_implementation/auto_implementation.egg-info/dependency_links.txt
+[5.906s] writing entry points to ../../../build/auto_implementation/auto_implementation.egg-info/entry_points.txt
+[5.906s] writing requirements to ../../../build/auto_implementation/auto_implementation.egg-info/requires.txt
+[5.906s] writing top-level names to ../../../build/auto_implementation/auto_implementation.egg-info/top_level.txt
+[5.906s] writing manifest file '../../../build/auto_implementation/auto_implementation.egg-info/SOURCES.txt'
+[6.025s] reading manifest file '../../../build/auto_implementation/auto_implementation.egg-info/SOURCES.txt'
+[6.025s] adding license file 'LICENSE'
+[6.026s] writing manifest file '../../../build/auto_implementation/auto_implementation.egg-info/SOURCES.txt'
+[6.027s] running build
+[6.028s] running build_py
+[6.033s] creating /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build
+[6.033s] creating /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib
+[6.034s] creating /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation
+[6.034s] copying auto_implementation/driving_logic.py -> /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation
+[6.034s] copying auto_implementation/finding_object.py -> /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation
+[6.034s] copying auto_implementation/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation
+[6.034s] copying auto_implementation/searching_drive.py -> /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation
+[6.034s] copying auto_implementation/finding_aruco_tag.py -> /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation
+[6.052s] running install
+[6.052s] running install_lib
+[6.116s] creating /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation
+[6.116s] copying /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation/driving_logic.py -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation
+[6.116s] copying /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation/finding_object.py -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation
+[6.116s] copying /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation
+[6.116s] copying /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation/searching_drive.py -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation
+[6.117s] copying /home/balabalu/workspace/WRoverSoftware/build/auto_implementation/build/lib/auto_implementation/finding_aruco_tag.py -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation
+[6.119s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation/driving_logic.py to driving_logic.cpython-312.pyc
+[6.120s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation/finding_object.py to finding_object.cpython-312.pyc
+[6.120s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation/__init__.py to __init__.cpython-312.pyc
+[6.128s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation/searching_drive.py to searching_drive.cpython-312.pyc
+[6.129s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation/finding_aruco_tag.py to finding_aruco_tag.cpython-312.pyc
+[6.129s] running install_data
+[6.130s] creating /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/ament_index
+[6.130s] creating /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/ament_index/resource_index
+[6.130s] creating /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/ament_index/resource_index/packages
+[6.130s] copying resource/auto_implementation -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/ament_index/resource_index/packages
+[6.131s] copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/share/auto_implementation
+[6.131s] running install_egg_info
+[6.185s] Copying ../../../build/auto_implementation/auto_implementation.egg-info to /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/python3.12/site-packages/auto_implementation-0.0.0-py3.12.egg-info
+[6.186s] running install_scripts
+[6.660s] Installing driving_logic script to /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/auto_implementation
+[6.660s] Installing finding_aruco_tag script to /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/auto_implementation
+[6.660s] Installing finding_object script to /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/auto_implementation
+[6.661s] Installing searching_drive script to /home/balabalu/workspace/WRoverSoftware/install/auto_implementation/lib/auto_implementation
+[6.661s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/auto_implementation/install.log'

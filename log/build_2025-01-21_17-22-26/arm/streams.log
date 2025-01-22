@@ -1,0 +1,46 @@
+[4.244s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/arm/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/arm build --build-base /home/balabalu/workspace/WRoverSoftware/build/arm/build install --record /home/balabalu/workspace/WRoverSoftware/build/arm/install.log --single-version-externally-managed install_data
+[5.138s] running egg_info
+[5.138s] creating ../../../build/arm/arm.egg-info
+[5.247s] writing ../../../build/arm/arm.egg-info/PKG-INFO
+[5.256s] writing dependency_links to ../../../build/arm/arm.egg-info/dependency_links.txt
+[5.256s] writing entry points to ../../../build/arm/arm.egg-info/entry_points.txt
+[5.256s] writing requirements to ../../../build/arm/arm.egg-info/requires.txt
+[5.256s] writing top-level names to ../../../build/arm/arm.egg-info/top_level.txt
+[5.257s] writing manifest file '../../../build/arm/arm.egg-info/SOURCES.txt'
+[5.370s] reading manifest file '../../../build/arm/arm.egg-info/SOURCES.txt'
+[5.373s] adding license file 'LICENSE'
+[5.375s] writing manifest file '../../../build/arm/arm.egg-info/SOURCES.txt'
+[5.375s] running build
+[5.376s] running build_py
+[5.376s] creating /home/balabalu/workspace/WRoverSoftware/build/arm/build
+[5.377s] creating /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib
+[5.377s] creating /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm
+[5.377s] copying arm/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm
+[5.377s] copying arm/arm_ik.py -> /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm
+[5.377s] copying arm/IK_logic.py -> /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm
+[5.377s] copying arm/arm_teleop.py -> /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm
+[5.377s] running install
+[5.387s] running install_lib
+[5.448s] creating /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm
+[5.448s] copying /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm
+[5.449s] copying /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm/arm_ik.py -> /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm
+[5.449s] copying /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm/IK_logic.py -> /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm
+[5.449s] copying /home/balabalu/workspace/WRoverSoftware/build/arm/build/lib/arm/arm_teleop.py -> /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm
+[5.452s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm/__init__.py to __init__.cpython-312.pyc
+[5.453s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm/arm_ik.py to arm_ik.cpython-312.pyc
+[5.453s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm/IK_logic.py to IK_logic.cpython-312.pyc
+[5.465s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm/arm_teleop.py to arm_teleop.cpython-312.pyc
+[5.465s] running install_data
+[5.465s] creating /home/balabalu/workspace/WRoverSoftware/install/arm/share/ament_index
+[5.466s] creating /home/balabalu/workspace/WRoverSoftware/install/arm/share/ament_index/resource_index
+[5.466s] creating /home/balabalu/workspace/WRoverSoftware/install/arm/share/ament_index/resource_index/packages
+[5.466s] copying resource/arm -> /home/balabalu/workspace/WRoverSoftware/install/arm/share/ament_index/resource_index/packages
+[5.466s] copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/arm/share/arm
+[5.467s] running install_egg_info
+[5.514s] Copying ../../../build/arm/arm.egg-info to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm-0.0.0-py3.12.egg-info
+[5.526s] running install_scripts
+[5.905s] Installing IK_logic script to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/arm
+[5.905s] Installing arm_ik script to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/arm
+[5.906s] Installing arm_teleop script to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/arm
+[5.906s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/arm/install.log'
+[6.002s] Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/arm/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/arm build --build-base /home/balabalu/workspace/WRoverSoftware/build/arm/build install --record /home/balabalu/workspace/WRoverSoftware/build/arm/install.log --single-version-externally-managed install_data

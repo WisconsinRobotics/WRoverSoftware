@@ -1,0 +1,38 @@
+[3.008s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/state_machine/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/state_machine build --build-base /home/balabalu/workspace/WRoverSoftware/build/state_machine/build install --record /home/balabalu/workspace/WRoverSoftware/build/state_machine/install.log --single-version-externally-managed install_data
+[3.771s] running egg_info
+[3.771s] creating ../../../build/state_machine/state_machine.egg-info
+[3.834s] writing ../../../build/state_machine/state_machine.egg-info/PKG-INFO
+[3.837s] writing dependency_links to ../../../build/state_machine/state_machine.egg-info/dependency_links.txt
+[3.839s] writing entry points to ../../../build/state_machine/state_machine.egg-info/entry_points.txt
+[3.839s] writing requirements to ../../../build/state_machine/state_machine.egg-info/requires.txt
+[3.840s] writing top-level names to ../../../build/state_machine/state_machine.egg-info/top_level.txt
+[3.840s] writing manifest file '../../../build/state_machine/state_machine.egg-info/SOURCES.txt'
+[3.924s] reading manifest file '../../../build/state_machine/state_machine.egg-info/SOURCES.txt'
+[3.924s] adding license file 'LICENSE'
+[3.925s] writing manifest file '../../../build/state_machine/state_machine.egg-info/SOURCES.txt'
+[3.926s] running build
+[3.927s] running build_py
+[3.927s] creating /home/balabalu/workspace/WRoverSoftware/build/state_machine/build
+[3.927s] creating /home/balabalu/workspace/WRoverSoftware/build/state_machine/build/lib
+[3.929s] creating /home/balabalu/workspace/WRoverSoftware/build/state_machine/build/lib/state_machine
+[3.929s] copying state_machine/state_machine.py -> /home/balabalu/workspace/WRoverSoftware/build/state_machine/build/lib/state_machine
+[3.929s] copying state_machine/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/state_machine/build/lib/state_machine
+[3.930s] running install
+[3.950s] running install_lib
+[3.997s] creating /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages/state_machine
+[3.998s] copying /home/balabalu/workspace/WRoverSoftware/build/state_machine/build/lib/state_machine/state_machine.py -> /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages/state_machine
+[3.998s] copying /home/balabalu/workspace/WRoverSoftware/build/state_machine/build/lib/state_machine/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages/state_machine
+[4.002s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages/state_machine/state_machine.py to state_machine.cpython-312.pyc
+[4.007s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages/state_machine/__init__.py to __init__.cpython-312.pyc
+[4.007s] running install_data
+[4.008s] creating /home/balabalu/workspace/WRoverSoftware/install/state_machine/share/ament_index
+[4.011s] creating /home/balabalu/workspace/WRoverSoftware/install/state_machine/share/ament_index/resource_index
+[4.011s] creating /home/balabalu/workspace/WRoverSoftware/install/state_machine/share/ament_index/resource_index/packages
+[4.011s] copying resource/state_machine -> /home/balabalu/workspace/WRoverSoftware/install/state_machine/share/ament_index/resource_index/packages
+[4.011s] copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/state_machine/share/state_machine
+[4.011s] running install_egg_info
+[4.069s] Copying ../../../build/state_machine/state_machine.egg-info to /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages/state_machine-0.0.0-py3.12.egg-info
+[4.071s] running install_scripts
+[4.412s] Installing state_machine script to /home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/state_machine
+[4.413s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/state_machine/install.log'
+[4.467s] Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/state_machine' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/state_machine/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/state_machine/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/state_machine build --build-base /home/balabalu/workspace/WRoverSoftware/build/state_machine/build install --record /home/balabalu/workspace/WRoverSoftware/build/state_machine/install.log --single-version-externally-managed install_data

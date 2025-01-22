@@ -1,0 +1,20 @@
+[ 50%] [32mBuilding CXX object CMakeFiles/gps_reading.dir/src/gps_reading.cpp.o[0m
+[100%] [32m[1mLinking CXX executable gps_reading[0m
+[100%] Built target gps_reading
+-- Install configuration: ""
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/lib/sensors/gps_reading
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/package_run_dependencies/sensors
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/parent_prefix_path/sensors
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/ament_prefix_path.sh
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/ament_prefix_path.dsv
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/path.sh
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/environment/path.dsv
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.bash
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.sh
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.zsh
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/local_setup.dsv
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.dsv
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/ament_index/resource_index/packages/sensors
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/cmake/sensorsConfig.cmake
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/cmake/sensorsConfig-version.cmake
+-- Installing: /home/balabalu/workspace/WRoverSoftware/install/sensors/share/sensors/package.xml

@@ -1,0 +1,24 @@
+[4.243s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/arm/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/arm build --build-base /home/balabalu/workspace/WRoverSoftware/build/arm/build install --record /home/balabalu/workspace/WRoverSoftware/build/arm/install.log --single-version-externally-managed install_data
+[5.005s] running egg_info
+[5.059s] writing ../../../build/arm/arm.egg-info/PKG-INFO
+[5.073s] writing dependency_links to ../../../build/arm/arm.egg-info/dependency_links.txt
+[5.073s] writing entry points to ../../../build/arm/arm.egg-info/entry_points.txt
+[5.073s] writing requirements to ../../../build/arm/arm.egg-info/requires.txt
+[5.073s] writing top-level names to ../../../build/arm/arm.egg-info/top_level.txt
+[5.174s] reading manifest file '../../../build/arm/arm.egg-info/SOURCES.txt'
+[5.179s] adding license file 'LICENSE'
+[5.184s] writing manifest file '../../../build/arm/arm.egg-info/SOURCES.txt'
+[5.185s] running build
+[5.185s] running build_py
+[5.186s] running install
+[5.203s] running install_lib
+[5.254s] running install_data
+[5.258s] running install_egg_info
+[5.318s] removing '/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm-0.0.0-py3.12.egg-info' (and everything under it)
+[5.318s] Copying ../../../build/arm/arm.egg-info to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages/arm-0.0.0-py3.12.egg-info
+[5.323s] running install_scripts
+[5.703s] Installing IK_logic script to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/arm
+[5.703s] Installing arm_ik script to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/arm
+[5.705s] Installing arm_teleop script to /home/balabalu/workspace/WRoverSoftware/install/arm/lib/arm
+[5.706s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/arm/install.log'
+[5.756s] Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Teleop/arm' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/arm/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/arm/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/arm build --build-base /home/balabalu/workspace/WRoverSoftware/build/arm/build install --record /home/balabalu/workspace/WRoverSoftware/build/arm/install.log --single-version-externally-managed install_data

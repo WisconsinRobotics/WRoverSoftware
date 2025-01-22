@@ -1,0 +1,10 @@
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/uninstall.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/sensors_uninstall.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/gps_reading.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/test.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/edit_cache.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/rebuild_cache.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/list_install_components.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/install.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/install/local.dir
+/home/balabalu/workspace/WRoverSoftware/build/sensors/CMakeFiles/install/strip.dir

@@ -1,0 +1,38 @@
+[3.230s] Invoking command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/path_planning/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/path_planning build --build-base /home/balabalu/workspace/WRoverSoftware/build/path_planning/build install --record /home/balabalu/workspace/WRoverSoftware/build/path_planning/install.log --single-version-externally-managed install_data
+[4.040s] running egg_info
+[4.040s] creating ../../../build/path_planning/path_planning.egg-info
+[4.105s] writing ../../../build/path_planning/path_planning.egg-info/PKG-INFO
+[4.107s] writing dependency_links to ../../../build/path_planning/path_planning.egg-info/dependency_links.txt
+[4.111s] writing entry points to ../../../build/path_planning/path_planning.egg-info/entry_points.txt
+[4.111s] writing requirements to ../../../build/path_planning/path_planning.egg-info/requires.txt
+[4.116s] writing top-level names to ../../../build/path_planning/path_planning.egg-info/top_level.txt
+[4.116s] writing manifest file '../../../build/path_planning/path_planning.egg-info/SOURCES.txt'
+[4.246s] reading manifest file '../../../build/path_planning/path_planning.egg-info/SOURCES.txt'
+[4.247s] adding license file 'LICENSE'
+[4.247s] writing manifest file '../../../build/path_planning/path_planning.egg-info/SOURCES.txt'
+[4.248s] running build
+[4.248s] running build_py
+[4.248s] creating /home/balabalu/workspace/WRoverSoftware/build/path_planning/build
+[4.248s] creating /home/balabalu/workspace/WRoverSoftware/build/path_planning/build/lib
+[4.248s] creating /home/balabalu/workspace/WRoverSoftware/build/path_planning/build/lib/path_planning
+[4.250s] copying path_planning/__init__.py -> /home/balabalu/workspace/WRoverSoftware/build/path_planning/build/lib/path_planning
+[4.250s] copying path_planning/path_planning.py -> /home/balabalu/workspace/WRoverSoftware/build/path_planning/build/lib/path_planning
+[4.251s] running install
+[4.262s] running install_lib
+[4.308s] creating /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages/path_planning
+[4.308s] copying /home/balabalu/workspace/WRoverSoftware/build/path_planning/build/lib/path_planning/__init__.py -> /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages/path_planning
+[4.313s] copying /home/balabalu/workspace/WRoverSoftware/build/path_planning/build/lib/path_planning/path_planning.py -> /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages/path_planning
+[4.315s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages/path_planning/__init__.py to __init__.cpython-312.pyc
+[4.315s] byte-compiling /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages/path_planning/path_planning.py to path_planning.cpython-312.pyc
+[4.315s] running install_data
+[4.315s] creating /home/balabalu/workspace/WRoverSoftware/install/path_planning/share/ament_index
+[4.316s] creating /home/balabalu/workspace/WRoverSoftware/install/path_planning/share/ament_index/resource_index
+[4.316s] creating /home/balabalu/workspace/WRoverSoftware/install/path_planning/share/ament_index/resource_index/packages
+[4.316s] copying resource/path_planning -> /home/balabalu/workspace/WRoverSoftware/install/path_planning/share/ament_index/resource_index/packages
+[4.316s] copying package.xml -> /home/balabalu/workspace/WRoverSoftware/install/path_planning/share/path_planning
+[4.316s] running install_egg_info
+[4.398s] Copying ../../../build/path_planning/path_planning.egg-info to /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages/path_planning-0.0.0-py3.12.egg-info
+[4.453s] running install_scripts
+[4.750s] Installing path_planning script to /home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/path_planning
+[4.750s] writing list of installed files to '/home/balabalu/workspace/WRoverSoftware/build/path_planning/install.log'
+[4.806s] Invoked command in '/home/balabalu/workspace/WRoverSoftware/src/Autonomous/path_planning' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/balabalu/workspace/WRoverSoftware/build/path_planning/prefix_override:/home/balabalu/workspace/WRoverSoftware/install/path_planning/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../../build/path_planning build --build-base /home/balabalu/workspace/WRoverSoftware/build/path_planning/build install --record /home/balabalu/workspace/WRoverSoftware/build/path_planning/install.log --single-version-externally-managed install_data
