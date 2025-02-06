@@ -1,0 +1,435 @@
+[0.115s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.115s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=12, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x79a7961d4d10>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x79a796105850>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x79a796105850>>)
+[0.169s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.170s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.170s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.170s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.170s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.170s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.170s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/david-wang/Desktop/Projects/WRoverSoftware'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.203s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['ignore', 'ignore_ament_install']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'ignore'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'ignore_ament_install'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['colcon_pkg']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'colcon_pkg'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['colcon_meta']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'colcon_meta'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['ros']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'ros'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['cmake', 'python']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'cmake'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'python'
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extensions ['python_setup_py']
+[0.204s] Level 1:colcon.colcon_core.package_identification:_identify(executable_launches) by extension 'python_setup_py'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.205s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['ignore', 'ignore_ament_install']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'ignore'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'ignore_ament_install'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['colcon_pkg']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'colcon_pkg'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['colcon_meta']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'colcon_meta'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['ros']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'ros'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['cmake', 'python']
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'cmake'
+[0.206s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'python'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extensions ['python_setup_py']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous) by extension 'python_setup_py'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['ignore', 'ignore_ament_install']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'ignore'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'ignore_ament_install'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['colcon_pkg']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'colcon_pkg'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['colcon_meta']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'colcon_meta'
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extensions ['ros']
+[0.207s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/auto_implementation) by extension 'ros'
+[0.210s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/auto_implementation' with type 'ros.ament_python' and name 'auto_implementation'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['ignore', 'ignore_ament_install']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'ignore'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'ignore_ament_install'
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['colcon_pkg']
+[0.210s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'colcon_pkg'
+[0.211s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['colcon_meta']
+[0.211s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'colcon_meta'
+[0.211s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extensions ['ros']
+[0.211s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_avoidance) by extension 'ros'
+[0.211s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/object_avoidance' with type 'ros.ament_python' and name 'object_avoidance'
+[0.211s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['ignore', 'ignore_ament_install']
+[0.211s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'ignore'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'ignore_ament_install'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['colcon_pkg']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'colcon_pkg'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['colcon_meta']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'colcon_meta'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extensions ['ros']
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection) by extension 'ros'
+[0.212s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/object_detection' with type 'ros.ament_python' and name 'object_detection'
+[0.212s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extensions ['ignore', 'ignore_ament_install']
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extension 'ignore'
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extension 'ignore_ament_install'
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extensions ['colcon_pkg']
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extension 'colcon_pkg'
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extensions ['colcon_meta']
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extension 'colcon_meta'
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extensions ['ros']
+[0.213s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/object_detection_package) by extension 'ros'
+[0.214s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/object_detection_package' with type 'ros.ament_python' and name 'object_detection_package'
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['ignore', 'ignore_ament_install']
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'ignore'
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'ignore_ament_install'
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['colcon_pkg']
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'colcon_pkg'
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['colcon_meta']
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'colcon_meta'
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extensions ['ros']
+[0.214s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/path_planning) by extension 'ros'
+[0.215s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/path_planning' with type 'ros.ament_python' and name 'path_planning'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['ignore', 'ignore_ament_install']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'ignore'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'ignore_ament_install'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['colcon_pkg']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'colcon_pkg'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['colcon_meta']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'colcon_meta'
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extensions ['ros']
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/sensors) by extension 'ros'
+[0.216s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/sensors' with type 'ros.ament_python' and name 'sensors'
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['ignore', 'ignore_ament_install']
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'ignore'
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'ignore_ament_install'
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['colcon_pkg']
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'colcon_pkg'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['colcon_meta']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'colcon_meta'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extensions ['ros']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Autonomous/state_machine) by extension 'ros'
+[0.217s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Autonomous/state_machine' with type 'ros.ament_python' and name 'state_machine'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['ignore', 'ignore_ament_install']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'ignore'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'ignore_ament_install'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['colcon_pkg']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'colcon_pkg'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['colcon_meta']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'colcon_meta'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['ros']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'ros'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['cmake', 'python']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'cmake'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'python'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extensions ['python_setup_py']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages) by extension 'python_setup_py'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['ignore', 'ignore_ament_install']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'ignore'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'ignore_ament_install'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['colcon_pkg']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'colcon_pkg'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['colcon_meta']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'colcon_meta'
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extensions ['ros']
+[0.218s] Level 1:colcon.colcon_core.package_identification:_identify(src/Messages/custom_msgs_srvs) by extension 'ros'
+[0.219s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Messages/custom_msgs_srvs' with type 'ros.ament_cmake' and name 'custom_msgs_srvs'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['ignore', 'ignore_ament_install']
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'ignore'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'ignore_ament_install'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['colcon_pkg']
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'colcon_pkg'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['colcon_meta']
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'colcon_meta'
+[0.219s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['ros']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'ros'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['cmake', 'python']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'cmake'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'python'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extensions ['python_setup_py']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop) by extension 'python_setup_py'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['ignore', 'ignore_ament_install']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'ignore'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'ignore_ament_install'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['colcon_pkg']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'colcon_pkg'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['colcon_meta']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'colcon_meta'
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extensions ['ros']
+[0.220s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/arm) by extension 'ros'
+[0.221s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Teleop/arm' with type 'ros.ament_python' and name 'arm'
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['ignore', 'ignore_ament_install']
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'ignore'
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'ignore_ament_install'
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['colcon_pkg']
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'colcon_pkg'
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['colcon_meta']
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'colcon_meta'
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extensions ['ros']
+[0.221s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/input) by extension 'ros'
+[0.222s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Teleop/input' with type 'ros.ament_python' and name 'input'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['ignore', 'ignore_ament_install']
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'ignore'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'ignore_ament_install'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['colcon_pkg']
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'colcon_pkg'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['colcon_meta']
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'colcon_meta'
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extensions ['ros']
+[0.222s] Level 1:colcon.colcon_core.package_identification:_identify(src/Teleop/swerve) by extension 'ros'
+[0.223s] DEBUG:colcon.colcon_core.package_identification:Package 'src/Teleop/swerve' with type 'ros.ament_python' and name 'swerve'
+[0.223s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.223s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.223s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.223s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.223s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.247s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_args' from command line to 'None'
+[0.247s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_target' from command line to 'None'
+[0.247s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.247s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_clean_cache' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_clean_first' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'cmake_force_configure' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'ament_cmake_args' from command line to 'None'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'catkin_cmake_args' from command line to 'None'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'arm' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.248s] DEBUG:colcon.colcon_core.verb:Building package 'arm' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/arm', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/arm', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/arm', 'symlink_install': False, 'test_result_base': None}
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_args' from command line to 'None'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_target' from command line to 'None'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_clean_cache' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_clean_first' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'cmake_force_configure' from command line to 'False'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'ament_cmake_args' from command line to 'None'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'catkin_cmake_args' from command line to 'None'
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'auto_implementation' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.248s] DEBUG:colcon.colcon_core.verb:Building package 'auto_implementation' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/auto_implementation', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/auto_implementation', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/auto_implementation', 'symlink_install': False, 'test_result_base': None}
+[0.248s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_args' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_target' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_clean_cache' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_clean_first' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'cmake_force_configure' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'ament_cmake_args' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'catkin_cmake_args' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'custom_msgs_srvs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.249s] DEBUG:colcon.colcon_core.verb:Building package 'custom_msgs_srvs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Messages/custom_msgs_srvs', 'symlink_install': False, 'test_result_base': None}
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_args' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_target' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_clean_cache' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_clean_first' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'cmake_force_configure' from command line to 'False'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'ament_cmake_args' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'catkin_cmake_args' from command line to 'None'
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'input' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.249s] DEBUG:colcon.colcon_core.verb:Building package 'input' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/input', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/input', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/input', 'symlink_install': False, 'test_result_base': None}
+[0.249s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_args' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_target' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_clean_cache' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_clean_first' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'cmake_force_configure' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'ament_cmake_args' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'catkin_cmake_args' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_avoidance' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.250s] DEBUG:colcon.colcon_core.verb:Building package 'object_avoidance' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/object_avoidance', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_avoidance', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_avoidance', 'symlink_install': False, 'test_result_base': None}
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_args' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_target' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_clean_cache' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_clean_first' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'cmake_force_configure' from command line to 'False'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'ament_cmake_args' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'catkin_cmake_args' from command line to 'None'
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.250s] DEBUG:colcon.colcon_core.verb:Building package 'object_detection' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/object_detection', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_detection', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_detection', 'symlink_install': False, 'test_result_base': None}
+[0.250s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'cmake_target' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'cmake_clean_cache' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'cmake_clean_first' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'cmake_force_configure' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'ament_cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'catkin_cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'object_detection_package' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.251s] DEBUG:colcon.colcon_core.verb:Building package 'object_detection_package' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/object_detection_package', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_detection_package', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_detection_package', 'symlink_install': False, 'test_result_base': None}
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_target' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_clean_cache' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_clean_first' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'cmake_force_configure' from command line to 'False'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'ament_cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'catkin_cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'path_planning' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.251s] DEBUG:colcon.colcon_core.verb:Building package 'path_planning' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/path_planning', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/path_planning', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/path_planning', 'symlink_install': False, 'test_result_base': None}
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_args' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_target' from command line to 'None'
+[0.251s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_clean_cache' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_clean_first' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'cmake_force_configure' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'ament_cmake_args' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'catkin_cmake_args' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'sensors' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.252s] DEBUG:colcon.colcon_core.verb:Building package 'sensors' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/sensors', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/sensors', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/sensors', 'symlink_install': False, 'test_result_base': None}
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_args' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_target' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_clean_cache' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_clean_first' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'cmake_force_configure' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'ament_cmake_args' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'catkin_cmake_args' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'state_machine' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.252s] DEBUG:colcon.colcon_core.verb:Building package 'state_machine' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/state_machine', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/state_machine', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/state_machine', 'symlink_install': False, 'test_result_base': None}
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_args' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_target' from command line to 'None'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_clean_cache' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_clean_first' from command line to 'False'
+[0.252s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'cmake_force_configure' from command line to 'False'
+[0.253s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'ament_cmake_args' from command line to 'None'
+[0.253s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'catkin_cmake_args' from command line to 'None'
+[0.253s] Level 5:colcon.colcon_core.verb:set package 'swerve' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.253s] DEBUG:colcon.colcon_core.verb:Building package 'swerve' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/build/swerve', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/david-wang/Desktop/Projects/WRoverSoftware/install/swerve', 'merge_install': False, 'path': '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/swerve', 'symlink_install': False, 'test_result_base': None}
+[0.253s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.254s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.254s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/arm' with build type 'ament_python'
+[0.255s] Level 1:colcon.colcon_core.shell:create_environment_hook('arm', 'ament_prefix_path')
+[0.258s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.258s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/arm/share/arm/hook/ament_prefix_path.dsv'
+[0.259s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/arm/share/arm/hook/ament_prefix_path.sh'
+[0.261s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.264s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/auto_implementation' with build type 'ament_python'
+[0.265s] Level 1:colcon.colcon_core.shell:create_environment_hook('auto_implementation', 'ament_prefix_path')
+[0.265s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/ament_prefix_path.dsv'
+[0.266s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/auto_implementation/share/auto_implementation/hook/ament_prefix_path.sh'
+[0.266s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.268s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Messages/custom_msgs_srvs' with build type 'ament_cmake'
+[0.268s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Messages/custom_msgs_srvs'
+[0.268s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.269s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/input' with build type 'ament_python'
+[0.270s] Level 1:colcon.colcon_core.shell:create_environment_hook('input', 'ament_prefix_path')
+[0.270s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/input/share/input/hook/ament_prefix_path.dsv'
+[0.271s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/input/share/input/hook/ament_prefix_path.sh'
+[0.271s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.272s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_avoidance' with build type 'ament_python'
+[0.272s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_avoidance', 'ament_prefix_path')
+[0.273s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/ament_prefix_path.dsv'
+[0.273s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_avoidance/share/object_avoidance/hook/ament_prefix_path.sh'
+[0.274s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.275s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_detection' with build type 'ament_python'
+[0.275s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_detection', 'ament_prefix_path')
+[0.275s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_detection/share/object_detection/hook/ament_prefix_path.dsv'
+[0.276s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_detection/share/object_detection/hook/ament_prefix_path.sh'
+[0.276s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.278s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_detection_package' with build type 'ament_python'
+[0.278s] Level 1:colcon.colcon_core.shell:create_environment_hook('object_detection_package', 'ament_prefix_path')
+[0.278s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_detection_package/share/object_detection_package/hook/ament_prefix_path.dsv'
+[0.279s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/object_detection_package/share/object_detection_package/hook/ament_prefix_path.sh'
+[0.279s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.280s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/path_planning' with build type 'ament_python'
+[0.281s] Level 1:colcon.colcon_core.shell:create_environment_hook('path_planning', 'ament_prefix_path')
+[0.281s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/path_planning/share/path_planning/hook/ament_prefix_path.dsv'
+[0.282s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/path_planning/share/path_planning/hook/ament_prefix_path.sh'
+[0.282s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.284s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/sensors' with build type 'ament_python'
+[0.284s] Level 1:colcon.colcon_core.shell:create_environment_hook('sensors', 'ament_prefix_path')
+[0.284s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/sensors/share/sensors/hook/ament_prefix_path.dsv'
+[0.285s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/sensors/share/sensors/hook/ament_prefix_path.sh'
+[0.286s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.287s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/state_machine' with build type 'ament_python'
+[0.287s] Level 1:colcon.colcon_core.shell:create_environment_hook('state_machine', 'ament_prefix_path')
+[0.287s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/state_machine/share/state_machine/hook/ament_prefix_path.dsv'
+[0.288s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/state_machine/share/state_machine/hook/ament_prefix_path.sh'
+[0.289s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.290s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/swerve' with build type 'ament_python'
+[0.290s] Level 1:colcon.colcon_core.shell:create_environment_hook('swerve', 'ament_prefix_path')
+[0.291s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/swerve/share/swerve/hook/ament_prefix_path.dsv'
+[0.291s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/swerve/share/swerve/hook/ament_prefix_path.sh'
+[0.292s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.524s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/arm'
+[0.524s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.749s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/auto_implementation'
+[0.749s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.757s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs -- -j12 -l12
+[0.993s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/input'
+[0.994s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.224s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_avoidance'
+[1.224s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.474s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_detection'
+[1.474s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.731s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/object_detection_package'
+[1.731s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.951s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/path_planning'
+[1.951s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.137s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/sensors'
+[2.138s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.262s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Autonomous/state_machine'
+[2.263s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.389s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/david-wang/Desktop/Projects/WRoverSoftware/src/Teleop/swerve'
+[2.389s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.394s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs' returned '2': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs -- -j12 -l12
+[2.413s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(custom_msgs_srvs)
+[2.416s] Level 1:colcon.colcon_core.environment:checking '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs' for CMake module files
+[2.417s] Level 1:colcon.colcon_core.environment:checking '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs' for CMake config files
+[2.417s] Level 1:colcon.colcon_core.shell:create_environment_hook('custom_msgs_srvs', 'cmake_prefix_path')
+[2.417s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.dsv'
+[2.418s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/hook/cmake_prefix_path.sh'
+[2.419s] Level 1:colcon.colcon_core.environment:checking '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/bin'
+[2.419s] Level 1:colcon.colcon_core.environment:checking '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/lib/pkgconfig/custom_msgs_srvs.pc'
+[2.419s] Level 1:colcon.colcon_core.environment:checking '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/lib/python3.12/site-packages'
+[2.419s] Level 1:colcon.colcon_core.environment:checking '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/bin'
+[2.419s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.dsv'
+[2.420s] INFO:colcon.colcon_core.shell:Creating package script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.sh'
+[2.421s] INFO:colcon.colcon_core.shell:Creating package script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.bash'
+[2.421s] INFO:colcon.colcon_core.shell:Creating package script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/custom_msgs_srvs/package.zsh'
+[2.422s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/david-wang/Desktop/Projects/WRoverSoftware/install/custom_msgs_srvs/share/colcon-core/packages/custom_msgs_srvs)
+[2.886s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[2.886s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[2.887s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '2'
+[2.887s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[2.892s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[2.892s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[2.892s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[2.903s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[2.904s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/local_setup.sh'
+[2.905s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/david-wang/Desktop/Projects/WRoverSoftware/install/_local_setup_util_sh.py'
+[2.905s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/setup.sh'
+[2.906s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/local_setup.bash'
+[2.906s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/setup.bash'
+[2.907s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/local_setup.zsh'
+[2.907s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/david-wang/Desktop/Projects/WRoverSoftware/install/setup.zsh'
