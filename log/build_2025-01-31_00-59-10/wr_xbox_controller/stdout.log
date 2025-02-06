@@ -1,0 +1,36 @@
+running egg_info
+creating ../../build/wr_xbox_controller/wr_xbox_controller.egg-info
+writing ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/PKG-INFO
+writing dependency_links to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/dependency_links.txt
+writing entry points to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/entry_points.txt
+writing requirements to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/requires.txt
+writing top-level names to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/top_level.txt
+writing manifest file '../../build/wr_xbox_controller/wr_xbox_controller.egg-info/SOURCES.txt'
+reading manifest file '../../build/wr_xbox_controller/wr_xbox_controller.egg-info/SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file '../../build/wr_xbox_controller/wr_xbox_controller.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build
+creating /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build/lib
+creating /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller
+copying wr_xbox_controller/__init__.py -> /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller
+copying wr_xbox_controller/xbox_controller.py -> /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller
+running install
+running install_lib
+creating /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller
+copying /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller/__init__.py -> /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller
+copying /home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller/xbox_controller.py -> /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller
+byte-compiling /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller/xbox_controller.py to xbox_controller.cpython-310.pyc
+running install_data
+creating /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/share/ament_index
+creating /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/share/ament_index/resource_index
+creating /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/share/ament_index/resource_index/packages
+copying resource/wr_xbox_controller -> /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/share/ament_index/resource_index/packages
+copying package.xml -> /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/share/wr_xbox_controller
+running install_egg_info
+Copying ../../build/wr_xbox_controller/wr_xbox_controller.egg-info to /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller-0.0.0-py3.10.egg-info
+running install_scripts
+Installing xbox_controller script to /home/devansh/WRoverForPushing/WRoverSoftware/install/wr_xbox_controller/lib/wr_xbox_controller
+writing list of installed files to '/home/devansh/WRoverForPushing/WRoverSoftware/build/wr_xbox_controller/install.log'

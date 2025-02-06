@@ -1,0 +1,3 @@
+[console_scripts]
+xbox_controller = wr_xbox_controller.xbox_controller:main
+
