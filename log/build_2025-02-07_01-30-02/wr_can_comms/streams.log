@@ -1,0 +1,21 @@
+[0.466s] Invoking command in '/home/devansh/WRoverMotorControl/WRoverSoftware/src/wr_can_comms': PYTHONPATH=/home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/devansh/WRoverMotorControl/WRoverSoftware/install/wr_can_comms/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/wr_can_comms build --build-base /home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/build install --record /home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/install.log --single-version-externally-managed install_data
+[0.558s] running egg_info
+[0.559s] writing ../../build/wr_can_comms/wr_can_comms.egg-info/PKG-INFO
+[0.559s] writing dependency_links to ../../build/wr_can_comms/wr_can_comms.egg-info/dependency_links.txt
+[0.559s] writing entry points to ../../build/wr_can_comms/wr_can_comms.egg-info/entry_points.txt
+[0.559s] writing requirements to ../../build/wr_can_comms/wr_can_comms.egg-info/requires.txt
+[0.559s] writing top-level names to ../../build/wr_can_comms/wr_can_comms.egg-info/top_level.txt
+[0.560s] reading manifest file '../../build/wr_can_comms/wr_can_comms.egg-info/SOURCES.txt'
+[0.560s] writing manifest file '../../build/wr_can_comms/wr_can_comms.egg-info/SOURCES.txt'
+[0.560s] running build
+[0.561s] running build_py
+[0.561s] running install
+[0.561s] running install_lib
+[0.561s] running install_data
+[0.561s] running install_egg_info
+[0.562s] removing '/home/devansh/WRoverMotorControl/WRoverSoftware/install/wr_can_comms/lib/python3.10/site-packages/wr_can_comms-0.0.0-py3.10.egg-info' (and everything under it)
+[0.562s] Copying ../../build/wr_can_comms/wr_can_comms.egg-info to /home/devansh/WRoverMotorControl/WRoverSoftware/install/wr_can_comms/lib/python3.10/site-packages/wr_can_comms-0.0.0-py3.10.egg-info
+[0.563s] running install_scripts
+[0.572s] Installing can_comms script to /home/devansh/WRoverMotorControl/WRoverSoftware/install/wr_can_comms/lib/wr_can_comms
+[0.572s] writing list of installed files to '/home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/install.log'
+[0.586s] Invoked command in '/home/devansh/WRoverMotorControl/WRoverSoftware/src/wr_can_comms' returned '0': PYTHONPATH=/home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/devansh/WRoverMotorControl/WRoverSoftware/install/wr_can_comms/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/wr_can_comms build --build-base /home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/build install --record /home/devansh/WRoverMotorControl/WRoverSoftware/build/wr_can_comms/install.log --single-version-externally-managed install_data

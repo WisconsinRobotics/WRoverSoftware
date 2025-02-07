@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='root',
     maintainer_email='root@todo.todo',
-    description='Listens for controller input and sends can_comms the requested message',
+    description='Listens for controller input and sends angles and speeds for each swerve module on their own individual topics',
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
