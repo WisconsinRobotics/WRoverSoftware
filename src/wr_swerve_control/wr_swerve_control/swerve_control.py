@@ -13,6 +13,7 @@ class SwerveControlSubsrciber(Node):
                          "BL":["74","75"],
                          "BR":["76","77"]
                         }
+                        #Module:[Drive, Swerve]
         self.max_rpm = 20000
         self.subscription_FL = self.create_subscription(
             Float32MultiArray,
