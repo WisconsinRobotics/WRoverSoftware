@@ -17,7 +17,7 @@ class XboxPublisher(Node):
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
-        self.AXIS_BOUNDARY = 0.4
+        self.AXIS_BOUNDARY = 0.1
 
     def timer_callback(self):
         # No button capability, but doesn't sound like we need it. 
@@ -26,7 +26,7 @@ class XboxPublisher(Node):
 
             if len(self.joysticks) > 0:
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 2 is right stick x-axis
-                motion = [self.joysticks[0].get_axis(0),self.joysticks[0].get_axis(1),self.joysticks[0].get_axis(3)]
+                motion = [self.joysticks[0].get_axis(0),-self.joysticks[0].get_axis(1),self.joysticks[0].get_axis(3)]
                 # Ignore jitter in sticks
                 for i in range(3):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:

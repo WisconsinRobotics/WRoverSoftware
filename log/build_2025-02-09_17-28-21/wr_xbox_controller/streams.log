@@ -1,0 +1,25 @@
+[0.458s] Invoking command in '/home/wiscrobo/WRoverXboxController/WRoverSoftware/src/wr_xbox_controller': PYTHONPATH=/home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/wr_xbox_controller build --build-base /home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/build install --record /home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/install.log --single-version-externally-managed install_data
+[0.633s] running egg_info
+[0.633s] writing ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/PKG-INFO
+[0.633s] writing dependency_links to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/dependency_links.txt
+[0.633s] writing entry points to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/entry_points.txt
+[0.633s] writing requirements to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/requires.txt
+[0.633s] writing top-level names to ../../build/wr_xbox_controller/wr_xbox_controller.egg-info/top_level.txt
+[0.634s] reading manifest file '../../build/wr_xbox_controller/wr_xbox_controller.egg-info/SOURCES.txt'
+[0.635s] adding license file 'LICENSE'
+[0.635s] writing manifest file '../../build/wr_xbox_controller/wr_xbox_controller.egg-info/SOURCES.txt'
+[0.635s] running build
+[0.635s] running build_py
+[0.635s] copying wr_xbox_controller/xbox_controller.py -> /home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller
+[0.636s] running install
+[0.636s] running install_lib
+[0.636s] copying /home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/build/lib/wr_xbox_controller/xbox_controller.py -> /home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller
+[0.637s] byte-compiling /home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller/xbox_controller.py to xbox_controller.cpython-310.pyc
+[0.637s] running install_data
+[0.638s] running install_egg_info
+[0.639s] removing '/home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller-0.0.0-py3.10.egg-info' (and everything under it)
+[0.639s] Copying ../../build/wr_xbox_controller/wr_xbox_controller.egg-info to /home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages/wr_xbox_controller-0.0.0-py3.10.egg-info
+[0.640s] running install_scripts
+[0.657s] Installing xbox_controller script to /home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/wr_xbox_controller
+[0.658s] writing list of installed files to '/home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/install.log'
+[0.690s] Invoked command in '/home/wiscrobo/WRoverXboxController/WRoverSoftware/src/wr_xbox_controller' returned '0': PYTHONPATH=/home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wiscrobo/WRoverXboxController/WRoverSoftware/install/wr_xbox_controller/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/wr_xbox_controller build --build-base /home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/build install --record /home/wiscrobo/WRoverXboxController/WRoverSoftware/build/wr_xbox_controller/install.log --single-version-externally-managed install_data
