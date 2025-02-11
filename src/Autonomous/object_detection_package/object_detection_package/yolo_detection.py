@@ -94,7 +94,7 @@ class YOLODetectionPublisher(Node):
             msg = Detection()
             msg.x = int(x1 + x2 / 2)
             msg.y = int(y1 + y2 / 2)
-            msg.cls = 0 if best_cls == "bottle" else "1"
+            msg.cls = 0 if best_cls == "bottle" else 1
             self.publisher_.publish(msg)
             self.get_logger().info(f"Publishing {msg.x}, {msg.y}, {msg.cls}")
 
