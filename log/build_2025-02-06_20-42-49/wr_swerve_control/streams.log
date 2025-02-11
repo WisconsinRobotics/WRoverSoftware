@@ -1,0 +1,22 @@
+[0.757s] Invoking command in '/home/wiscrobo/WRoverMotorControl/WRoverSoftware/src/wr_swerve_control': PYTHONPATH=/home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wiscrobo/WRoverMotorControl/WRoverSoftware/install/wr_swerve_control/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/wr_swerve_control build --build-base /home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/build install --record /home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/install.log --single-version-externally-managed install_data
+[0.914s] running egg_info
+[0.914s] writing ../../build/wr_swerve_control/wr_swerve_control.egg-info/PKG-INFO
+[0.915s] writing dependency_links to ../../build/wr_swerve_control/wr_swerve_control.egg-info/dependency_links.txt
+[0.915s] writing entry points to ../../build/wr_swerve_control/wr_swerve_control.egg-info/entry_points.txt
+[0.915s] writing requirements to ../../build/wr_swerve_control/wr_swerve_control.egg-info/requires.txt
+[0.915s] writing top-level names to ../../build/wr_swerve_control/wr_swerve_control.egg-info/top_level.txt
+[0.916s] reading manifest file '../../build/wr_swerve_control/wr_swerve_control.egg-info/SOURCES.txt'
+[0.916s] adding license file 'LICENSE'
+[0.917s] writing manifest file '../../build/wr_swerve_control/wr_swerve_control.egg-info/SOURCES.txt'
+[0.918s] running build
+[0.918s] running build_py
+[0.918s] running install
+[0.918s] running install_lib
+[0.918s] running install_data
+[0.918s] running install_egg_info
+[0.919s] removing '/home/wiscrobo/WRoverMotorControl/WRoverSoftware/install/wr_swerve_control/lib/python3.10/site-packages/wr_swerve_control-0.0.0-py3.10.egg-info' (and everything under it)
+[0.920s] Copying ../../build/wr_swerve_control/wr_swerve_control.egg-info to /home/wiscrobo/WRoverMotorControl/WRoverSoftware/install/wr_swerve_control/lib/python3.10/site-packages/wr_swerve_control-0.0.0-py3.10.egg-info
+[0.920s] running install_scripts
+[0.936s] Installing swerve_control script to /home/wiscrobo/WRoverMotorControl/WRoverSoftware/install/wr_swerve_control/lib/wr_swerve_control
+[0.936s] writing list of installed files to '/home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/install.log'
+[0.968s] Invoked command in '/home/wiscrobo/WRoverMotorControl/WRoverSoftware/src/wr_swerve_control' returned '0': PYTHONPATH=/home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/wiscrobo/WRoverMotorControl/WRoverSoftware/install/wr_swerve_control/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/wr_swerve_control build --build-base /home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/build install --record /home/wiscrobo/WRoverMotorControl/WRoverSoftware/build/wr_swerve_control/install.log --single-version-externally-managed install_data

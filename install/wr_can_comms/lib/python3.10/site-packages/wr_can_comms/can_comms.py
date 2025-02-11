@@ -137,6 +137,7 @@ def build_msg(command: str, value: int, vesc_id: int, raw: bool = False):
 
     # build data
     int_data = value * scaling
+    int_data = int(int_data)
     # VESC uses big endian, and we need 4 bytes
     data = int_data.to_bytes(4, byteorder='big')
 
