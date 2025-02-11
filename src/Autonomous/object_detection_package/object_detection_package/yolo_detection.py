@@ -7,8 +7,12 @@ from rclpy.node import Node
 from ultralytics import YOLO
 from std_msgs.msg import String
 
-# Import custom message
+# Import custom messages
 from custom_msgs_srvs.msg import Detection
+
+# Import package share directory path
+from ament_index_python.packages import get_package_share_directory
+
 
 class YOLODetectionPublisher(Node):
     # Initialization
@@ -36,7 +40,7 @@ class YOLODetectionPublisher(Node):
             self.get_logger().error("Failed to open webcam")
 
         # Load YOLO model
-        self.model = YOLO(os.path.join(os.path.dirname(__file__), "fine-tuning8_best.pt"))
+        self.model = YOLO(os.path.join(get_package_share_directory("object_detection_package"), "model.pt"))
 
 
     # Async fuction for YOLO inference

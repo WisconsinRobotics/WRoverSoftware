@@ -10,6 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name, ['model.pt'])
     ],
     install_requires=[
       'setuptools',
@@ -19,8 +20,8 @@ setup(
       'opencv-python'
     ],
     zip_safe=True,
-    maintainer='david-wang',
-    maintainer_email='wang3458@wisc.edu',
+    maintainer='David Wang',
+    maintainer_email='davidw070129@gmail.com',
     description='A ROS2 package for YOLO-based object detection',
     license='Apache-2.0',
     tests_require=['pytest'],

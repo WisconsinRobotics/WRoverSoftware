@@ -3,8 +3,8 @@
 <package format="3">
   <name>custom_msgs_srvs</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="nicolasdittmarg1@gmail.com">balabalu</maintainer>
+  <description>A package that stores custom messages and services</description>
+  <maintainer email="wang3458@wisc.edu">David Wang</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
