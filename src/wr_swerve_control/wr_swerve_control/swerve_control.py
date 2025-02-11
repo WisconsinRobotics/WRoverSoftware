@@ -13,7 +13,8 @@ class SwerveControlSubsrciber(Node):
                          "BL":["74","75"],
                          "BR":["76","77"]
                         }
-        self.max_rpm = 20000
+        self.max_rpm = 2000
+        self.limit_rotation = 0
         self.subscription_FL = self.create_subscription(
             Float32MultiArray,
             'swerve_FL',
@@ -50,8 +51,8 @@ class SwerveControlSubsrciber(Node):
         can_msg_angle = String()
         
         turn_amount = (msg.data[1]/4 + 180)
-        if turn_amount < 140 or turn_amount > 220:
-            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 140-220")
+        if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
+            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
             can_msg_angle.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
@@ -68,8 +69,8 @@ class SwerveControlSubsrciber(Node):
         can_msg_angle = String()
 
         turn_amount = (msg.data[1]/4 + 180)
-        if turn_amount < 140 or turn_amount > 220:
-            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 140-220")
+        if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
+            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
             can_msg_angle.data = self.vesc_ids["FR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
@@ -86,8 +87,8 @@ class SwerveControlSubsrciber(Node):
         can_msg_angle = String()
 
         turn_amount = (msg.data[1]/4 + 180)
-        if turn_amount < 140 or turn_amount > 220:
-            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 140-220")
+        if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
+            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
             can_msg_angle.data = self.vesc_ids["BL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
@@ -104,8 +105,8 @@ class SwerveControlSubsrciber(Node):
         can_msg_angle = String()
 
         turn_amount = (msg.data[1]/4 + 180)
-        if turn_amount < 140 or turn_amount > 220:
-            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 140-220")
+        if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
+            self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
             can_msg_angle.data = self.vesc_ids["BR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to

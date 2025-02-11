@@ -10,8 +10,8 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     # + or - depends on what wheel it is
 
     #TODO GET BODY HEIGHT AND WIDTH
-    BODY_HEIGHT = 1
-    BODY_WIDTH = 1
+    BODY_HEIGHT = 0.93
+    BODY_WIDTH = 0.60
     # see "derivation of inverse kinematics for swerve" figure 5
     # possible x components    
     A = vehicle_translation[0] - ((rotational_velocity)*(BODY_HEIGHT/2))
