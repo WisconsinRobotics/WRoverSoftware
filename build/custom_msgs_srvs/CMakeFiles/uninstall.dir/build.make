@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs
+CMAKE_SOURCE_DIR = /home/david-wang/Desktop/Projects/WRoverSoftware/src/Messages/custom_msgs_srvs
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs
+CMAKE_BINARY_DIR = /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs
 
 # Utility rule file for uninstall.
 
@@ -78,6 +78,6 @@ CMakeFiles/uninstall.dir/clean:
 .PHONY : CMakeFiles/uninstall.dir/clean
 
 CMakeFiles/uninstall.dir/depend:
-	cd /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs /home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs/CMakeFiles/uninstall.dir/DependInfo.cmake "--color=$(COLOR)"
+	cd /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/david-wang/Desktop/Projects/WRoverSoftware/src/Messages/custom_msgs_srvs /home/david-wang/Desktop/Projects/WRoverSoftware/src/Messages/custom_msgs_srvs /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs/CMakeFiles/uninstall.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/uninstall.dir/depend
 
