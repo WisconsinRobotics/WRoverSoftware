@@ -11,7 +11,7 @@ pygame.init()
 class XboxPublisher(Node):
 
     def __init__(self):
-        super().__init__('xbox_publisher')
+        super().__init__('old_xbox_publisher')
         self.swerve_publisher_ = self.create_publisher(Float32MultiArray, 'swerve', 10)
         # NOTE: This might need to be tuned
         timer_period = 0.05  # seconds
@@ -81,14 +81,14 @@ class XboxPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    xbox_publisher = XboxPublisher()
+    old_xbox_publisher = XboxPublisher()
 
-    rclpy.spin(xbox_publisher)
+    rclpy.spin(old_xbox_publisher)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    xbox_publisher.destroy_node()
+    old_xbox_publisher.destroy_node()
     rclpy.shutdown()
 
 
