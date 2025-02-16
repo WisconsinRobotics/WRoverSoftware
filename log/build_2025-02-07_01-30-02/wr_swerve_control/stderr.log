@@ -1,5 +1,0 @@
-  File "/home/devansh/WRoverMotorControl/WRoverSoftware/install/wr_swerve_control/lib/python3.10/site-packages/wr_swerve_control/swerve_control.py", line 11
-    self.vesc_ids = {"FL":["70","71"]
-                          
-SyntaxError: invalid syntax. Perhaps you forgot a comma?
-

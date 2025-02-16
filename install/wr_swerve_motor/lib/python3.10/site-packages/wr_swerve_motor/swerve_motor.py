@@ -9,9 +9,15 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     # y component is vehicle_translation +/- rot_vel*body_height/2
     # + or - depends on what wheel it is
 
+    # Kohler added code here to handle triggers
+
+    rotational_velocity = -((float(rotational_velocity[0]) + 1) / 2.0) + ((float(rotational_velocity[1]) + 1.0) / 2.0)
+
+    #print("Rotational velocity", rotational_velocity)
+
     #TODO GET BODY HEIGHT AND WIDTH
-    BODY_HEIGHT = 1
-    BODY_WIDTH = 1
+    BODY_HEIGHT = 0.93
+    BODY_WIDTH = 0.60
     # see "derivation of inverse kinematics for swerve" figure 5
     # possible x components    
     A = vehicle_translation[0] - ((rotational_velocity)*(BODY_HEIGHT/2))
@@ -37,7 +43,7 @@ def get_wheel_speeds(wheel_vectors):
 
 def get_wheel_angle(wheel_vector):
     # arctan2(x_component, y_component)
-    return (math.atan2(wheel_vector[0], wheel_vector[1])) * (180/math.pi)
+    return (math.atan2((wheel_vector[0]), wheel_vector[1])) * (180/math.pi)
 
 def get_wheel_angles(wheel_vectors):
     return [get_wheel_angle(wheel_vectors[0]),
@@ -63,13 +69,13 @@ class SwerveSubscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
+        #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
-        wheel_vectors = get_wheel_vectors([motion[0],motion[1]],motion[2])
+        wheel_vectors = get_wheel_vectors([motion[1],motion[0]],[motion[2], motion[3]])
         wheel_speeds  = get_wheel_speeds(wheel_vectors)
         wheel_angles  = get_wheel_angles(wheel_vectors)
-        print("Wheel Speeds", wheel_speeds)
-        print("Wheel Angles", wheel_angles)
+        #print("Wheel Speeds", wheel_speeds)
+        #print("Wheel Angles", wheel_angles)
 
         # TODO: Make this more abstract for actual control
         if len(wheel_speeds) == 4 and len(wheel_angles) == 4:
@@ -95,6 +101,7 @@ class SwerveSubscriber(Node):
 def main(args=None):
     rclpy.init(args=args)
     swerve_subscriber = SwerveSubscriber()
+    print("Starting ros2 swerve-motor node")
     rclpy.spin(swerve_subscriber)
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically

@@ -15,7 +15,7 @@ class CANSubscriber(Node):
         self.subscription  # prevent unused variable warning
 
     def listener_callback(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
+        #self.get_logger().info('I heard: "%s"' % msg.data)
         # Parse message for data
         # NOTE: Assuming "vesc_id COMMAND value value_type"
         can_msg = msg.data.split(' ')
@@ -40,7 +40,7 @@ class CANSubscriber(Node):
 def send_msg(compiled_msg: can.message.Message):
     """Immediately send a compiled CAN message"""
     channel = 'can0'
-    print(f"Sending {compiled_msg.arbitration_id} with {compiled_msg.data}")
+    #print(f"Sending {compiled_msg.arbitration_id} with {compiled_msg.data}")
     with can.Bus(channel=channel, interface='socketcan') as bus:
         bus.send(compiled_msg)
 
