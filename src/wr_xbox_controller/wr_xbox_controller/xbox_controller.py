@@ -58,7 +58,7 @@ class XboxPublisher(Node):
 
                 if event.type == pygame.JOYDEVICEREMOVED:
                     swerve_command = Float32MultiArray()
-                    motion = [0.0,0.0,0.0]
+                    motion = [0.0,0.0,-1,-1]
                     swerve_command.data = motion
                     self.swerve_publisher_.publish(swerve_command)
                     self.joysticks = {}
