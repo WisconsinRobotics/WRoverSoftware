@@ -13,14 +13,14 @@ class XboxPublisher(Node):
 
     def __init__(self):
         super().__init__('arm_xbox_publisher')
-        self.swerve_publisher_ = self.create_publisher(Float32MultiArray, 'arm', 10)
+        self.arm_publisher = self.create_publisher(Float32MultiArray, 'joy', 10)
         # NOTE: This might need to be tuned
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
         self.AXIS_BOUNDARY = 0.1
-        self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'arm', 2)
-        self.joysticks_publisher_= self.create_publisher(Int16MultiArray, 'arm', 2)
+
+        self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
         self.buttons=[0,0,0,0] #Up, Down, Left, Right
 
     def timer_callback(self):
@@ -39,7 +39,7 @@ class XboxPublisher(Node):
                 # Publish to topic swerve
                 swerve_command = Float32MultiArray()
                 swerve_command.data = motion
-                self.swerve_publisher_.publish(swerve_command)
+                self.arm_publisher.publish(swerve_command)
             
             
             for event in pygame.event.get():
@@ -62,7 +62,10 @@ class XboxPublisher(Node):
                         self.buttons[3] = 1
                     else:
                         self.buttons[3] = 0  # Reset to False
-                        
+                buttons_command = Int16MultiArray()
+                buttons_command.data = self.buttons
+                self.buttons_publisher_.publish(buttons_command)
+            
                         
 
                 # Handle hotplugging
