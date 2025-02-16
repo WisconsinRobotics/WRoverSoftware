@@ -26,16 +26,11 @@ class XboxPublisher(Node):
 
             if len(self.joysticks) > 0:
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 2 is right stick x-axis
-                motion = [-self.joysticks[0].get_axis(1),
-                           self.joysticks[0].get_axis(3),
-                           self.joysticks[0].get_axis(2),
-                           self.joysticks[0].get_axis(5) ]
-                           
+                motion = [self.joysticks[0].get_axis(0),-self.joysticks[0].get_axis(1),self.joysticks[0].get_axis(3)]
                 # Ignore jitter in sticks
-                for i in range(len(motion)):
+                for i in range(3):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:
                         motion[i] = 0.0
-
                 print(motion)
                 # Publish to topic swerve
                 swerve_command = Float32MultiArray()
@@ -58,7 +53,7 @@ class XboxPublisher(Node):
 
                 if event.type == pygame.JOYDEVICEREMOVED:
                     swerve_command = Float32MultiArray()
-                    motion = [0.0,0.0,-1,-1]
+                    motion = [0.0,0.0,0.0]
                     swerve_command.data = motion
                     self.swerve_publisher_.publish(swerve_command)
                     self.joysticks = {}
