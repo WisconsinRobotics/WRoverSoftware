@@ -1,0 +1,4 @@
+source;share/arm_test_node/local_setup.bash
+source;share/arm_test_node/local_setup.dsv
+source;share/arm_test_node/local_setup.sh
+source;share/arm_test_node/local_setup.zsh
