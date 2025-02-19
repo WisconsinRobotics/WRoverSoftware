@@ -14,11 +14,11 @@ class XboxPublisher(Node):
         super().__init__('xbox_publisher')
         self.swerve_publisher_ = self.create_publisher(Float32MultiArray, 'swerve', 10)
         # NOTE: This might need to be tuned
-        timer_period = 0.05  # seconds
+        timer_period = 0.5  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
         self.AXIS_BOUNDARY = 0.1
-
+    
     def timer_callback(self):
         # No button capability, but doesn't sound like we need it. 
         running = True
@@ -30,7 +30,7 @@ class XboxPublisher(Node):
                            self.joysticks[0].get_axis(3),
                            self.joysticks[0].get_axis(2),
                            self.joysticks[0].get_axis(5) ]
-                           
+                print(motion)           
                 # Ignore jitter in sticks
                 for i in range(len(motion)):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:
