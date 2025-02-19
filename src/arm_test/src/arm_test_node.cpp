@@ -43,8 +43,8 @@ private:
 
         shoulderOut.Output = shoulder_speed;
         elbowOut.Output = elbow_speed;
-
-        elbowMotor.SetControl(elbowOut);
+	std::cout << elbowOut.Output; 
+        std::cout << elbowMotor.SetControl(elbowOut) << '\n';
         shoulderMotor.SetControl(shoulderOut);
     }
 
