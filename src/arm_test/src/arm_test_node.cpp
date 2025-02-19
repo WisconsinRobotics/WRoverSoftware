@@ -28,7 +28,7 @@ public:
           elbowMotor(1, "can0") // Assume elbowMotor has a different ID (1)
     {
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "arm", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+            "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
     }
 
 private:
