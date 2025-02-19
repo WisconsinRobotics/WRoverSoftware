@@ -1,34 +1,30 @@
-#define Phoenix_No_WPI // remove WPI dependencies
-#include "ctre/Phoenix.h"
-#include "ctre/phoenix/platform/Platform.hpp"
-#include "ctre/phoenix/unmanaged/Unmanaged.h"
-#include <chrono>
-#include <iostream>
-#include <string>
-#include <thread>
-#include <unistd.h>
-#include <SDL2/SDL.h>
-
+#include "ctre/phoenix6/TalonFX.hpp"
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float32_multi_array.hpp"
+#include <functional> // Include this for std::bind
 
-using std::placeholders::_1;
-using namespace ctre::phoenix;
-using namespace ctre::phoenix::platform;
-using namespace ctre::phoenix::motorcontrol;
-using namespace ctre::phoenix::motorcontrol::can;
+using namespace ctre::phoenix6;
 
 class MinimalSubscriber : public rclcpp::Node
 {
 public:
     MinimalSubscriber()
         : Node("arm_test"),
-          shoulderMotor(0, "can0"), // Initialize TalonSRX with ID 0 on CAN bus "can0"
-          elbowMotor(1, "can0") // Assume elbowMotor has a different ID (1)
+          elbowMotor(1, "can0"),
+          shoulderMotor(0, "can0"),
+          shoulderOut(0),
+          elbowOut(0)
     {
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, _1));
+            "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
+
+        configs::TalonFXConfiguration fx_cfg{};
+
+        /* the left motor is CCW+ */
+        fx_cfg.MotorOutput.Inverted = signals::InvertedValue::CounterClockwise_Positive;
+        elbowMotor.GetConfigurator().Apply(fx_cfg);
+        shoulderMotor.GetConfigurator().Apply(fx_cfg);
     }
 
 private:
@@ -42,16 +38,23 @@ private:
 
         double shoulder_speed = msg.data[1]; // SDL_CONTROLLER_AXIS_LEFTY
         double elbow_speed = msg.data[2];    // SDL_CONTROLLER_AXIS_LEFTY
+        std::cout << "shoulderSpeed: " << shoulder_speed << ", "
+                  << " ElbowSpeed: " << elbow_speed << '\n';
 
-        shoulderMotor.Set(ControlMode::PercentOutput, shoulder_speed);
-        elbowMotor.Set(ControlMode::PercentOutput, elbow_speed);
+        shoulderOut.Output = shoulder_speed;
+        elbowOut.Output = elbow_speed;
+
+        elbowMotor.SetControl(elbowOut);
+        shoulderMotor.SetControl(shoulderOut);
     }
 
     rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr subscription_;
 
-    // Declare TalonSRX objects as class members
-    TalonSRX shoulderMotor;
-    TalonSRX elbowMotor;
+    // Move these to class members
+    hardware::TalonFX elbowMotor;
+    hardware::TalonFX shoulderMotor;
+    controls::DutyCycleOut shoulderOut;
+    controls::DutyCycleOut elbowOut;
 };
 
 int main(int argc, char *argv[])
