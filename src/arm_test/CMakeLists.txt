@@ -40,10 +40,12 @@ else()
     set(PHOENIX_LIBS_DIR ${CMAKE_SOURCE_DIR}/lib/x86-64)
 endif()
 
-install(DIRECTORY ${PHOENIX_LIBS_DIR})/
-    DESTINATION lib
-    FILE_MATCHING PATTERN "*.so"
+# install(DIRECTORY ${PHOENIX_LIBS_DIR})/
+#     DESTINATION lib
+#     FILE_MATCHING PATTERN "*.so"
 
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "AAAAAAAAAAAAAAAAa")
+execute_process(COMMAND ${CMAKE_COMMAND} -E echo "${PHOENIX_LIBS_DIR}")
 target_link_libraries(arm_test ${PHOENIX_LIBS_DIR}/libCTRE_Phoenix.so)
 target_link_libraries(arm_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixCCI.so)
 target_link_libraries(arm_test ${PHOENIX_LIBS_DIR}/libCTRE_PhoenixTools.so)
