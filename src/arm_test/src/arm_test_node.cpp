@@ -16,7 +16,7 @@ public:
           elbowMotor(1, "can0"),
           shoulderMotor(0, "can0"),
           shoulderOut(0),
-          elbowOut(units::angular_velocity::turns_per_second_t(0)),
+          elbowOut(0_tps),
           shoulder_speed(0), // Initialize speeds to 0
           elbow_speed(0)
     {
@@ -73,7 +73,7 @@ private:
         // Convert Output to double before printing
         std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
                    << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
-        std::cout << elbowMotor.SetControl(elbowOut.WithVelocity(units::angular_velocity::turns_per_second_t(elbow_speed)).WithSlot(0).WithFeedForward(units::voltage::volt_t(0))) << std::endl;
+        std::cout << elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0))) << std::endl;
         std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
         std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
     }
@@ -88,7 +88,7 @@ private:
 
         // Store values as class members for periodic updates
         shoulder_speed = msg.data[1];
-        elbow_speed = static_cast<double>(msg.data[2]*5); // Go for plus/minus 1 rotations per second
+        elbow_speed = static_cast<double>(msg.data[2]* 5_tps); // Go for plus/minus 1 rotations per second
         
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
                   //<< ", Elbow: " << elbow_speed << '\n';
