@@ -47,41 +47,42 @@ class SwerveControlSubsrciber(Node):
     def arm_listener_base(self, msg):
         can_msg_rpm = String()
 
-        rpm = msg.data[0] * self.max_rpm
+        rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["BASE"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('Publishing RPM FL: "%s"' % can_msg_rpm)
+        #self.get_logger().info('RPM BASE: "%s"' % can_msg_rpm.data + '\n')
 
     def arm_listener_wrist_left(self, msg):
         can_msg_rpm = String()
 
-        rpm = msg.data[0] * self.max_rpm
+        rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["WRIST_LEFT"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('Publishing RPM FR: "%s"' % can_msg_rpm)
+        #self.get_logger().info('RPM LEFT_WRIST: "%s"' % can_msg_rpm.data + '\n')
 
     def arm_listener_wrist_right(self, msg):
         can_msg_rpm = String()
     
-        rpm = msg.data[0] * self.max_rpm
+        rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('Publishing RPM BL: "%s"' % can_msg_rpm)
+        #self.get_logger().info('RPM RIGHT_WRIST: "%s"' % can_msg_rpm.data + '\n')
 
     def arm_listener_gripper(self, msg):
         can_msg_rpm = String()
 
-        rpm = msg.data[0] * self.max_rpm
+        rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["GRIPPER"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
+        #self.get_logger().info('RPM GRIPPER: "%s"' % can_msg_rpm.data + '\n')
 
 def main(args=None):
     rclpy.init(args=args)
 
     swerve_control_subscriber = SwerveControlSubsrciber()
-
+    print("Starting ros2 arm_neo node")
     rclpy.spin(swerve_control_subscriber)
+    
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically

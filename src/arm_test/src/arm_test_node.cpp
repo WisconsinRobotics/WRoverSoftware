@@ -71,11 +71,12 @@ private:
         ctre::phoenix::unmanaged::FeedEnable(20);
         shoulderOut.Output = shoulder_speed;
         // Convert Output to double before printing
-        std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
-                   << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
-        std::cout << elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0))) << std::endl;
-        std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
-        std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        //std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
+        //           << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
+        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
+        //std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
+        //std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        //RCLCPP_INFO(get_logger(), "Elbow Speed: '%f'", elbow_speed);    
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
@@ -88,7 +89,7 @@ private:
 
         // Store values as class members for periodic updates
         shoulder_speed = msg.data[1];
-        elbow_speed = static_cast<double>(msg.data[2]* 5_tps); // Go for plus/minus 1 rotations per second
+        elbow_speed = static_cast<double>(msg.data[0]* 5_tps); // Go for plus/minus 1 rotations per second
         
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
                   //<< ", Elbow: " << elbow_speed << '\n';

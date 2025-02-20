@@ -21,17 +21,17 @@ class XboxPublisher(Node):
         self.AXIS_BOUNDARY = 0.1
 
         self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
-        self.buttons=[0,0,0,0] #Up, Down, Left, Right
+        self.buttons=[0,0,0,0,0,0] #Up, Down, Left, Right, A, B
 
     def timer_callback(self):
         #We have button capability, yippee. 
         running = True
         while running:
-            print(len(self.joysticks))
+            #print(len(self.joysticks))
             if len(self.joysticks) > 0:
                 #TODO: Check inputs for arm
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-                motion = [self.joysticks[0].get_axis(0), #Right stick y-axis (hopefully)
+                motion = [-self.joysticks[0].get_axis(4), #Right stick y-axis (hopefully)
                           -self.joysticks[0].get_axis(1), #Left stick y-axis
                            self.joysticks[0].get_axis(2), #Left trigger
                            self.joysticks[0].get_axis(5)] #Right trigger
@@ -39,7 +39,7 @@ class XboxPublisher(Node):
                 for i in range(3):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:
                         motion[i] = 0.0
-                print(motion)
+                #print(motion)
                 # Publish to topic swerve
                 swerve_command = Float32MultiArray()
                 swerve_command.data = motion
@@ -80,9 +80,8 @@ class XboxPublisher(Node):
 
                 print(self.buttons)
                 buttons_command = Int16MultiArray()
-                buttons_command.data = self.buttons
-                self.buttons_publisher_.publish(buttons_command)
-            
+                buttons_command.data = self.buttons  
+                self.buttons_publisher_.publish(buttons_command)          
                         
 
                 # Handle hotplugging
