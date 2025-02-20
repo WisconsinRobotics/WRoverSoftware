@@ -2,8 +2,10 @@
 
 These are the instructions for We have only tested these instructions on Ubuntu and Windows.
 
-### 1. Install Docker
-Make sure you have installed docker. You can install docker [here for windows](https://docs.docker.com/desktop/install/windows-install/) or [here for linux](https://docs.docker.com/desktop/install/linux/)
+### 1. Install and Start Docker
+Make sure you have installed docker. You can install docker [here for windows](https://docs.docker.com/desktop/install/windows-install/) or [here for linux](https://docs.docker.com/desktop/install/linux/).
+
+Now make sure docker is started.
 
 ### 2. Setup display forwarding
 
