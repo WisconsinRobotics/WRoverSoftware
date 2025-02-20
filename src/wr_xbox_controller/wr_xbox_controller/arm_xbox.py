@@ -5,6 +5,11 @@ from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Int16MultiArray
 
+from relaxed_ik_ros2.msg import  EEVelGoals
+from geometry_msgs.msg import  Twist
+
+
+
 # NOTE: This might cause problems if called multiple times
 pygame.init()
 
@@ -23,6 +28,10 @@ class XboxPublisher(Node):
         self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
         self.buttons=[0,0,0,0] #Up, Down, Left, Right
 
+        self.ee_vel_goals_pub = self.create_publisher(EEVelGoals, 'relaxed_ik/ee_vel_goals', 5)
+        self.linear = [0.0,0.0,0.0]
+        self.angular = [0.0,0.0,0.0]
+
     def timer_callback(self):
         #We have button capability, yippee. 
         running = True
@@ -38,6 +47,37 @@ class XboxPublisher(Node):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:
                         motion[i] = 0.0
                 print(motion)
+
+                #### TEMP ######################
+                self.angular[0] = motion[0]/10000
+                self.linear[0] = -motion[1]/1000
+                # No Y movement (linear[1])
+                self.linear[2] = motion[2] /1000
+              
+                msg = EEVelGoals()
+                for i in range(1):
+                    twist = Twist()
+                    twist.linear.x = self.linear[0]
+                    twist.linear.y = self.linear[1]
+                    twist.linear.z = self.linear[2]
+
+                    twist.angular.x = self.angular[0]
+                    twist.angular.y = self.angular[1]
+                    twist.angular.z = self.angular[2]
+
+                    tolerance = Twist()
+                    tolerance.linear.x = 0.0
+                    tolerance.linear.y = 0.0
+                    tolerance.linear.z = 0.0
+                    tolerance.angular.x = 0.0
+                    tolerance.angular.y = 0.0
+                    tolerance.angular.z = 0.0
+
+                    msg.ee_vels.append(twist)
+                    msg.tolerances.append(tolerance)
+                self.ee_vel_goals_pub.publish(msg)
+                ################################################
+
                 # Publish to topic swerve
                 swerve_command = Float32MultiArray()
                 swerve_command.data = motion
