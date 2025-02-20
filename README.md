@@ -14,7 +14,7 @@ Codebase for the URC rover at UW-Madison, 2024-2025.
 - The following commit guidelines are required for "feature" branches and recommended for
 
 ### Commits
-### Vikram was here
+
 #### Subject Line
 
 - Try to keep the subject to 50 characters, and strictly no less than 72 characters
