@@ -16,7 +16,7 @@ public:
           elbowMotor(1, "can0"),
           shoulderMotor(0, "can0"),
           shoulderOut(0),
-          elbowOut(0_tps),
+          elbowOut(units::angular_velocity::turns_per_second_t(0)),
           shoulder_speed(0), // Initialize speeds to 0
           elbow_speed(0)
     {
@@ -42,10 +42,10 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-        mm.MotionMagicCruiseVelocity = 2_tps; // 5 (mechanism) rotations per second cruise
-        mm.MotionMagicAcceleration = 5_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
+        mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(2); // 5 (mechanism) rotations per second cruise
+        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(5); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
-        mm.MotionMagicJerk = 100_tr_per_s_cu;
+        mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100);
         
         configs::Slot0Configs &slot0 = cfg.Slot0;
         slot0.kS = 0.0; // Add 0.25 V output to overcome static friction
