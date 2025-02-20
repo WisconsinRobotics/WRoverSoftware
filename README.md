@@ -20,7 +20,7 @@ colcon build --symlink-install
 
 * To run the IK with keyboard controls, run the following:
     ```bash
-    ros2 launch urdf_visualization demo.launch.py 
+    ros2 launch arm_ik demo.launch.py 
 
     # Run this in another terminal:
     ros2 run relaxed_ik_ros2 keyboard_input.py 
