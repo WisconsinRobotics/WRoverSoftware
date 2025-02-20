@@ -5,7 +5,7 @@ from launch import LaunchDescription
 
 path_to_src = get_package_share_directory('relaxed_ik_ros2')
 path_to_current_package = get_package_share_directory('urdf_visualization')
-setting_file_path = path_to_current_package + '/config/arm.yaml'
+setting_file_path = path_to_current_package + '/config/urc_arm.yaml'
 
 def generate_launch_description():
     # Load the infomation
