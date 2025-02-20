@@ -26,13 +26,15 @@ class XboxPublisher(Node):
     def timer_callback(self):
         #We have button capability, yippee. 
         running = True
-        print("AAAAAAAAA")
-        #self.get_logger().debug("BBBBBBBBBB")
         while running:
             print(len(self.joysticks))
             if len(self.joysticks) > 0:
+                #TODO: Check inputs for arm
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-                motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
+                motion = [self.joysticks[0].get_axis(0), #Right stick y-axis (hopefully)
+                          -self.joysticks[0].get_axis(1), #Left stick y-axis
+                           self.joysticks[0].get_axis(2), #Left trigger
+                           self.joysticks[0].get_axis(5)] #Right trigger
                 # Ignore jitter in sticks
                 for i in range(3):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:
@@ -64,6 +66,18 @@ class XboxPublisher(Node):
                         self.buttons[3] = 1
                     else:
                         self.buttons[3] = 0  # Reset to False
+                elif event.type == pygame.JOYBUTTONDOWN:
+                    if event.button == 0:  # A button
+                        self.buttons[4] = 1
+                    elif event.button == 1:  # B button
+                        self.buttons[5] = 1
+
+                elif event.type == pygame.JOYBUTTONUP:
+                    if event.button == 0:  # A button
+                        self.buttons[4] = 0
+                    elif event.button == 1:  # B button
+                        self.buttons[5] = 0
+
                 print(self.buttons)
                 buttons_command = Int16MultiArray()
                 buttons_command.data = self.buttons

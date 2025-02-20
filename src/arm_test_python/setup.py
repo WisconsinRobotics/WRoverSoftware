@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'arm_test_logic = arm_test_python.arm_test_logic:main'
+            'arm_test_logic = arm_test_python.arm_test_logic:main',
+            'arm_test_neo = arm_test_python.arm_test_neo:main',
         ],
     },
 )
