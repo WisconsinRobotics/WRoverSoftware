@@ -17,6 +17,13 @@ colcon build --symlink-install
 ```
 ## Running
 
+* To run controls:
+    ```bash
+    ros2 run wr_xbox_controller arm_xbox_control
+    ```
+
+
+
 * To run the IK with keyboard controls, run the following:
     ```bash
     ros2 launch arm_ik demo.launch.py 

@@ -23,13 +23,14 @@ Now  build the container image and start the container. Make sure you are in thi
 **If you are on linux...**
 ```bash
 sudo docker build -t urc-container .
-sudo docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/workspace --net=host urc-container
+sudo docker run -it --privileged  -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $(pwd):/workspace --net=host urc-container
 ```
 
 **If you are on Windows...**
+This command does not support usb devices. You will need to pass each device itself.
 ```bash
 docker build -t urc-container .
-docker run -it -e DISPLAY=host.docker.internal:0.0 -v ${PWD}:/workspace --net=host urc-container
+docker run -it  -e DISPLAY=host.docker.internal:0.0 -v ${PWD}:/workspace --net=host urc-container
 ```
 
 You and your computer are all set up, you rock! Now you are ready to continue onto README.md.
