@@ -9,6 +9,7 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     # y component is vehicle_translation +/- rot_vel*body_height/2
     # + or - depends on what wheel it is
 
+
     # Kohler added code here to handle triggers
 
     rotational_velocity = -((float(rotational_velocity[0]) + 1) / 2.0) + ((float(rotational_velocity[1]) + 1.0) / 2.0)
@@ -29,10 +30,32 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     FR_vector = [B, C]
     BL_vector = [A, D]
     BR_vector = [A, C]
-    return [FL_vector, FR_vector, BL_vector, BR_vector]
+    
+    return normalize_angles([FL_vector, FR_vector, BL_vector, BR_vector])
 
 def get_wheel_speed(wheel_vector):
     return math.sqrt(wheel_vector[0]*wheel_vector[0] + wheel_vector[1]*wheel_vector[1])
+
+def normalize_angles(wheels): 
+    wheel_angles = []
+    for i in wheels:
+        wheel_angles.append(get_wheel_angle(i))
+    
+    wheel_magnitudes = []
+    for i in wheels:
+        wheel_magnitudes.append(get_wheel_speed(i))
+    for i in range (0, 3):
+       if wheel_angles[i] < -90:
+           wheel_angles[i] += 180
+           wheel_magnitudes[i] *= -1
+       elif wheel_angles[i] > 90: 
+           wheel_angles[i] -= 180
+           wheel_magnitudes[i] *= -1
+    
+    wheel_vectors = [0,0,0,0]
+    for i in range(0,3):
+        wheel_vectors[i] = [wheel_angles[i],wheel_magnitudes[i]]
+    return wheel_vectors
 
 def get_wheel_speeds(wheel_vectors):
 # returns a list containing vectors [front left, front right, back left, back right]
