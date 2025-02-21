@@ -30,32 +30,11 @@ def get_wheel_vectors(vehicle_translation, rotational_velocity):
     FR_vector = [B, C]
     BL_vector = [A, D]
     BR_vector = [A, C]
-    
-    return normalize_angles([FL_vector, FR_vector, BL_vector, BR_vector])
+
+    return [FL_vector, FR_vector, BL_vector, BR_vector]
 
 def get_wheel_speed(wheel_vector):
     return math.sqrt(wheel_vector[0]*wheel_vector[0] + wheel_vector[1]*wheel_vector[1])
-
-def normalize_angles(wheels): 
-    wheel_angles = []
-    for i in wheels:
-        wheel_angles.append(get_wheel_angle(i))
-    
-    wheel_magnitudes = []
-    for i in wheels:
-        wheel_magnitudes.append(get_wheel_speed(i))
-    for i in range (0, 3):
-       if wheel_angles[i] < -90:
-           wheel_angles[i] += 180
-           wheel_magnitudes[i] *= -1
-       elif wheel_angles[i] > 90: 
-           wheel_angles[i] -= 180
-           wheel_magnitudes[i] *= -1
-    
-    wheel_vectors = [0,0,0,0]
-    for i in range(0,3):
-        wheel_vectors[i] = [wheel_angles[i],wheel_magnitudes[i]]
-    return wheel_vectors
 
 def get_wheel_speeds(wheel_vectors):
 # returns a list containing vectors [front left, front right, back left, back right]
@@ -99,6 +78,14 @@ class SwerveSubscriber(Node):
         wheel_angles  = get_wheel_angles(wheel_vectors)
         #print("Wheel Speeds", wheel_speeds)
         #print("Wheel Angles", wheel_angles)
+        for i in range (0, 3):
+            if wheel_angles[i] < -90.0:
+                wheel_angles[i] += 180.0
+                wheel_speeds[i] *= -1.0
+            elif wheel_angles[i] > 90.0: 
+                wheel_angles[i] -= 180.0
+                wheel_speeds[i] *= -1.0
+
 
         # TODO: Make this more abstract for actual control
         if len(wheel_speeds) == 4 and len(wheel_angles) == 4:
