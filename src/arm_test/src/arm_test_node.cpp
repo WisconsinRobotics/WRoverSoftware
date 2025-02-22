@@ -72,16 +72,15 @@ private:
     {
         ctre::phoenix::unmanaged::FeedEnable(20);
         // Convert Output to double before printing
-        //std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulderOut.Output)
-        //           << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
+        std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulder_speed)
+                   << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
         // NOTE speed 0
-        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
-        shoulderMotor.SetControl(shoulderOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0).WithFeedForward(units::voltage::volt_t(0)));
+        elbowMotor.SetControl(elbowOut.WithVelocity(shoulder_speed * 1_tps).WithSlot(0));
+        shoulderMotor.SetControl(shoulderOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0));
         //std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
         //std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
-        RCLCPP_INFO(get_logger(), "Elbow Pos: '%f'", elbowMotor.GetPosition() );    
-    
-        RCLCPP_INFO(get_logger(), "Shoulder Speed: '%f'", shoulderMotor.GetPosition() );    
+        //RCLCPP_INFO(get_logger(), "Elbow Pos: '%f'", elbowMotor.GetPosition());   
+        //RCLCPP_INFO(get_logger(), "Shoulder Speed: '%f'", shoulderMotor.GetPosition() );    
     
     }
 
@@ -94,7 +93,6 @@ private:
         }
 
         // Store values as class members for periodic updates
-        shoulder_speed = msg.data[1];
         elbow_speed = static_cast<double>(msg.data[1]* 20_tps); // Go for plus/minus 1 rotations per second
         
         shoulder_speed = static_cast<double>(msg.data[0]* 20_tps); // Go for plus/minus 1 rotations per second
@@ -108,8 +106,8 @@ private:
 
     hardware::TalonFX elbowMotor;
     hardware::TalonFX shoulderMotor;
-    controls::MotionMagicVelocityVoltage shoulderOut;
-    controls::MotionMagicVelocityVoltage elbowOut;
+    controls::MotionMagicVelocityDutyCycle shoulderOut;
+    controls::MotionMagicVelocityDutyCycle elbowOut;
 
     // Moved speeds to class members
     double shoulder_speed;
