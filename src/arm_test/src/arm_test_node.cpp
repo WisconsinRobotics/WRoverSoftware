@@ -22,19 +22,22 @@ public:
     {
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
             "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
-
+        
+        ctre::phoenix::unmanaged::SetTransmitEnable(true);
         // fx_cfg is the default config with inverted output
         configs::TalonFXConfiguration fx_cfg{};
 
         /* the left motor is CCW+ */
         fx_cfg.MotorOutput.Inverted = signals::InvertedValue::CounterClockwise_Positive;
         elbowMotor.GetConfigurator().Apply(fx_cfg);
+        fx_cfg.MotorOutput.Inverted = signals::InvertedValue::Clockwise_Positive;
         shoulderMotor.GetConfigurator().Apply(fx_cfg);
 
         // Corrected class name
-        timer_ = this->create_wall_timer(
-            10ms, std::bind(&MinimalSubscriber::timer_callback, this)); // Reduced delay for smoother control
+        timer_shoulder = this->create_wall_timer(
+            10ms, std::bind(&MinimalSubscriber::timer_callback_shoulder, this)); // Reduced delay for smoother control
         
+
         configs::TalonFXConfiguration cfg{};
 
         /* Configure gear ratio */
@@ -44,7 +47,7 @@ public:
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm = cfg.MotionMagic;
         mm.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(20).value(); // 5 (mechanism) rotations per second cruise
-        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(10).value(); // Take approximately 0.5 seconds to reach max vel
+        mm.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(100).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
         mm.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
 
@@ -57,6 +60,7 @@ public:
         slot0.kD = 0; // A velocity error of 1 rps results in 0.5 V output
         
         ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
+        ctre::phoenix::StatusCode statusS = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
         // Configure elbow motor
         for (int i = 0; i < 5; ++i) {
             status = elbowMotor.GetConfigurator().Apply(cfg);
@@ -65,23 +69,26 @@ public:
         if (!status.IsOK()) {
             std::cout << "Could not configure device. Error: " << status.GetName() << std::endl;
         }
+
+        // Configure shoulder motor
+        for (int i = 0; i < 5; ++i) {
+            statusS = shoulderMotor.GetConfigurator().Apply(cfg);
+            if (statusS.IsOK()) break;
+        }
+        if (!statusS.IsOK()) {
+            std::cout << "Could not configure device. Error: " << statusS.GetName() << std::endl;
+        }
+        
     }
 
 private:
-    void timer_callback()
+
+    void timer_callback_shoulder()
     {
-        ctre::phoenix::unmanaged::FeedEnable(20);
-        // Convert Output to double before printing
-        std::cout << "Sending to motors - Shoulder: " << static_cast<double>(shoulder_speed)
-                   << ", Elbow: " << static_cast<double>(elbow_speed) << '\n';
-        // NOTE speed 0
-        elbowMotor.SetControl(elbowOut.WithVelocity(shoulder_speed * 1_tps).WithSlot(0));
-        shoulderMotor.SetControl(shoulderOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0));
-        //std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
-        //std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
-        //RCLCPP_INFO(get_logger(), "Elbow Pos: '%f'", elbowMotor.GetPosition());   
-        //RCLCPP_INFO(get_logger(), "Shoulder Speed: '%f'", shoulderMotor.GetPosition() );    
-    
+        ctre::phoenix::unmanaged::FeedEnable(10);
+        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0));
+        //std::cout << "Vel: " << shoulderMotor.GetVelocity() << std::endl;
+        shoulderMotor.SetControl(shoulderOut.WithVelocity(shoulder_speed * 1_tps).WithSlot(0));
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
@@ -101,7 +108,8 @@ private:
                   //<< ", Elbow: " << elbow_speed << '\n';
     }
 
-    rclcpp::TimerBase::SharedPtr timer_;
+    rclcpp::TimerBase::SharedPtr timer_elbow;
+    rclcpp::TimerBase::SharedPtr timer_shoulder;
     rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr subscription_;
 
     hardware::TalonFX elbowMotor;
