@@ -27,7 +27,7 @@ class XboxPublisher(Node):
         #We have button capability, yippee. 
         running = True
         while running:
-            #print(len(self.joysticks))
+            print(len(self.joysticks))
             if len(self.joysticks) > 0:
                 #TODO: Check inputs for arm
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
@@ -39,17 +39,17 @@ class XboxPublisher(Node):
                 for i in range(3):
                     if abs(motion[i]) < self.AXIS_BOUNDARY:
                         motion[i] = 0.0
-                #print(motion)
+                print(motion)
                 # Publish to topic swerve
                 swerve_command = Float32MultiArray()
                 swerve_command.data = motion
                 self.arm_publisher.publish(swerve_command)
-            
-            
+    
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                elif event.type == pygame.JOYHATMOTION:
+                
+                if event.type == pygame.JOYHATMOTION:
                     if event.value[1] == 1:  # D-Pad Up
                         self.buttons[0] = 1
                     else:
@@ -78,12 +78,13 @@ class XboxPublisher(Node):
                     elif event.button == 1:  # B button
                         self.buttons[5] = 0
 
-                print(self.buttons)
+                #print(self.buttons)
                 buttons_command = Int16MultiArray()
                 buttons_command.data = self.buttons  
                 self.buttons_publisher_.publish(buttons_command)          
-                
-
+        
+                if event.type == pygame.QUIT:
+                    running = False
                 # Handle hotplugging
                 if event.type == pygame.JOYDEVICEADDED:
                     # This event will be generated when the program starts for every
@@ -113,7 +114,6 @@ class XboxPublisher(Node):
                 #    swerve_command = Float32MultiArray()
                 #    swerve_command.data = motion
                 #    self.swerve_publisher_.publish(swerve_command)
-
         pygame.quit()
 def main(args=None):
     rclpy.init(args=args)
