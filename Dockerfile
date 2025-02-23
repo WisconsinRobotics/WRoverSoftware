@@ -35,8 +35,8 @@ RUN apt-get update && \
     python3-pip\
     wget\
     python3-pykdl\
-    vim\
-    phoenix6
+    vim
+    # phoenix6 import doesn't work for now
 
 # Install python packages
 RUN pip install --upgrade pip
