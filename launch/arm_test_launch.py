@@ -17,10 +17,5 @@ def generate_launch_description():
             package='arm_test',
             executable='arm_test_node',
             name='arm_test_node'
-        ),
-        Node(
-            package='wr_xbox_controller',
-            executable='arm_xbox_control',
-            name='arm_xbox'
         )
     ])

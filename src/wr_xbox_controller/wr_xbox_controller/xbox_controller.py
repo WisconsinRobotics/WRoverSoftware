@@ -32,7 +32,7 @@ class XboxPublisher(Node):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
 
-            print(motion)
+            #print(motion)
             # Publish to topic swerve
             swerve_command = Float32MultiArray()
             swerve_command.data = motion
@@ -42,19 +42,24 @@ class XboxPublisher(Node):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            
+            if event.type == pygame.JOYBUTTONDOWN:
+                if event.joy == 0: #First controller
+                    if event.button == 2: # X Button
+                        self.get_logger().info("Pressed first controller (DRIVE)")
 
             # Handle hotplugging
             if event.type == pygame.JOYDEVICEADDED:
                 # This event will be generated when the program starts for every
                 # joystick, filling up the list without needing to create them manually.
                 self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-                print(f"{len(self.joysticks)} Joysticks connected")
-                print(f"There are {self.joysticks[0].get_numaxes()} axes")
-                print(self.joysticks)
+                #print(f"{len(self.joysticks)} Joysticks connected")
+                #print(f"There are {self.joysticks[0].get_numaxes()} axes")
+                #print(self.joysticks)
 
             if event.type == pygame.JOYDEVICEREMOVED:
                 swerve_command = Float32MultiArray()
-                motion = [0.0,0.0,-1,-1]
+                motion = [0.0,0.0,-1.0,-1.0]
                 swerve_command.data = motion
                 self.swerve_publisher_.publish(swerve_command)
                 self.joysticks = {}
