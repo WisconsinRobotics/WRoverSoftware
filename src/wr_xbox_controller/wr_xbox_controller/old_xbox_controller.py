@@ -21,9 +21,6 @@ class XboxPublisher(Node):
 
     def timer_callback(self):
         # No button capability, but doesn't sound like we need it. 
-        running = True
-        while running:
-
             if len(self.joysticks) > 0:
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 2 is right stick x-axis
                 motion = [self.joysticks[0].get_axis(0),-self.joysticks[0].get_axis(1),self.joysticks[0].get_axis(3)]
@@ -72,7 +69,6 @@ class XboxPublisher(Node):
                 #    swerve_command.data = motion
                 #    self.swerve_publisher_.publish(swerve_command)
 
-        pygame.quit()
 def main(args=None):
     rclpy.init(args=args)
 
