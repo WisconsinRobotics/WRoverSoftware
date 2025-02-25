@@ -7,7 +7,7 @@ from std_msgs.msg import Int16MultiArray
 import math
 
 
-WRIST_SPEED_VALUE = .2
+WRIST_SPEED_VALUE = .1 #As we are publishing 100 times per second. It moves 10% of the way per second.
 GRIPPER_SPEED_VALUE = .2
 class ArmLogic(Node):
 
@@ -32,6 +32,14 @@ class ArmLogic(Node):
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
+        timer_period = 0.01  # seconds
+        self.timer_wrist = self.create_timer(timer_period, self.timer_update_wrist)
+
+        #Define Postion of left and right position of wrist
+        self.wrist_positions = [0.0,0.0] #[lef,right]
+        self.D_PAD = [0,0,0,0] #Array to keep track of which buttons are pressed
+        self.absolute_wrist = 0 #Start at zero
+
         #Define messages beforehand
         self.msg_linear_rail = Float64()
         self.msg_linear_rail.data = 0.0
@@ -44,6 +52,7 @@ class ArmLogic(Node):
 
         self.msg_gripper = Float64()
         self.msg_gripper.data = 0.0
+
     
     #Put publishers in timer to limit rate of publishing
     def timer_callback(self):
@@ -58,7 +67,7 @@ class ArmLogic(Node):
         #Converting -1 -> 1 range of triggers to 0->1
         return ((left+1)/2 - (right+1)/2)
     
-    def get_wrist_speeds(self, up, down, left, right) -> Float32MultiArray:
+    def set_wrist_speeds(self, up, down, left, right) -> Float32MultiArray:
         #Assume left is forward
         wrist_speeds = [0,0]
         if up == 1:
@@ -75,6 +84,30 @@ class ArmLogic(Node):
             return wrist_speeds
         else:
             return wrist_speeds
+    
+    def timer_update_wrist(self):
+        #Publishing
+        if self.absolute_wrist >= 0 and self.absolute_wrist <= 100 and 1 in self.D_PAD:
+            self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
+            self.msg_wrist_left.data = float(self.wrist_positions[0])
+            self.msg_wrist_right.data = float(self.wrist_positions[1])
+
+
+    def get_wrist_position(self, up, down, left, right) -> Float32MultiArray:
+        if up == 1:
+            self.wrist_positions[0] += -WRIST_SPEED_VALUE
+            self.wrist_positions[1] += -WRIST_SPEED_VALUE
+            self.absolute_wrist += -WRIST_SPEED_VALUE
+        elif down == 1:
+            self.wrist_positions[0] += WRIST_SPEED_VALUE
+            self.wrist_positions[1] += WRIST_SPEED_VALUE
+            self.absolute_wrist += -WRIST_SPEED_VALUE
+        elif left == 1:
+            self.wrist_positions[0] += WRIST_SPEED_VALUE
+            self.wrist_positions[1] += -WRIST_SPEED_VALUE
+        elif right == 1:
+            self.wrist_positions[0] += -WRIST_SPEED_VALUE
+            self.wrist_positions[1] += WRIST_SPEED_VALUE
 
     
     def get_gripper_speed(self, a, b) -> float:
@@ -99,13 +132,12 @@ class ArmLogic(Node):
         buttons = msg.data
         
         #Expecting D-Pad
-        wrist_speeds = self.get_wrist_speeds(buttons[0], buttons[1], buttons[2], buttons[3])
-        #Expecting A and B buttonrs
+        self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
+        
+        #Expecting A and B buttons
         gripper_speed = self.get_gripper_speed(buttons[4], buttons[5])
         
-        #Publishing
-        self.msg_wrist_left.data = float(wrist_speeds[0])
-        self.msg_wrist_right.data = float(wrist_speeds[1])
+
         self.msg_gripper.data = float(gripper_speed)
     
 

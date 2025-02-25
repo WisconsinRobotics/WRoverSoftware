@@ -53,20 +53,22 @@ class SwerveControlSubsrciber(Node):
         #self.get_logger().info('RPM BASE: "%s"' % can_msg_rpm.data + '\n')
 
     def arm_listener_wrist_left(self, msg):
-        can_msg_rpm = String()
-
-        rpm = msg.data * self.max_rpm
-        can_msg_rpm.data = self.vesc_ids["WRIST_LEFT"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-        self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('RPM LEFT_WRIST: "%s"' % can_msg_rpm.data + '\n')
+        can_msg_angle = String()
+        turn_amount = (msg.data)
+       
+        can_msg_angle.data = self.vesc_ids["WRIST_LEFT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+        #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
+        self.publisher_.publish(can_msg_angle)
+        #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
 
     def arm_listener_wrist_right(self, msg):
-        can_msg_rpm = String()
-    
-        rpm = msg.data * self.max_rpm
-        can_msg_rpm.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-        self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('RPM RIGHT_WRIST: "%s"' % can_msg_rpm.data + '\n')
+        can_msg_angle = String()
+        turn_amount = (msg.data)
+        
+        can_msg_angle.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+        #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
+        self.publisher_.publish(can_msg_angle)
+        #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
 
     def arm_listener_gripper(self, msg):
         can_msg_rpm = String()
