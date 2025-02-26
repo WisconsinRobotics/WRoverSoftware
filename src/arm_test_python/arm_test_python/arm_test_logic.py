@@ -36,7 +36,7 @@ class ArmLogic(Node):
         self.timer_wrist = self.create_timer(timer_period, self.timer_update_wrist)
 
         #Define Postion of left and right position of wrist
-        self.wrist_positions = [0.0,0.0] #[lef,right]
+        self.wrist_positions = [50.0,50.0] #[lef,right]
         self.D_PAD = [0,0,0,0] #Array to keep track of which buttons are pressed
         self.absolute_wrist = 0 #Start at zero
 
@@ -67,23 +67,23 @@ class ArmLogic(Node):
         #Converting -1 -> 1 range of triggers to 0->1
         return ((left+1)/2 - (right+1)/2)
     
-    def set_wrist_speeds(self, up, down, left, right) -> Float32MultiArray:
-        #Assume left is forward
-        wrist_speeds = [0,0]
-        if up == 1:
-            wrist_speeds = [WRIST_SPEED_VALUE, -WRIST_SPEED_VALUE]
-            return wrist_speeds
-        elif down == 1:
-            wrist_speeds = [-WRIST_SPEED_VALUE, WRIST_SPEED_VALUE]
-            return wrist_speeds
-        elif left == 1:
-            wrist_speeds = [WRIST_SPEED_VALUE, WRIST_SPEED_VALUE]
-            return wrist_speeds
-        elif right == 1:
-            wrist_speeds = [-WRIST_SPEED_VALUE, -WRIST_SPEED_VALUE]
-            return wrist_speeds
-        else:
-            return wrist_speeds
+    # def set_wrist_speeds(self, up, down, left, right) -> Float32MultiArray:
+    #     #Assume left is forward
+    #     wrist_speeds = [0,0]
+    #     if up == 1:
+    #         wrist_speeds = [WRIST_SPEED_VALUE, -WRIST_SPEED_VALUE]
+    #         return wrist_speeds
+    #     elif down == 1:
+    #         wrist_speeds = [-WRIST_SPEED_VALUE, WRIST_SPEED_VALUE]
+    #         return wrist_speeds
+    #     elif left == 1:
+    #         wrist_speeds = [WRIST_SPEED_VALUE, WRIST_SPEED_VALUE]
+    #         return wrist_speeds
+    #     elif right == 1:
+    #         wrist_speeds = [-WRIST_SPEED_VALUE, -WRIST_SPEED_VALUE]
+    #         return wrist_speeds
+    #     else:
+    #         return wrist_speeds
     
     def timer_update_wrist(self):
         #Publishing
