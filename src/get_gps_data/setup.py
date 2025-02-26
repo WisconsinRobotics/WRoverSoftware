@@ -20,7 +20,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-		'gps_subscriber = get_gps_data.gps_data:main'
+		'gps_subscriber = get_gps_data.gps_data:main',
+        'display_gps = get_gps_data.display_gps_data:main',
+        'start_gui = get_gps_data.sym:main',
         ],
     },
 )
