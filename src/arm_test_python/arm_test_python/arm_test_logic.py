@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Float64
+from custom_msgs_srvs.msg import GripperPosition
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Int16MultiArray
 import math
@@ -26,8 +27,8 @@ class ArmLogic(Node):
             10)
 
         self.arm_publisher_base = self.create_publisher(Float64, 'arm_base', 10)
-        self.arm_publisher_wrist_left = self.create_publisher(Float64, 'arm_wrist_left', 10)
-        self.arm_publisher_wrist_right = self.create_publisher(Float64, 'arm_wrist_right', 10)
+        self.arm_publisher_wrist_left = self.create_publisher(GripperPosition, 'arm_wrist_left', 10)
+        self.arm_publisher_wrist_right = self.create_publisher(GripperPosition, 'arm_wrist_right', 10)
         self.arm_publisher_gripper = self.create_publisher(Float64, 'arm_gripper', 10)
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -46,11 +47,9 @@ class ArmLogic(Node):
         self.msg_linear_rail = Float64()
         self.msg_linear_rail.data = 0.0
 
-        self.msg_wrist_left = Float64()
-        self.msg_wrist_left.data = 0.0
-
-        self.msg_wrist_right = Float64()
-        self.msg_wrist_right.data = 0.0
+        self.msg_wrist = GripperPosition()
+        self.msg_wrist.left_position = 180.0
+        self.msg_wrist.right_position = 180.0
 
         self.msg_gripper = Float64()
         self.msg_gripper.data = 0.0
@@ -59,8 +58,8 @@ class ArmLogic(Node):
     #Put publishers in timer to limit rate of publishing
     def timer_callback(self):
         self.arm_publisher_base.publish(self.msg_linear_rail)
-        self.arm_publisher_wrist_left.publish(self.msg_wrist_left)
-        self.arm_publisher_wrist_right.publish(self.msg_wrist_right)
+        self.arm_publisher_wrist_left.publish(self.msg_wrist)
+        self.arm_publisher_wrist_right.publish(self.msg_wrist)
         self.arm_publisher_gripper.publish(self.msg_gripper)
 
 
@@ -93,8 +92,8 @@ class ArmLogic(Node):
         if self.absolute_wrist >= 0 + self.kohler_shift and self.absolute_wrist <= 100 + self.kohler_shift and 1 in self.D_PAD:
             self.get_logger().info(str(self.absolute_wrist))
             self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
-            self.msg_wrist_left.data = float(self.wrist_positions[0])
-            self.msg_wrist_right.data = float(self.wrist_positions[1])
+            self.msg_wrist_left.left_position = float(self.wrist_positions[0])
+            self.msg_wrist_right.right_position = float(self.wrist_positions[1])
 
 
     def get_wrist_position(self, up, down, left, right) -> Float32MultiArray:

@@ -2,6 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Float64
+from custom_msgs_srvs.msg import GripperPosition
 import math
 
 class SwerveControlSubsrciber(Node):
@@ -24,13 +25,13 @@ class SwerveControlSubsrciber(Node):
             10)
 
         self.subscription_wrist_left = self.create_subscription(
-            Float64,
+            GripperPosition,
             'arm_wrist_left',
             self.arm_listener_wrist_left,
             10)
         
         self.subscription_wrist_right = self.create_subscription(
-            Float64,
+            GripperPosition,
             'arm_wrist_right',
             self.arm_listener_wrist_right,
             10)
@@ -50,11 +51,11 @@ class SwerveControlSubsrciber(Node):
         rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["BASE"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('RPM BASE: "%s"' % can_msg_rpm.data + '\n')
+        #self.get_logger().info('RPM BASE: "%s"' % can_msg_rpm.data + '\n')
 
     def arm_listener_wrist_left(self, msg):
         can_msg_angle = String()
-        turn_amount = (msg.data)
+        turn_amount = (msg.left_position)
        
         can_msg_angle.data = self.vesc_ids["WRIST_LEFT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
@@ -63,7 +64,7 @@ class SwerveControlSubsrciber(Node):
 
     def arm_listener_wrist_right(self, msg):
         can_msg_angle = String()
-        turn_amount = (msg.data)
+        turn_amount = (msg.right_position)
         
         can_msg_angle.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
@@ -76,7 +77,7 @@ class SwerveControlSubsrciber(Node):
         rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["GRIPPER"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('RPM GRIPPER: "%s"' % can_msg_rpm.data + '\n')
+        #self.get_logger().info('RPM GRIPPER: "%s"' % can_msg_rpm.data + '\n')
 
 def main(args=None):
     rclpy.init(args=args)
