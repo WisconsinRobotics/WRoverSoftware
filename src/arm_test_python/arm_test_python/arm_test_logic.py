@@ -7,7 +7,7 @@ from std_msgs.msg import Int16MultiArray
 import math
 
 
-WRIST_SPEED_VALUE = .1 #As we are publishing 100 times per second. It moves 10% of the way per second.
+WRIST_SPEED_VALUE = .2 #As we are publishing 100 times per second. It moves 10% of the way per second.
 GRIPPER_SPEED_VALUE = .2
 class ArmLogic(Node):
 
@@ -36,9 +36,11 @@ class ArmLogic(Node):
         self.timer_wrist = self.create_timer(timer_period, self.timer_update_wrist)
 
         #Define Postion of left and right position of wrist
-        self.wrist_positions = [50.0,50.0] #[lef,right]
+        self.kohler_shift = 130
         self.D_PAD = [0,0,0,0] #Array to keep track of which buttons are pressed
-        self.absolute_wrist = 0 #Start at zero
+        self.absolute_wrist = 50 + self.kohler_shift#Start at zero
+        self.wrist_positions = [0.0 + self.absolute_wrist ,0.0 + self.absolute_wrist] #[lef,right]
+ 
 
         #Define messages beforehand
         self.msg_linear_rail = Float64()
@@ -87,7 +89,9 @@ class ArmLogic(Node):
     
     def timer_update_wrist(self):
         #Publishing
-        if self.absolute_wrist >= 0 and self.absolute_wrist <= 100 and 1 in self.D_PAD:
+        
+        if self.absolute_wrist >= 0 + self.kohler_shift and self.absolute_wrist <= 100 + self.kohler_shift and 1 in self.D_PAD:
+            self.get_logger().info(str(self.absolute_wrist))
             self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
             self.msg_wrist_left.data = float(self.wrist_positions[0])
             self.msg_wrist_right.data = float(self.wrist_positions[1])
@@ -97,11 +101,13 @@ class ArmLogic(Node):
         if up == 1:
             self.wrist_positions[0] += -WRIST_SPEED_VALUE
             self.wrist_positions[1] += -WRIST_SPEED_VALUE
-            self.absolute_wrist += -WRIST_SPEED_VALUE
+            if self.absolute_wrist >= 0 + self.kohler_shift + 1:
+                self.absolute_wrist += -WRIST_SPEED_VALUE
         elif down == 1:
             self.wrist_positions[0] += WRIST_SPEED_VALUE
             self.wrist_positions[1] += WRIST_SPEED_VALUE
-            self.absolute_wrist += -WRIST_SPEED_VALUE
+            if self.absolute_wrist <= 100 + self.kohler_shift - 1:
+                self.absolute_wrist += WRIST_SPEED_VALUE
         elif left == 1:
             self.wrist_positions[0] += WRIST_SPEED_VALUE
             self.wrist_positions[1] += -WRIST_SPEED_VALUE
@@ -123,7 +129,7 @@ class ArmLogic(Node):
         motion = msg.data
 
         #Expecting (left trigger, rigt trigger)
-        linear_rail_speed = self.get_linear_rail_speed(motion[2], motion[3])
+        linear_rail_speed = self.get_linear_rail_speed(motion[3], motion[2])
         
         #Publishing
         self.msg_linear_rail.data = linear_rail_speed
