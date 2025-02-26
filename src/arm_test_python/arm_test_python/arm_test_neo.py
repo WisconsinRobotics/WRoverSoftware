@@ -9,10 +9,10 @@ class SwerveControlSubsrciber(Node):
     def __init__(self):
         super().__init__('swerve_control')
         #TODO:CHANGE IDS
-        self.vesc_ids = {"BASE":["70"],
-                         "WRIST_LEFT":["72"],
-                         "WRIST_RIGHT":["74"],
-                         "GRIPPER":["76"]
+        self.vesc_ids = {"BASE":["78"],
+                         "WRIST_LEFT":["80"],
+                         "WRIST_RIGHT":["81"],
+                         "GRIPPER":["79"]
                         }
         self.max_rpm = 6000
         self.limit_rotation = 0
