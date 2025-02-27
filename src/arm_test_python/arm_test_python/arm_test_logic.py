@@ -92,8 +92,8 @@ class ArmLogic(Node):
         if self.absolute_wrist >= 0 + self.kohler_shift and self.absolute_wrist <= 100 + self.kohler_shift and 1 in self.D_PAD:
             self.get_logger().info(str(self.absolute_wrist))
             self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
-            self.msg_wrist_left.left_position = float(self.wrist_positions[0])
-            self.msg_wrist_right.right_position = float(self.wrist_positions[1])
+            self.msg_wrist.left_position = float(self.wrist_positions[0])
+            self.msg_wrist.right_position = float(self.wrist_positions[1])
 
 
     def get_wrist_position(self, up, down, left, right) -> Float32MultiArray:
