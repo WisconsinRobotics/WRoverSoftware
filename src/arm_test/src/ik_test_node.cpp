@@ -1,12 +1,14 @@
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/joint_state.hpp"  // Adjust if a custom message is used
 #include "ctre/phoenix6/TalonFX.hpp"
 #include <memory>
-#include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float32_multi_array.hpp"
 #include <functional> // Include this for std::bind4
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp" // for FeedEnable
 
 using namespace ctre::phoenix6;
 using namespace std::chrono_literals;
+
 
 class MinimalSubscriber : public rclcpp::Node
 {
@@ -20,6 +22,10 @@ public:
           shoulder_speed(0), // Initialize speeds to 0
           elbow_speed(0)
     {
+        subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
+            "/relaxed_ik/joint_angle_solutions", 10,
+            std::bind(&JointAngleSubscriber::topic_callback_ik, this, std::placeholders::_1));
+
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
             "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
         
@@ -87,7 +93,7 @@ private:
     {
         ctre::phoenix::unmanaged::FeedEnable(10);
         elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0));
-        std::cout << "Vel: " << shoulderMotor.GetVelocity() << std::endl;
+        //std::cout << "Vel: " << shoulderMotor.GetVelocity() << std::endl;
         shoulderMotor.SetControl(shoulderOut.WithVelocity(shoulder_speed * 1_tps).WithSlot(0));
     }
 
@@ -107,6 +113,18 @@ private:
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
                   //<< ", Elbow: " << elbow_speed << '\n';
     }
+
+    void topic_callback_ik(const sensor_msgs::msg::JointState::SharedPtr msg)
+    {
+        RCLCPP_INFO(this->get_logger(), "Received joint angles:");
+        for (size_t i = 0; i < msg->name.size(); ++i)
+        {
+            RCLCPP_INFO(this->get_logger(), "%s: %f", msg->name[i].c_str(), msg->position[i]);
+        }
+        
+    }
+
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr subscription_;
 
     rclcpp::TimerBase::SharedPtr timer_elbow;
     rclcpp::TimerBase::SharedPtr timer_shoulder;
@@ -129,3 +147,5 @@ int main(int argc, char *argv[])
     rclcpp::shutdown();
     return 0;
 }
+//Shoulder: 0->-105
+//Elbow: 0 ->105
