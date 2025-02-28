@@ -82,7 +82,8 @@ def receive_canbus(num_messages: int, infty: bool = False):
             # print(f"Command id {command_id} with vesc id {vesc_id}")
 
             # Data
-            data = bin(msg.data)[2:].zfill(64)
+            # NOTE this is hacky but it works
+            data = bin(int.from_bytes(msg.data, 'big', signed=True))[2:].zfill(64)
 
             match command_id:
                 case 16:
