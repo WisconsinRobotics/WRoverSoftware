@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String, Float32
+from std_msgs.msg import String, Float32MultiArray
 import can
 import time
 
@@ -16,15 +16,22 @@ class CANSubscriber(Node):
             self.listener_callback,
             10)
         
-        # Publishers for canbus data
         # NOTE: This may need to be tuned
         max_queue = 10
         timer_freq = 0.01 # seconds
-        self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
         self.timer = self.create_timer(timer_freq, self.timer_callback)
+
+        # Publishers for canbus data
+        # NOTE These will be in format [VALUE, VESC_ID]
+        self.temp_fet_publisher = self.create_publisher(Float32MultiArray, 'temp_fet', max_queue)
+        self.temp_motor_publisher = self.create_publisher(Float32MultiArray, 'temp_motor', max_queue)
+        self.current_in_publisher = self.create_publisher(Float32MultiArray, 'current_in', max_queue)
+        self.pid_position_publisher = self.create_publisher(Float32MultiArray, 'pid_position', max_queue)
+
+        self.adc1_publisher = self.create_publisher(Float32MultiArray, 'adc1', max_queue)
+        self.adc2_publisher = self.create_publisher(Float32MultiArray, 'adc2', max_queue)
+        self.adc3_publisher = self.create_publisher(Float32MultiArray, 'adc3', max_queue)
+        self.ppm_publisher = self.create_publisher(Float32MultiArray, 'ppm', max_queue)
 
     def listener_callback(self, msg):
         #self.get_logger().info('I heard: "%s"' % msg.data)
@@ -52,91 +59,125 @@ class CANSubscriber(Node):
         send_msg(compiled_msg=compiled_msg)
 
         # TODO if someone needs to manually send status commands, deal with that here
+        if is_status:
+            pass
+
+    def receive_canbus(self, num_messages: int, infty: bool = False):
+        """
+        Queries the canbus for data. 
+
+        Args:
+            num_messages: Number of messages to parse before exiting. 
+            infty: Whether to query the canbus until it runs out of messages. 
+        """
+        channel = 'can0'
+        with can.Bus(channel=channel, interface='socketcan') as bus:
+            # if you try to query for all messages in the canbus,
+            # the canbus publishes more messages than you can parse
+            i = 0
+            for msg in bus:
+                if i == num_messages and not infty:
+                    break
+
+                # Parse arbitration id
+                arbitration_id = bin(msg.arbitration_id)[2:].zfill(29)
+                command_id = int(arbitration_id[13:21], 2)
+                vesc_id = int(arbitration_id[21:], 2)
+                # TODO for now, the values are strangely off by ~1-2, and sometimes 58 instead of 28.
+                # Not sure why, might need to investigate electrical. 
+                # print(f"Command id {command_id} with vesc id {vesc_id}")
+
+                # Data
+                # NOTE this is hacky but it works
+                data = bin(int.from_bytes(msg.data, 'big', signed=True))[2:].zfill(64)
+
+                match command_id:
+                    case 16:
+                        # B0-B1: Temp FET in DegC (scale factor 10)
+                        temp_fet_bits = data[0:16]
+                        temp_fet_raw = int(temp_fet_bits, 2)
+                        temp_fet_degc = temp_fet_raw / 10
+                        # Send msg
+                        data_vec = [temp_fet_degc, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.temp_fet_publisher.publish(float_arr)
+
+                        # B2-B3: Temp Motor in DegC (scale factor 10)
+                        temp_motor_bits = data[16:32]
+                        temp_motor_raw = int(temp_motor_bits, 2)
+                        temp_motor_degc = temp_motor_raw / 10
+                        # Send msg
+                        data_vec = [temp_motor_degc, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.temp_motor_publisher.publish(float_arr)
+
+                        # B4-B5: Current In A (scale factor 10)
+                        current_bits = data[32:48]
+                        current_raw = int(current_bits, 2)
+                        current_amps = current_raw / 10
+                        # Send msg
+                        data_vec = [current_amps, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.current_in_publisher.publish(float_arr)
+
+                        # B6-B7: PID Pos Deg (scale factor 50)
+                        pid_pos_bits = data[48:64]
+                        pid_pos_raw = int(pid_pos_bits, 2)
+                        pid_pos_deg = pid_pos_raw / 50
+                        # Send msg
+                        data_vec = [pid_pos_deg, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.pid_position_publisher.publish(float_arr)
+
+                    case 28:
+                        # B0-B1: ADC1 in V (scale factor 1000)
+                        adc1_bits = data[0:16]
+                        adc1_raw = int(adc1_bits, 2)
+                        adc1_v = adc1_raw / 1000
+                        # Send msg
+                        data_vec = [adc1_v, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.adc1_publisher.publish(float_arr)
+                        
+                        # B2-B3: ADC2 in V (scale factor 1000)
+                        adc2_bits = data[16:32]
+                        adc2_raw = int(adc2_bits, 2)
+                        adc2_v = adc2_raw / 1000
+                        # Send msg
+                        data_vec = [adc2_v, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.adc2_publisher.publish(float_arr)
+                        
+                        # B4-B5: ADC3 in V (scale factor 1000)
+                        adc3_bits = data[32:48]
+                        adc3_raw = int(adc3_bits, 2)
+                        adc3_v = adc3_raw / 1000
+                        # Send msg
+                        data_vec = [adc3_v, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.adc3_publisher.publish(float_arr)
+                        
+                        # B6-B7: PPM % / 100 (scale factor 1000)
+                        ppm_bits = data[48:64]
+                        ppm_raw = int(ppm_bits, 2)
+                        ppm_percent = ppm_raw / 1000
+                        # Send msg
+                        data_vec = [ppm_percent, vesc_id]
+                        float_arr = Float32MultiArray()
+                        float_arr.data = data_vec
+                        self.ppm_publisher.publish(float_arr)
+                i += 1
+
 
     def timer_callback(self):
-        receive_canbus(2)
-
-def receive_canbus(num_messages: int, infty: bool = False):
-    """
-    Queries the canbus for data. 
-
-    Args:
-        num_messages: Number of messages to parse before exiting. 
-        infty: Whether to query the canbus until it runs out of messages. 
-    """
-    channel = 'can0'
-    with can.Bus(channel=channel, interface='socketcan') as bus:
-        # if you try to query for all messages in the canbus,
-        # the canbus publishes more messages than you can parse
-        i = 0
-        for msg in bus:
-            if i == num_messages and not infty:
-                break
-
-            # Parse arbitration id
-            arbitration_id = bin(msg.arbitration_id)[2:].zfill(29)
-            command_id = int(arbitration_id[13:21], 2)
-            vesc_id = int(arbitration_id[21:], 2)
-            # TODO for now, the values are strangely off by ~1-2, and sometimes 58 instead of 28.
-            # Not sure why, might need to investigate electrical. 
-            # print(f"Command id {command_id} with vesc id {vesc_id}")
-
-            # Data
-            # NOTE this is hacky but it works
-            data = bin(int.from_bytes(msg.data, 'big', signed=True))[2:].zfill(64)
-
-            match command_id:
-                case 16:
-                    # B0-B1: Temp FET in DegC (scale factor 10)
-                    temp_fet_bits = data[0:16]
-                    temp_fet_raw = int(temp_fet_bits, 2)
-                    temp_fet_degc = temp_fet_raw / 10
-                    print(f"Temperature FET: {temp_fet_degc} °C")
-
-                    # B2-B3: Temp Motor in DegC (scale factor 10)
-                    temp_motor_bits = data[16:32]
-                    temp_motor_raw = int(temp_motor_bits, 2)
-                    temp_motor_degc = temp_motor_raw / 10
-                    print(f"Temperature Motor: {temp_motor_degc} °C")
-
-                    # B4-B5: Current In A (scale factor 10)
-                    current_bits = data[32:48]
-                    current_raw = int(current_bits, 2)
-                    current_amps = current_raw / 10
-                    print(f"Current: {current_amps} A")
-
-                    # B6-B7: PID Pos Deg (scale factor 50)
-                    pid_pos_bits = data[48:64]
-                    pid_pos_raw = int(pid_pos_bits, 2)
-                    pid_pos_deg = pid_pos_raw / 50
-                    print(f"PID Position: {pid_pos_deg} degrees")
-
-                case 28:
-                    # B0-B1: ADC1 in V (scale factor 1000)
-                    adc1_bits = data[0:16]
-                    adc1_raw = int(adc1_bits, 2)
-                    adc1_v = adc1_raw / 1000
-                    print(f"ADC1: {adc1_v} V")
-                    
-                    # B2-B3: ADC2 in V (scale factor 1000)
-                    adc2_bits = data[16:32]
-                    adc2_raw = int(adc2_bits, 2)
-                    adc2_v = adc2_raw / 1000
-                    print(f"ADC2: {adc2_v} V")
-                    
-                    # B4-B5: ADC3 in V (scale factor 1000)
-                    adc3_bits = data[32:48]
-                    adc3_raw = int(adc3_bits, 2)
-                    adc3_v = adc3_raw / 1000
-                    print(f"ADC3: {adc3_v} V")
-                    
-                    # B6-B7: PPM % / 100 (scale factor 1000)
-                    ppm_bits = data[48:64]
-                    ppm_raw = int(ppm_bits, 2)
-                    ppm_percent = ppm_raw / 1000
-                    print(f"PPM: {ppm_percent} %")
-
-            i += 1
+        self.receive_canbus(self, 2)
 
 def send_msg(compiled_msg: can.message.Message):
     """Immediately send a compiled CAN message"""
