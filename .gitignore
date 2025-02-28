@@ -5,3 +5,5 @@ Dockerfile
 venv/
 .vscode/
 src/arm_test/bin/
+testing.ipynb
+.gitignore
