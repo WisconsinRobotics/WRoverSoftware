@@ -82,11 +82,8 @@ class CANSubscriber(Node):
                 # Parse arbitration id
                 arbitration_id = bin(msg.arbitration_id)[2:].zfill(29)
                 command_id = int(arbitration_id[13:21], 2)
-                vesc_id = int(arbitration_id[21:], 2)
-                # TODO for now, the values are strangely off by ~1-2, and sometimes 58 instead of 28.
-                # Not sure why, might need to investigate electrical. 
-                # print(f"Command id {command_id} with vesc id {vesc_id}")
-
+                vesc_id = float(int(arbitration_id[21:], 2)) # convert to float for float_arr
+                
                 # Data
                 # NOTE this is hacky but it works
                 data = bin(int.from_bytes(msg.data, 'big', signed=True))[2:].zfill(64)
