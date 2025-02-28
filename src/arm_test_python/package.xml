@@ -12,6 +12,7 @@
   <exec_depend>custom_msgs_srvs</exec_depend>
 
   <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
 
 
   <test_depend>ament_copyright</test_depend>

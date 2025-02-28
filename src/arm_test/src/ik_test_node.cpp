@@ -1,10 +1,11 @@
 #include "rclcpp/rclcpp.hpp"
-#include "sensor_msgs/msg/joint_state.hpp"  // Adjust if a custom message is used
 #include "ctre/phoenix6/TalonFX.hpp"
 #include <memory>
 #include "std_msgs/msg/float32_multi_array.hpp"
 #include <functional> // Include this for std::bind4
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp" // for FeedEnable
+//#include <sensor_msgs/msg/joint_state.hpp>
+
 
 using namespace ctre::phoenix6;
 using namespace std::chrono_literals;
@@ -17,17 +18,17 @@ public:
         : Node("arm_test"),
           elbowMotor(4, "can0"),
           shoulderMotor(5, "can0"),
-          shoulderOut(units::angular_velocity::turns_per_second_t(0)),
-          elbowOut(units::angular_velocity::turns_per_second_t(0)),
-          shoulder_speed(0), // Initialize speeds to 0
-          elbow_speed(0)
+          shoulderOut(units::angle::turn_t(0)),
+          elbowOut(units::angle::turn_t(0)),
+          shoulder_position(0), // Initialize speeds to 0
+          elbow_position(0)
     {
-        subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
-            "/relaxed_ik/joint_angle_solutions", 10,
-            std::bind(&JointAngleSubscriber::topic_callback_ik, this, std::placeholders::_1));
-
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
+            "arm_angles", 10,
+            std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
+
+        // subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
+        //     "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
         
         ctre::phoenix::unmanaged::SetTransmitEnable(true);
         // fx_cfg is the default config with inverted output
@@ -92,9 +93,9 @@ private:
     void timer_callback_shoulder()
     {
         ctre::phoenix::unmanaged::FeedEnable(10);
-        elbowMotor.SetControl(elbowOut.WithVelocity(elbow_speed * 1_tps).WithSlot(0));
-        //std::cout << "Vel: " << shoulderMotor.GetVelocity() << std::endl;
-        shoulderMotor.SetControl(shoulderOut.WithVelocity(shoulder_speed * 1_tps).WithSlot(0));
+        elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(0));
+        std::cout << "Pos: " << shoulderMotor.GetPosition() << std::endl;
+        shoulderMotor.SetControl(shoulderOut.WithPosition(shoulder_position * 1_tr).WithSlot(0));
     }
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
@@ -106,25 +107,13 @@ private:
         }
 
         // Store values as class members for periodic updates
-        elbow_speed = static_cast<double>(msg.data[1]* 20_tps); // Go for plus/minus 1 rotations per second
+        elbow_position = static_cast<double>(msg.data[1]); 
         
-        shoulder_speed = static_cast<double>(msg.data[0]* 20_tps); // Go for plus/minus 1 rotations per second
+        shoulder_position = static_cast<double>(msg.data[0]); 
         
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
                   //<< ", Elbow: " << elbow_speed << '\n';
     }
-
-    void topic_callback_ik(const sensor_msgs::msg::JointState::SharedPtr msg)
-    {
-        RCLCPP_INFO(this->get_logger(), "Received joint angles:");
-        for (size_t i = 0; i < msg->name.size(); ++i)
-        {
-            RCLCPP_INFO(this->get_logger(), "%s: %f", msg->name[i].c_str(), msg->position[i]);
-        }
-        
-    }
-
-    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr subscription_;
 
     rclcpp::TimerBase::SharedPtr timer_elbow;
     rclcpp::TimerBase::SharedPtr timer_shoulder;
@@ -132,12 +121,12 @@ private:
 
     hardware::TalonFX elbowMotor;
     hardware::TalonFX shoulderMotor;
-    controls::MotionMagicVelocityDutyCycle shoulderOut;
-    controls::MotionMagicVelocityDutyCycle elbowOut;
+    controls::MotionMagicDutyCycle shoulderOut;
+    controls::MotionMagicDutyCycle elbowOut;
 
     // Moved speeds to class members
-    double shoulder_speed;
-    double elbow_speed;
+    double shoulder_position;
+    double elbow_position;
 };
 
 int main(int argc, char *argv[])
