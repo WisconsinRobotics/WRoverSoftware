@@ -79,9 +79,61 @@ def receive_canbus(num_messages: int, infty: bool = False):
             vesc_id = int(arbitration_id[21:], 2)
             # TODO for now, the values are strangely off by ~1-2, and sometimes 58 instead of 28.
             # Not sure why, might need to investigate electrical. 
-            print(f"command id {command_id} with vesc id {vesc_id}")
+            # print(f"Command id {command_id} with vesc id {vesc_id}")
 
-            # Find the correct command
+            # Data
+            data = bin(msg.data)[2:].zfill(64)
+
+            match command_id:
+                case 16:
+                    # B0-B1: Temp FET in DegC (scale factor 10)
+                    temp_fet_bits = data[0:16]
+                    temp_fet_raw = int(temp_fet_bits, 2)
+                    temp_fet_degc = temp_fet_raw / 10
+                    print(f"Temperature FET: {temp_fet_degc} °C")
+
+                    # B2-B3: Temp Motor in DegC (scale factor 10)
+                    temp_motor_bits = data[16:32]
+                    temp_motor_raw = int(temp_motor_bits, 2)
+                    temp_motor_degc = temp_motor_raw / 10
+                    print(f"Temperature Motor: {temp_motor_degc} °C")
+
+                    # B4-B5: Current In A (scale factor 10)
+                    current_bits = data[32:48]
+                    current_raw = int(current_bits, 2)
+                    current_amps = current_raw / 10
+                    print(f"Current: {current_amps} A")
+
+                    # B6-B7: PID Pos Deg (scale factor 50)
+                    pid_pos_bits = data[48:64]
+                    pid_pos_raw = int(pid_pos_bits, 2)
+                    pid_pos_deg = pid_pos_raw / 50
+                    print(f"PID Position: {pid_pos_deg} degrees")
+
+                case 28:
+                    # B0-B1: ADC1 in V (scale factor 1000)
+                    adc1_bits = data[0:16]
+                    adc1_raw = int(adc1_bits, 2)
+                    adc1_v = adc1_raw / 1000
+                    print(f"ADC1: {adc1_v} V")
+                    
+                    # B2-B3: ADC2 in V (scale factor 1000)
+                    adc2_bits = data[16:32]
+                    adc2_raw = int(adc2_bits, 2)
+                    adc2_v = adc2_raw / 1000
+                    print(f"ADC2: {adc2_v} V")
+                    
+                    # B4-B5: ADC3 in V (scale factor 1000)
+                    adc3_bits = data[32:48]
+                    adc3_raw = int(adc3_bits, 2)
+                    adc3_v = adc3_raw / 1000
+                    print(f"ADC3: {adc3_v} V")
+                    
+                    # B6-B7: PPM % / 100 (scale factor 1000)
+                    ppm_bits = data[48:64]
+                    ppm_raw = int(ppm_bits, 2)
+                    ppm_percent = ppm_raw / 1000
+                    print(f"PPM: {ppm_percent} %")
 
             i += 1
 
