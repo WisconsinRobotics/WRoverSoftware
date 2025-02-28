@@ -1,7 +1,10 @@
 #!/bin/bash
 
+colcon build
+
 source install/local_setup.bash
 
-ros2 run wr_swerve_control swerve_control &&
-	ros2 run wr_swerve_motor swerve_motor
+cd launch
+ros2 launch swerve_launch_base.py
+cd ..
 

@@ -1,5 +1,10 @@
 #!/bin/bash
 
+canableStart.sh
+
+colcon build
 source install/local_setup.bash
 
-ros2 run wr_can_comms can_comms
+cd launch
+ros2 launch swerve_launch_rover.py
+cd ..
