@@ -13,7 +13,6 @@ from geometry_msgs.msg import  Twist
 # NOTE: This might cause problems if called multiple times
 pygame.init()
 
-
 class XboxPublisher(Node):
 
     def __init__(self):
@@ -26,19 +25,18 @@ class XboxPublisher(Node):
         self.AXIS_BOUNDARY = 0.1
 
         self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
-        self.buttons=[0,0,0,0] #Up, Down, Left, Right
+        self.buttons=[0,0,0,0,0,0] #Up, Down, Left, Right
 
         self.ee_vel_goals_pub = self.create_publisher(EEVelGoals, 'relaxed_ik/ee_vel_goals', 5)
         self.linear = [0.0,0.0,0.0]
         self.angular = [0.0,0.0,0.0]
 
     def timer_callback(self):
-        #We have button capability, yippee. 
-        running = True
-        print("AAAAAAAAA")
-        #self.get_logger().debug("BBBBBBBBBB")
-        while running:
-            print(len(self.joysticks))
+        while(True):
+            #We have button capability, yippee. 
+            running = True
+            #self.get_logger().debug("BBBBBBBBBB")
+            #print(len(self.joysticks))
             if len(self.joysticks) > 0:
                 # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
                 motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
@@ -49,11 +47,11 @@ class XboxPublisher(Node):
                 print(motion)
 
                 #### TEMP ######################
-                self.angular[0] = motion[0]/10000
-                self.linear[0] = -motion[1]/1000
+                self.angular[0] = (motion[0])/100000
+                self.linear[0] = -motion[1]/10000
                 # No Y movement (linear[1])
-                self.linear[2] = motion[2] /1000
-              
+                self.linear[2] = motion[2] /10000
+                
                 msg = EEVelGoals()
                 for i in range(1):
                     twist = Twist()
@@ -87,29 +85,6 @@ class XboxPublisher(Node):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                elif event.type == pygame.JOYHATMOTION:
-                    if event.value[1] == 1:  # D-Pad Up
-                        self.buttons[0] = 1
-                    else:
-                        self.buttons[0] = 0
-                    if event.value[1] == -1:  # D-Pad Down
-                        self.buttons[1] = 1
-                    else:
-                        self.buttons[1] = 0
-                    if event.value[0] == -1:  # D-Pad Left
-                        self.buttons[2] = 1
-                    else:
-                        self.buttons[2] = 0
-                    if event.value[0] == 1:  # D-Pad Right
-                        self.buttons[3] = 1
-                    else:
-                        self.buttons[3] = 0  # Reset to False
-                print(self.buttons)
-                buttons_command = Int16MultiArray()
-                buttons_command.data = self.buttons
-                self.buttons_publisher_.publish(buttons_command)
-            
-                        
 
                 # Handle hotplugging
                 if event.type == pygame.JOYDEVICEADDED:
@@ -141,7 +116,6 @@ class XboxPublisher(Node):
                 #    swerve_command.data = motion
                 #    self.swerve_publisher_.publish(swerve_command)
 
-        pygame.quit()
 def main(args=None):
     rclpy.init(args=args)
 
