@@ -1,3 +1,0 @@
-[console_scripts]
-aruco_tag_detection = object_detection.aruco_tag_detection:main
-object_detection = object_detection.object_detection:main

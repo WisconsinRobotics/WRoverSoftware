@@ -1,2 +1,0 @@
-[console_scripts]
-path_planning = path_planning.path_planning:main

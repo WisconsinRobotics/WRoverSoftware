@@ -1,6 +1,0 @@
-source;share/swerve/hook/pythonpath.ps1
-source;share/swerve/hook/pythonpath.dsv
-source;share/swerve/hook/pythonpath.sh
-source;share/swerve/hook/ament_prefix_path.ps1
-source;share/swerve/hook/ament_prefix_path.dsv
-source;share/swerve/hook/ament_prefix_path.sh
