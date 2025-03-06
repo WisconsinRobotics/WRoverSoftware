@@ -1,3 +1,5 @@
+#Link to dataset: https://www.kaggle.com/datasets/sachinpatel21/az-handwritten-alphabets-in-csv-format
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
