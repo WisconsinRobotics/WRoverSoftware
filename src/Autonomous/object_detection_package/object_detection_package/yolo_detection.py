@@ -27,10 +27,10 @@ class YOLODetectionPublisher(Node):
 
         # Initialize video capture to use webcam
         self.video = cv2.VideoCapture(0)
-
-        # Set camera height and weidth
-        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 640)
-        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        
+        # Set default video capture resolution to 1920x1080
+        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
         # Ensure the buffer only stores the most recent frame
         self.video.set(cv2.CAP_PROP_BUFFERSIZE, 1)
@@ -46,6 +46,27 @@ class YOLODetectionPublisher(Node):
     # Async fuction for YOLO inference
     async def yolo_inference(self, frame):
         return self.model(frame, verbose=False)
+    
+    # Crop and resize frames to 640x640 to fit the model
+    def crop_and_resize(self, frame):
+        # Get current frame dimensions
+        height, width, _ = frame.shape
+        
+        # Crop the frame into a square
+        x, y = width // 2, height // 2
+        size = min(width, height)
+
+        x1 = x - (size // 2)
+        y1 = y - (size // 2)
+        x2 = x + (size // 2)
+        y2 = y + (size // 2)
+        
+        frame = frame[y1:y2, x1:x2]
+        
+        # Resize the frame to 640x640
+        frame = cv2.resize(frame, (640, 640))
+        
+        return frame
 
 
     # Async function for frame processing
@@ -57,12 +78,14 @@ class YOLODetectionPublisher(Node):
         if not ret:
             self.get_logger().error("Failed to capture image from webcam")
             return
-
+            
+        # Crop and resize the frame
+        frame = self.crop_and_resize(frame)
+        
         # Perform YOLO inference asynchronously
         results = await self.yolo_inference(frame)
 
         best_box = None
-        best_cls = None
         best_conf = 0
 
         # Process results
@@ -71,13 +94,11 @@ class YOLODetectionPublisher(Node):
             for box in boxes:
                 # Get bounding box, class and confidence level
                 x1, y1, x2, y2 = box.xyxy[0]
-                cls = box.cls[0].item()
                 conf = box.conf[0].item()
 
                 # Store the object with the highest confidence level
                 if (conf > best_conf):
                     best_box = (x1, y1, x2, y2)
-                    best_cls = int(cls)
                     best_conf = conf
 
         # If an object is detected
@@ -85,18 +106,23 @@ class YOLODetectionPublisher(Node):
             # Display bounding boxes and detection info
             color = (0, 255, 0)
             x1, y1, x2, y2 = best_box
+            
+            # Janky algorithm for estimating distance
+            interp = 0.004
+            length = (x2 - x1) if (x2 - x1) > (y2 - y1) else (y2 - y1)
+            dis = 1 / (length * interp)
+            
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
-            best_cls = "bottle" if best_cls == 0 else "hammer"
-            label = f"{best_cls} {best_conf:.2f}"
+            label = f"{best_conf:.2f} {dis:.2f}"
             cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
             # Publish message
             msg = Detection()
-            msg.x = int(x1 + x2 / 2)
-            msg.y = int(y1 + y2 / 2)
-            msg.cls = 0 if best_cls == "bottle" else 1
+            msg.x = int((x1 + x2) / 2)
+            msg.y = int((y1 + y2) / 2)
+            msg.dis = float(dis)
             self.publisher_.publish(msg)
-            self.get_logger().info(f"Publishing {msg.x}, {msg.y}, {msg.cls}")
+            self.get_logger().info(f"Publishing {msg.x}, {msg.y}, {msg.dis}")
 
         # Graphical display
         cv2.imshow("YOLO Object Detection", frame)
