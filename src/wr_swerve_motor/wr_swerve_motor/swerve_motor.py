@@ -88,7 +88,9 @@ class SwerveSubscriber(Node):
 
 
         # TODO: Make this more abstract for actual control
-        if len(wheel_speeds) == 4 and len(wheel_angles) == 4:
+        if (len(wheel_speeds) == 4 and len(wheel_angles) == 4 and
+           (wheel_speeds[0] != 0 and wheel_speeds[1] != 0 and
+            wheel_speeds[2] != 0 and wheel_speeds[3] != 0)):
             msg_FL = Float32MultiArray()
             msg_FL.data = [wheel_speeds[0],wheel_angles[0]]
             self.swerve_publisher_FL.publish(msg_FL)

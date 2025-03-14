@@ -1,10 +1,7 @@
 #!/bin/bash
 
-canableStart.sh
-
-colcon build
+./canableStart.sh
 source install/local_setup.bash
-
 cd launch
 ros2 launch swerve_launch_rover.py
 cd ..
