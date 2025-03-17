@@ -9,12 +9,12 @@ import os
 
 
 # Ensure Flask always finds the templates folder
-template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
+template_dir = os.path.join(os.path.dirname(os.getcwd()), "WRoverSoftware/src/get_gps_data/get_gps_data/templates")
 print(template_dir)
 app = Flask(__name__, template_folder=template_dir)
 
 # Robot and goal locations   Next to Mechanical Engineering : 43.0721443104249, -89.41169303680519
-robot_location = {"lat": 43.0721443104249, "lon": -89.41169303680519}
+robot_location = {"lat": 43.07235320367639, "lon": -89.41159304772383} #INITIALIZES ROBOT LOCATION
 
 # takes a 2d array in the form lat lon
 def set_goals(x):
@@ -23,10 +23,10 @@ def set_goals(x):
     for i in x:
         goal_locations.append({"lat": str(i[0]), "lon": str(i[1]), "name": "Goal " + str(x.index(i) + 1)})
 
-# goal_locations = [
-#     {"lat": 38.376, "lon": -110.832, "name": "Goal 1"},
-#     {"lat": 38.374, "lon": -110.828, "name": "Goal 2"},
-# ]
+goal_locations = [
+    {"lat": 43.07235320367639, "lon": -89.41159304772383, "name": "Front of MEC E"},
+    {"lat": 38.374, "lon": -110.828, "name": "UTAH"},
+]
 
 @app.route("/map")
 def home():
@@ -56,7 +56,7 @@ def get_goals():
 
 # Function to generate the map.html file
 def generate_map():
-    m = folium.Map(location=[robot_location["lat"], robot_location["lon"]], zoom_start=12)
+    m = folium.Map(location=[robot_location["lat"], robot_location["lon"]], zoom_start=100)
 
     # Add robot marker (this will be updated dynamically)
     folium.Marker(
@@ -104,8 +104,6 @@ def run_gui():
     sys.exit(app.exec())
 
 def main(args=None):
-    #set_goals([(43.071858382510584, -89.41171628924494)])
-    #generate_map()
     print("Current Working Directory:", os.getcwd())
     threading.Thread(target=run_flask, daemon=True).start()
     run_gui()

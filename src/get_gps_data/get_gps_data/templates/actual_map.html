@@ -24,7 +24,9 @@
     <script>
         console.log("AntPath Loaded:", typeof L.polyline.antPath);
 
-        var map = L.map('map').setView([38.3753855364, -110.8302205892], 12);
+        var initial_position = [43.07280456333762, -89.41184284787494]
+
+        var map = L.map('map').setView(initial_position, 100);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -33,7 +35,7 @@
 
         // Create the robot marker (default Leaflet marker)
         // Fix broken marker by using Leaflet's built-in marker images
-        var robotMarker = L.marker([38.3753855364, -110.8302205892], {
+        var robotMarker = L.marker(initial_position, {
             icon: L.icon({
                 iconUrl: "https://cdn-icons-png.flaticon.com/128/9407/9407495.png",
                 iconSize: [35, 35],
@@ -43,7 +45,7 @@
         }).addTo(map);
 
         // Add a blue marker at the robot's starting position
-        var startMarker = L.marker([38.3753855364, -110.8302205892], {
+        var startMarker = L.marker(initial_position, {
             icon: L.icon({
                 iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",  // Default blue marker
                 iconSize: [25, 41],
@@ -56,8 +58,8 @@
         // Function to generate random goal markers
         function generateRandomGoals(numGoals) {
             for (let i = 0; i < numGoals; i++) {
-                let randLat = 38.375 + (Math.random() * 0.1 - 0.05) + .07  // Random latitude offset
-                let randLon = -110.830 + (Math.random() * 0.1 - 0.05) + .07 // Random longitude offset
+                let randLat = initial_position[0]+ (Math.random() * 0.1 - 0.05) + .07  // Random latitude offset
+                let randLon = initial_position[1] + (Math.random() * 0.1 - 0.05) + .07 // Random longitude offset
 
                 let goalMarker = L.marker([randLat, randLon], {
                     icon: L.icon({
@@ -71,7 +73,7 @@
         }
 
         // Add 3 random goals
-        generateRandomGoals(3);
+        //generateRandomGoals(3);
 
         // Dictionary to store goal markers
         var goalMarkers = {};
@@ -100,7 +102,7 @@
         }
 
         // Store past robot positions for the trail - NOT WORKING
-        var robotPath = [[38.3753855364, -110.8302205892]];  // Start with initial position
+        var robotPath = [initial_position];  // Start with initial position
 
         var robotTrail = L.polyline.antPath(robotPath, {
             "delay": 400,
