@@ -86,6 +86,8 @@ class RelaxedIK(Node):
         
         # Subscribers
         self.create_subscription(EEPoseGoals, '/relaxed_ik/ee_pose_goals', self.pose_goals_cb, 1)
+        self.get_logger().debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+
         self.create_subscription(EEVelGoals, '/relaxed_ik/ee_vel_goals', self.pose_vels_cb, 1)
         self.create_subscription(JointState, '/relaxed_ik/reset', self.reset_cb, 1)
 
@@ -145,6 +147,7 @@ class RelaxedIK(Node):
         self.relaxed_ik.reset(x, n)
 
     def pose_goals_cb(self, msg):
+        self.get_logger().debug(msg)
         positions = []
         orientations = []
         tolerances = []

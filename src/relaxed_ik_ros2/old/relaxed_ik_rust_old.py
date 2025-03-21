@@ -19,9 +19,11 @@ os.chdir(package_share_directory + '/relaxed_ik_core')
 lib = ctypes.cdll.LoadLibrary(package_share_directory + '/relaxed_ik_core/target/debug/librelaxed_ik_lib.so')
 lib.solve.restype = Opt
 
+
 eepg = None
-def eePoseGoals_cb(msg):
+def eePoseGoals_cb(self,msg):
     global eepg
+    self.get_logger().debug(eepg)
     eepg = msg
 
 def main(args=None):
@@ -34,6 +36,7 @@ def main(args=None):
     node.create_subscription(EEPoseGoals, '/relaxed_ik/ee_pose_goals', eePoseGoals_cb, 3)
 
     angles_pub = node.create_publisher(JointAngles, '/relaxed_ik/joint_angle_solutions', 3)
+    node.get_logger().debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
     rclpy.spin_once(node)
 
