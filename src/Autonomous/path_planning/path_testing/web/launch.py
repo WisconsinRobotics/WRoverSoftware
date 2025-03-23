@@ -27,7 +27,7 @@ if __name__ == "__main__":
     
     driver_path = argv[1]
     test = argv[2]
-    with open(f"../test{test}/test{test}.json") as f:
+    with open(f"../test{test}/test.json") as f:
         js = json.load(f)
     
     save_map_image(driver_path, "index.html", "result.png", js["center"], js["points"])
