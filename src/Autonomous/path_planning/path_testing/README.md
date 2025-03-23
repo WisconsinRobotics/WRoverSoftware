@@ -35,6 +35,9 @@ To use this code, make sure you have the following prerequisites:
    ```bash
    python launch.py [path to driver] [test number]
    ```
+## New Tests
+1. To create new tests, make new folder with format "test{number}" and specify the test.json file similar to previous tests.
+2. Add path points in test.json where the first point is the start point and last point is the end point of your path.
 
 
 
