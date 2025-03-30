@@ -17,14 +17,12 @@ class XboxPublisher(Node):
 
     def __init__(self):
         super().__init__('arm_xbox_publisher')
-        self.arm_publisher = self.create_publisher(Float32MultiArray, 'joy', 10)
         # NOTE: This might need to be tuned
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
         self.AXIS_BOUNDARY = 0.1
 
-        self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
         self.buttons=[0,0,0,0,0,0] #Up, Down, Left, Right
 
         self.ee_vel_goals_pub = self.create_publisher(EEVelGoals, 'relaxed_ik/ee_vel_goals', 5)
@@ -48,9 +46,9 @@ class XboxPublisher(Node):
 
                 #### TEMP ######################
                 self.angular[0] = (motion[0])/100000
-                self.linear[0] = -motion[1]/10000
+                self.linear[0] = -motion[1]/50000
                 # No Y movement (linear[1])
-                self.linear[2] = motion[2] /10000
+                self.linear[2] = motion[2] /50000
                 
                 msg = EEVelGoals()
                 for i in range(1):
@@ -75,11 +73,6 @@ class XboxPublisher(Node):
                     msg.tolerances.append(tolerance)
                 self.ee_vel_goals_pub.publish(msg)
                 ################################################
-
-                # Publish to topic swerve
-                swerve_command = Float32MultiArray()
-                swerve_command.data = motion
-                self.arm_publisher.publish(swerve_command)
             
             
             for event in pygame.event.get():
