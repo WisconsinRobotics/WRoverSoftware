@@ -1,3 +1,18 @@
+## Installations Required
+
+### Prerequisites
+Ensure you have Python 3 and `pip` installed on your system.
+You need to be running a linux machine.
+
+### Required Libraries
+Install the following Python libraries using `pip`:
+
+```bash
+pip install flask folium PyQt6 PyQt6-WebEngine
+```
+
+If you want to not mess up stuff, set up a virtual environment before running this.
+
 ## Publishing GPS Data
 
 If you have a GPS node publishing to `/fix`, this should work as expected. However, if you want to test with fake values that don't rely on a GPS unit, use the following command in a terminal:
