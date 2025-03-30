@@ -93,6 +93,7 @@ public:
         if (!statusS.IsOK()) {
             std::cout << "Could not configure device. Error: " << statusS.GetName() << std::endl;
         }
+
         
     }
 
@@ -107,8 +108,9 @@ private:
         elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(1).WithOverrideBrakeDurNeutral(true));
         shoulderMotor.SetControl(shoulderOut.WithPosition(shoulder_position * 1_tr).WithSlot(0).WithOverrideBrakeDurNeutral(true));
         //}
-        std::cout << "Shoulder: " << shoulderMotor.ToString() << std::endl;
-        std::cout << "Pos Elbow: " << elbowMotor.ToString() << std::endl;
+        std::cout << "Shoulder: " << shoulderOut.ToString() << std::endl;
+        std::cout << "Pos Elbow: " << elbowOut.ToString() << std::endl;
+
 
     }
 

@@ -16,10 +16,16 @@ class IKSubscriber(Node):
 
     def __init__(self):
         super().__init__('arm_logic')
-        self.subscription_joy = self.create_subscription(
+        self.subscription_joint_solutions = self.create_subscription(
             JointState,
             '/relaxed_ik/joint_angle_solutions',
             self.listener_callback,
+            10)
+        
+        self.subscription_joy = self.create_subscription(
+            Float32MultiArray,
+            'rail',
+            self.listener_callback_joy,
             10)
 
         self.subscription_buttons = self.create_subscription(
@@ -41,9 +47,13 @@ class IKSubscriber(Node):
 
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
-
-        self.arm_angles = [0.0, 0.0, 50.0]
+        
         self.kohler_shift = 130
+        self.arm_angles = [0.0, 0.0, 50.0 + self.kohler_shift]
+
+        #Define messages beforehand
+        self.msg_linear_rail = Float64()
+        self.msg_linear_rail.data = 0.0
 
         self.msg_wrist = GripperPosition()
         self.msg_wrist.left_position = 180.0
@@ -52,10 +62,23 @@ class IKSubscriber(Node):
         self.msg_gripper = Float64()
         self.msg_gripper.data = 0.0
 
+        self.arm_publisher_base = self.create_publisher(Float64, 'arm_base', 10)
+
+
     def listener_callback(self, data):
         #self.get_logger().info('I heard: "%s"' % msg.data)
         #print(data.position)
         self.processPositions(data.position)
+    
+    def listener_callback_joy(self, msg):
+        #self.get_logger().info('I heard: "%s"' % msg.data)
+        motion = msg.data
+
+        #Expecting (left trigger, rigt trigger)
+        linear_rail_speed = self.get_linear_rail_speed(motion[0], motion[1])
+        
+        #Publishing
+        self.msg_linear_rail.data = linear_rail_speed
 
     def timer_callback(self):
         msg = Float32MultiArray()
@@ -70,6 +93,8 @@ class IKSubscriber(Node):
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
         
         self.arm_publisher_gripper.publish(self.msg_gripper)
+        self.arm_publisher_base.publish(self.msg_linear_rail)
+
 
     def processPositions(self, arm_positions):
         #Shoulder
@@ -96,6 +121,10 @@ class IKSubscriber(Node):
             return -GRIPPER_SPEED_VALUE
         else:
             return 0
+    def get_linear_rail_speed(self, left, right) -> Float64:
+        #Reverse if right is positive
+        #Converting -1 -> 1 range of triggers to 0->1
+        return ((left+1)/2 - (right+1)/2)
 
 def main(args=None):
     rclpy.init(args=args)
