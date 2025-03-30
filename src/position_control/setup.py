@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'send_position = position_control.send_position:main'
+            'send_position = position_control.send_position:main',
+            'make_drawing = position_control.make_drawing:main',
         ],
     },
 )

@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
-from draw_xy_action.action import DrawPath
+from position_control.action import DrawPath
 from geometry_msgs.msg import Point
 
 import tkinter as tk
