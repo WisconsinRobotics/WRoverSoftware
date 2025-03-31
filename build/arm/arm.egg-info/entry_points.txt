@@ -1,4 +1,0 @@
-[console_scripts]
-IK_logic = arm.IK_logic:main
-arm_ik = arm.arm_ik:main
-arm_teleop = arm.arm_teleop:main

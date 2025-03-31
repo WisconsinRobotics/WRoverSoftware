@@ -1,3 +1,0 @@
-[console_scripts]
-joystick_input = input.joystick_input:main
-xbox_input = input.xbox_input:main

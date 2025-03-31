@@ -1,6 +1,0 @@
-[0.489s] Invoking command in '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs -- -j12 -l12
-[2.124s] [0mCMake Error: The current CMakeCache.txt directory /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs/CMakeCache.txt is different than the directory /home/balabalu/workspace/WRoverSoftware/build/custom_msgs_srvs where CMakeCache.txt was created. This may result in binaries being created in the wrong place. If you are not sure, reedit the CMakeCache.txt[0m
-[2.125s] [0mCMake Error: The source directory "/home/balabalu/workspace/WRoverSoftware/src/Messages/custom_msgs_srvs" does not exist.
-[2.125s] Specify --help for usage, or press the help button on the CMake GUI.[0m
-[2.125s] gmake: *** [Makefile:226: cmake_check_build_system] Error 1
-[2.126s] Invoked command in '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs' returned '2': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs -- -j12 -l12

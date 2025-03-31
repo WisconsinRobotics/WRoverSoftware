@@ -1,4 +1,0 @@
-[console_scripts]
-drive_motors = swerve.drive_motors:main
-rotate_motors = swerve.rotate_motors:main
-swerve_logic = swerve.swerve_logic:main

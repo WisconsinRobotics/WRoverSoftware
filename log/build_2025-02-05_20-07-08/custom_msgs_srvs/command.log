@@ -1,2 +1,0 @@
-Invoking command in '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs -- -j12 -l12
-Invoked command in '/home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs' returned '2': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/david-wang/Desktop/Projects/WRoverSoftware/build/custom_msgs_srvs -- -j12 -l12
