@@ -111,30 +111,30 @@ def receive_canbus(num_messages: int, infty: bool = False):
                     pid_pos_deg = pid_pos_raw / 50
                     print(f"PID Position: {pid_pos_deg} degrees")
 
-                case 28:
-                    # B0-B1: ADC1 in V (scale factor 1000)
-                    adc1_bits = data[0:16]
-                    adc1_raw = int(adc1_bits, 2)
-                    adc1_v = adc1_raw / 1000
-                    print(f"ADC1: {adc1_v} V")
+                # case 28:
+                #     # B0-B1: ADC1 in V (scale factor 1000)
+                #     adc1_bits = data[0:16]
+                #     adc1_raw = int(adc1_bits, 2)
+                #     adc1_v = adc1_raw / 1000
+                #     print(f"ADC1: {adc1_v} V")
                     
-                    # B2-B3: ADC2 in V (scale factor 1000)
-                    adc2_bits = data[16:32]
-                    adc2_raw = int(adc2_bits, 2)
-                    adc2_v = adc2_raw / 1000
-                    print(f"ADC2: {adc2_v} V")
+                #     # B2-B3: ADC2 in V (scale factor 1000)
+                #     adc2_bits = data[16:32]
+                #     adc2_raw = int(adc2_bits, 2)
+                #     adc2_v = adc2_raw / 1000
+                #     print(f"ADC2: {adc2_v} V")
                     
-                    # B4-B5: ADC3 in V (scale factor 1000)
-                    adc3_bits = data[32:48]
-                    adc3_raw = int(adc3_bits, 2)
-                    adc3_v = adc3_raw / 1000
-                    print(f"ADC3: {adc3_v} V")
+                #     # B4-B5: ADC3 in V (scale factor 1000)
+                #     adc3_bits = data[32:48]
+                #     adc3_raw = int(adc3_bits, 2)
+                #     adc3_v = adc3_raw / 1000
+                #     print(f"ADC3: {adc3_v} V")
                     
-                    # B6-B7: PPM % / 100 (scale factor 1000)
-                    ppm_bits = data[48:64]
-                    ppm_raw = int(ppm_bits, 2)
-                    ppm_percent = ppm_raw / 1000
-                    print(f"PPM: {ppm_percent} %")
+                #     # B6-B7: PPM % / 100 (scale factor 1000)
+                #     ppm_bits = data[48:64]
+                #     ppm_raw = int(ppm_bits, 2)
+                #     ppm_percent = ppm_raw / 1000
+                #     print(f"PPM: {ppm_percent} %")
 
             i += 1
 
