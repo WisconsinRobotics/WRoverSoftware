@@ -28,15 +28,15 @@ class CompassDataPublisher : public rclcpp::Node {
         void timer_callback()
         {
             std_msgs::msg::Float64 message; // this is potentially wrong
-            //StatusSignal<units::angle::degree_t> sig;
-            //sig = 
-            double yawVal = 20.5;//pigeon2imu->GetYaw();
-            message.data = yawVal;
+            //StatusSignal<units::angle::degree_t> &sig;
+            auto &sig = pigeon2imu.GetYaw();
+            //double yawVal = sig.GetValue();//pigeon2imu->GetYaw();
+            message.data = sig.GetValue().value();
             publisher_->publish(message);
         }
         rclcpp::TimerBase::SharedPtr timer_;
         rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr publisher_;
-        hardware::core::CorePigeon2 pigeon2imu;
+        hardware::Pigeon2 pigeon2imu;
 };
 
 
