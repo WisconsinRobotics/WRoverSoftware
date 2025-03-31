@@ -1,7 +1,9 @@
+#include <memory>
+#include "rclcpp/rclcpp.hpp"
+#include <functional> // Include this for std::bind4
 #include <chrono>
 #include <functional>
 #include <memory>
-#include "rclcpp/rclcpp.hpp"
 #include "ctre/phoenix6/Pigeon2.hpp"
 #include "std_msgs/msg/float64.hpp"
 
@@ -14,7 +16,7 @@ class CompassDataPublisher : public rclcpp::Node {
     public:
         CompassDataPublisher()
         :
-            Node("compass_data"),
+            Node("compass"),
             pigeon2imu(10, "can0")
         {
             publisher_ = this->create_publisher<std_msgs::msg::Float64>("compass_data_topic", 10);
@@ -25,13 +27,16 @@ class CompassDataPublisher : public rclcpp::Node {
     private:
         void timer_callback()
         {
-            auto message = std_msgs::msg::Float64(); // this is potentially wrong
-            message.data = pigeon2imu.GetAngle();
+            std_msgs::msg::Float64 message; // this is potentially wrong
+            //StatusSignal<units::angle::degree_t> sig;
+            //sig = 
+            double yawVal = 20.5;//pigeon2imu->GetYaw();
+            message.data = yawVal;
             publisher_->publish(message);
         }
         rclcpp::TimerBase::SharedPtr timer_;
         rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr publisher_;
-        hardware::Pigeon2 pigeon2imu;
+        hardware::core::CorePigeon2 pigeon2imu;
 };
 
 
