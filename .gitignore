@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 build/
 install/
 log/
@@ -7,3 +8,6 @@ venv/
 src/arm_test/bin/
 /launch/__pycache__/
 src/relaxed_ik_ros2
+src/build
+src/install
+src/log

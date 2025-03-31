@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+
+
+    <!-- Trails Plugin BUT IT DONT WORK AHAHAH NEED A DIFF PLUGIN GPT WAS WRONG --> 
+    <script src="https://unpkg.com/leaflet-ant-path@1.3.0/dist/leaflet-ant-path.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ant-path/1.3.0/leaflet-ant-path.min.js"></script>  --> 
+    
+
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; right: 0; left: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script>
+        console.log("AntPath Loaded:", typeof L.polyline.antPath);
+
+        var initial_position = [43.07280456333762, -89.41184284787494]
+
+        var map = L.map('map').setView(initial_position, 100);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Create the robot marker (default Leaflet marker)
+        // Fix broken marker by using Leaflet's built-in marker images
+        var robotMarker = L.marker(initial_position, {
+            icon: L.icon({
+                iconUrl: "https://cdn-icons-png.flaticon.com/128/9407/9407495.png",
+                iconSize: [35, 35],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+            })
+        }).addTo(map);
+
+        // Add a blue marker at the robot's starting position
+        var startMarker = L.marker(initial_position, {
+            icon: L.icon({
+                iconUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png",  // Default blue marker
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34]
+            })
+        }).bindPopup("Start Position").addTo(map);
+
+
+        // Function to generate random goal markers
+        function generateRandomGoals(numGoals) {
+            for (let i = 0; i < numGoals; i++) {
+                let randLat = initial_position[0]+ (Math.random() * 0.1 - 0.05) + .07  // Random latitude offset
+                let randLon = initial_position[1] + (Math.random() * 0.1 - 0.05) + .07 // Random longitude offset
+
+                let goalMarker = L.marker([randLat, randLon], {
+                    icon: L.icon({
+                        iconUrl: "https://cdn-icons-png.flaticon.com/128/4394/4394611.png",
+                        iconSize: [40, 40],
+                        iconAnchor: [12, 41],
+                        popupAnchor: [1, -34]
+                    })
+                }).bindPopup(`Goal ${i + 1}`).addTo(map);
+            }
+        }
+
+        // Add 3 random goals
+        //generateRandomGoals(3);
+
+        // Dictionary to store goal markers
+        var goalMarkers = {};
+
+        // Function to fetch and add goal markers (only runs once)
+        function loadGoalMarkers() {
+            fetch("/get_goals")
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Goal Locations:", data);
+
+                    // Loop through each goal and place a static marker
+                    data.forEach(goal => {
+                        var key = goal.name;
+                        goalMarkers[key] = L.marker([goal.lat, goal.lon], {
+                            icon: L.icon({
+                            iconUrl: "https://cdn-icons-png.flaticon.com/128/4394/4394611.png",
+                            iconSize: [40, 40],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34]
+                        })
+                        }).bindPopup(goal.name).addTo(map);
+                    });
+                })
+                .catch(error => console.error("Error fetching goal locations:", error));
+        }
+
+        // Store past robot positions for the trail - NOT WORKING
+        var robotPath = [initial_position];  // Start with initial position
+
+        var robotTrail = L.polyline.antPath(robotPath, {
+            "delay": 400,
+            "dashArray": [10, 20],
+            "weight": 5,
+            "color": "#0000FF",
+            "pulseColor": "#FFFFFF",
+            "paused": false,
+            "reverse": false
+        }).addTo(map);
+
+        // Function to update robot location dynamically
+        function updateRobotLocation() {
+            fetch("/get_location")
+                .then(response => response.json())
+                .then(data => {
+                    var lat = data.lat;
+                    var lon = data.lon;
+                    console.log("Updated Robot Coordinates:", lat, lon);
+                    console.log("Trail Path:", robotPath);
+
+                    // Move the robot marker to the new position
+                    robotMarker.setLatLng([lat, lon]);
+
+                    robotPath.push([lat, lon]);
+
+                    // Update the trail dynamically
+                    robotTrail.setLatLngs(robotPath);
+                    console.log("✅ Trail Path Updated:", robotPath);
+
+                    // Optionally move the map to follow the robot
+                    map.panTo([lat, lon]);
+                })
+                .catch(error => console.error("Error fetching robot location:", error));
+        }
+
+        // Load goal markers once when the page loads
+        loadGoalMarkers();
+
+        // Update the robot's location every second
+        setInterval(updateRobotLocation, 1000);
+    </script>
+
+</body>
+</html>

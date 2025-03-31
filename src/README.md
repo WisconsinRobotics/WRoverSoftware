@@ -1,33 +1,44 @@
-src directory that holds all project packages
 
-## Building
-Running this code works best on Linux, as colcon has problems even in a docker container on Windows. To build:
-```bash
-colcon build
-source install/setup.bash
-```
-Then run ```ros2 run {package name} {entrypoint name}```
+## Installations Required
 
-### CAN Messages
-CAN messages are used to communicate with (most of) the motors. Do this to ensure the CAN interface is active:
+### Prerequisites
+Ensure you have Python 3 and `pip` installed on your system.
+You need to be running a linux machine.
+
+### Required Libraries
+Install the following Python libraries using `pip`:
+
 ```bash
-modprobe can
-sudo ip link set can0 type can bitrate 500000
-sudo ip link set can0 up
+pip install flask folium PyQt6 PyQt6-WebEngine
 ```
 
-You can check if can0 is up with ```ip link show type can```
+If you want to not mess up stuff, set up a virtual environment before running this.
 
-### Swerve
-As of 01/15/24, the swerve motor can be controller via the xbox controller through these steps:
+## Publishing GPS Data
 
-1. Ensure you have the wr_xbox_controller, wr_swerve_motor, and wr_can_comms packages
-2. Ensure the CAN interface is active (see CAN Messages). 
-3. Ensure the xbox controller is connected (bluetooth or cable)
-4. Enable all three packages in separate terminals:
+If you have a GPS node publishing to `/fix`, this should work as expected. However, if you want to test with fake values that don't rely on a GPS unit, use the following command in a terminal:
+
 ```bash
-ros2 run wr_can_comms can_comms
-ros2 run wr_swerve_motor swerve_motor
-ros2 run wr_xbox_controller xbox_controller
+ros2 topic pub /fix sensor_msgs/NavSatFix "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: 'gps'}, status: {status: 0, service: 1}, latitude: 43.07, longitude: -89.41, altitude: 0.0, position_covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], position_covariance_type: 0}"
 ```
-5. Use the left joystick to move the motor
+
+## Running the GUI Code
+
+Follow these steps to launch the GUI:
+
+1. Run the following command inside the `WRoverSoftware/` directory:
+   ```bash
+   colcon build
+   ```
+2. Open a new terminal and source the setup file:
+   ```bash
+   source install/setup.bash
+   ```
+3. Now, launch the GUI:
+   ```bash
+   ros2 launch get_gps_data gps_gui_start_launch.py
+   ```
+
+Your GUI should now display and update with the GPS location.
+
+>>>>>>> d8c6f4786f364224b94f6539cd283bf66a9d26e2
