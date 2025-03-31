@@ -110,7 +110,7 @@ private:
         std_msgs::msg::Bool msg;
 
         
-        if (abs(shoulderMotor.GetPosition() - shoulder_position) < .1 && abs(elbowMotor.GetPosition() - shoulder_position) < .1 ){
+        if (abs(static_cast<double>((shoulderMotor.GetPosition().GetValue()) - shoulder_position)) < .1 && abs(static_cast<double>((elbowMotor.GetPosition().GetValue()) - elbow_position)) < .1 ){
             msg.data = true;
             RCLCPP_INFO(this->get_logger(), "Publishing: false" );
         }else{
