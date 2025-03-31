@@ -17,7 +17,9 @@ setup(
       'rosidl_runtime_py',
       'ultralytics',
       'torch',
-      'opencv-python'
+      'opencv-python',
+      'zmq',
+      'numpy'
     ],
     zip_safe=True,
     maintainer='David Wang',

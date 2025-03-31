@@ -1,8 +1,10 @@
 # Import libraries
 import os
+import zmq
 import cv2
 import time
 import rclpy
+import numpy as np
 from rclpy.node import Node
 from ultralytics import YOLO
 from std_msgs.msg import String
@@ -24,20 +26,14 @@ class YOLODetectionPublisher(Node):
         # Set timer to process frames every timer_period seconds
         timer_period = 0.05
         self.timer = self.create_timer(timer_period, self.timer_callback)
-
-        # Initialize video capture to use webcam
-        self.video = cv2.VideoCapture(0)
         
-        # Set default video capture resolution to 1920x1080
-        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
-
-        # Ensure the buffer only stores the most recent frame
-        self.video.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-
-        # If webcam cannot be opened
-        if not self.video.isOpened():
-            self.get_logger().error("Failed to open webcam")
+        # Initialize ZeroMQ Context and SUB socket for camera video stream
+        context = zmq.Context()
+        self.camera_socket = context.socket(zmq.SUB)
+        
+        # Subscribe to all messages and connect to publisher port
+        self.camera_socket.setsockopt(zmq.SUBSCRIBE, b"")
+        self.camera_socket.connect("tcp://localhost:5555")
 
         # Load YOLO model
         self.model = YOLO(os.path.join(get_package_share_directory("object_detection_package"), "model.pt"))
@@ -71,13 +67,16 @@ class YOLODetectionPublisher(Node):
 
     # Async function for frame processing
     async def timer_callback(self):
-        # Capture a frame from the webcam
-        ret, frame = self.video.read()
-
-        # If image capture failed
-        if not ret:
-            self.get_logger().error("Failed to capture image from webcam")
-            return
+        # Flush the buffer to ensure most recent frame
+        while True:
+            try:
+                _ = self.camera_socket.recv(flags=zmq.NOBLOCK)
+            except zmq.Again:
+                break
+                
+        # Decode frame data from camera socket
+        data = np.frombuffer(self.camera_socket.recv(), dtype=np.uint8)
+        frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
             
         # Crop and resize the frame
         frame = self.crop_and_resize(frame)
@@ -151,3 +150,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
