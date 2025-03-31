@@ -2,6 +2,7 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float32_multi_array.hpp"
+#include "std_msgs/msg/int16_multi_array.hpp"
 #include <functional> // Include this for std::bind4
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp" // for FeedEnable
 #include <ctre/phoenix6/Orchestra.hpp> // for music!
@@ -16,11 +17,13 @@ public:
         : Node("arm_tone"),
           elbowMotor(1, "can0"),
           shoulderMotor(0, "can0"),
-          m_orchestra({elbowMotor, shoulderMotor}, "onwisc.chrp")
+          m_orchestra("onwisc.chrp")
     {
         subscription_ = this->create_subscription<std_msgs::msg::Int16MultiArray>(
             "buttons", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
         
+	m_orchestra.AddInstrument(elbowMotor);
+	m_orchestra.AddInstrument(shoulderMotor);
         // skip all the boring configuration stuff, surely it isn't important
     }
 
@@ -37,7 +40,7 @@ private:
 
     hardware::TalonFX elbowMotor;
     hardware::TalonFX shoulderMotor;
-    Orchestra::Orchestra m_orchestra;
+    Orchestra m_orchestra;
 };
 
 int main(int argc, char *argv[])
