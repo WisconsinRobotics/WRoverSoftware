@@ -155,13 +155,17 @@ private:
     void timer_callback_shoulder()
     {
         ctre::phoenix::unmanaged::FeedEnable(10);
-        if (abs(static_cast<double>((shoulderMotor.GetPosition().GetValue()) - shoulder_position*1_tr)) < .2 && abs(static_cast<double>((elbowMotor.GetPosition().GetValue()) - elbow_position*1_tr)) < .2 ){
+        if (abs(static_cast<double>((shoulderMotor.GetPosition().GetValue()) - shoulder_position*1_tr)) < .2 ){
             //Make this break the motors and stop trying to move
-            elbowMotor.SetControl(controls::NeutralOut{});
             shoulderMotor.SetControl(controls::NeutralOut{});
         }else{
-            elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(1).WithOverrideBrakeDurNeutral(true));
             shoulderMotor.SetControl(shoulderOut.WithPosition(shoulder_position * 1_tr).WithSlot(0).WithOverrideBrakeDurNeutral(true));
+        }
+        if (abs(static_cast<double>((elbowMotor.GetPosition().GetValue()) - elbow_position*1_tr)) < .2 ){
+            //Make this break the motors and stop trying to move
+            elbowMotor.SetControl(controls::NeutralOut{});
+        }else{
+            elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(1).WithOverrideBrakeDurNeutral(true));
         }
         std::cout << "Shoulder: " << shoulderOut.ToString() << std::endl;
         std::cout << "Pos Elbow: " << elbowOut.ToString() << std::endl;
