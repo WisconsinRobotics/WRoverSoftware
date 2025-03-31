@@ -47,7 +47,7 @@ public:
         configs::TalonFXConfiguration cfg_shoulder{};
 
         //Invert shoulder motor
-        cfg_shoulder.MotorOutput.Inverted = signals::InvertedValue::Clockwise_Positive;
+        cfg_shoulder.MotorOutput.Inverted = signals::InvertedValue::CounterClockwise_Positive;
 
         //Motor in break mode
         configs::MotorOutputConfigs &moc_shoulder = cfg_shoulder.MotorOutput;
@@ -83,7 +83,7 @@ public:
         configs::TalonFXConfiguration cfg_elbow{};
 
         //Invert shoulder motor
-        cfg_elbow.MotorOutput.Inverted = signals::InvertedValue::CounterClockwise_Positive;
+        cfg_elbow.MotorOutput.Inverted = signals::InvertedValue::Clockwise_Positive;
 
         //Motor in break mode
         configs::MotorOutputConfigs &moc_elbow = cfg_elbow.MotorOutput;

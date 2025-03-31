@@ -48,6 +48,9 @@ class IKSubscriber(Node):
 
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
+
+        timer_period = 0.05  # seconds
+        self.timer_rotation = self.create_timer(timer_period, self.change_rotation)
         
         self.kohler_shift = 130
         self.arm_angles = [0.0, 0.0, 50.0 + self.kohler_shift]
@@ -61,6 +64,8 @@ class IKSubscriber(Node):
         self.msg_wrist.right_position = 180.0
         self.add_left_EE = 0.0
         self.add_right_EE = 0.0
+        self.absolute_left_EE = 0.0
+        self.absolute_right_EE = 0.0
 
         self.msg_gripper = Float64()
         self.msg_gripper.data = 0.0
@@ -86,11 +91,11 @@ class IKSubscriber(Node):
     def timer_callback(self):
         msg = Float32MultiArray()
         msg.data = self.arm_angles
-        print(msg)
+        #print(msg)
         self.arm_position_publisher.publish(msg)
-        
-        self.msg_wrist.left_position = float(self.arm_angles[2] + self.add_left_EE)
-        self.msg_wrist.right_position = float(self.arm_angles[2] + self.add_right_EE)
+        #print("Left Position: " + str(float(self.absolute_left_EE)))
+        self.msg_wrist.left_position = float(self.arm_angles[2] + self.absolute_left_EE)
+        self.msg_wrist.right_position = float(self.arm_angles[2] + self.absolute_right_EE)
         
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
@@ -98,13 +103,17 @@ class IKSubscriber(Node):
         self.arm_publisher_gripper.publish(self.msg_gripper)
         self.arm_publisher_base.publish(self.msg_linear_rail)
 
+    def change_rotation(self):
+        self.absolute_left_EE += self.add_left_EE
+        self.absolute_right_EE += self.add_right_EE
+
 
     def processPositions(self, arm_positions):
         #Shoulder
         self.arm_angles[0] = arm_positions[0] *(-105.0 / (math.pi/2))
 
         #Elbow
-        self.arm_angles[1] = -arm_positions[1] *(105.0 / (math.pi/2))
+        self.arm_angles[1] = -(arm_positions[1] - 2*math.pi) *(105.0 / (math.pi/2))
 
         #End Effector up and down
         self.arm_angles[2] = (arm_positions[2]* (50.0 / (math.pi/2))) + 50 + self.kohler_shift
@@ -122,12 +131,16 @@ class IKSubscriber(Node):
 
     def set_turning_speed(self, left_turning, right_turning):
             #TODO: Might have to switch the + and minus
+            print(f"Left turning: {left_turning} Right turning: {right_turning}")
             if left_turning == 1:
-                self.add_left_EE += -TURN_SPEED
-                self.add_right_EE += TURN_SPEED
+                self.add_left_EE = TURN_SPEED
+                self.add_right_EE = -TURN_SPEED
             elif right_turning == 1:
-                self.add_left_EE += -TURN_SPEED
-                self.add_right_EE += TURN_SPEED
+                self.add_left_EE = -TURN_SPEED
+                self.add_right_EE = TURN_SPEED
+            else:
+                self.add_left_EE = 0.0
+                self.add_right_EE = 0.0
 
     def get_gripper_speed(self, a, b) -> float:
         if a == 1:
