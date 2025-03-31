@@ -75,7 +75,7 @@ class IKSubscriber(Node):
         motion = msg.data
 
         #Expecting (left trigger, rigt trigger)
-        linear_rail_speed = self.get_linear_rail_speed(motion[0], motion[1])
+        linear_rail_speed = self.get_linear_rail_speed(motion[1], motion[0])
         
         #Publishing
         self.msg_linear_rail.data = linear_rail_speed
@@ -86,13 +86,13 @@ class IKSubscriber(Node):
         print(msg)
         self.arm_position_publisher.publish(msg)
         
-        self.msg_wrist.left_position = float(self.arm_angles[2])
-        self.msg_wrist.right_position = float(self.arm_angles[2])
+        #self.msg_wrist.left_position = float(self.arm_angles[2])
+        #self.msg_wrist.right_position = float(self.arm_angles[2])
         
-        self.arm_publisher_wrist_left.publish(self.msg_wrist)
-        self.arm_publisher_wrist_right.publish(self.msg_wrist)
+        #self.arm_publisher_wrist_left.publish(self.msg_wrist)
+        #self.arm_publisher_wrist_right.publish(self.msg_wrist)
         
-        self.arm_publisher_gripper.publish(self.msg_gripper)
+        #self.arm_publisher_gripper.publish(self.msg_gripper)
         self.arm_publisher_base.publish(self.msg_linear_rail)
 
 
