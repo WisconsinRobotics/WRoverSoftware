@@ -1,8 +1,0 @@
-# Request: List of X-Y coordinates
-geometry_msgs/Point[] points
----
-# Result: Confirmation message
-string result
----
-# Feedback: Current point being processed
-geometry_msgs/Point current_point

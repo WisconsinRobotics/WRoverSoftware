@@ -7,7 +7,9 @@ from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 import math
 from rclpy.action import ActionServer
 from rclpy.action import CancelResponse, GoalResponse
-from draw_xy_action.action import DrawPath
+from custom_msgs_srvs.action import DrawPath
+import asyncio
+
 
 class EEPublisher(Node):
     def __init__(self):
@@ -25,9 +27,18 @@ class EEPublisher(Node):
         self.pose_publisher = self.create_publisher(EEPoseGoals, '/relaxed_ik/ee_pose_goals', 1)
 
         # Timer to publish periodically
-        self.timer = self.create_timer(0.1, self.publish_messages)
+        self.timer = self.create_timer(0.01, self.publish_messages)
 
+        self.x = 0.0
+        self.y = 0.0
         self.counter = 0.0
+        
+        self.feedback_msg = DrawPath.Feedback()
+        self.line_index = 0
+        self.point_index = 0
+        self.lines = []
+        self.delay = 0.1  # Adjust the speed (seconds)
+        self.timer = None  # Timer will be created later
 
         # Create action server
         self._action_server = ActionServer(
@@ -51,40 +62,59 @@ class EEPublisher(Node):
     async def execute_callback(self, goal_handle):
         """Execute the action goal."""
         self.get_logger().info('Executing goal...')
+        
+        self.result = DrawPath.Result()
+        
+        # Store the lines for processing
+        self.lines = goal_handle.request.lines
+        self.line_index = 0
+        self.point_index = 0
+        
+        # Create the timer to process feedback
+        self.timer = self.create_timer(self.delay, self.process_line_feedback)
+        
+        return self.result
+    def process_line_feedback(self):
+        """Handle feedback for each line point."""
+        if self.line_index < len(self.lines):
+            line = self.lines[self.line_index]
+            if self.point_index < len(line.points):
+                self.get_logger().info(f'INDEX: {self.point_index}')
+                point = line.points[self.point_index]
+                self.x = point.x
+                self.y = point.y
 
-        for idx, point in enumerate(goal_handle.request.points):
-            self.get_logger().info(f'Point {idx + 1}: x={point.x}, y={point.y}')
-            
-            # Send feedback
-            feedback_msg = DrawPath.Feedback()
-            feedback_msg.current_point = point
-            goal_handle.publish_feedback(feedback_msg)
+                self.get_logger().info(f'Processing point {self.point_index} of line {self.line_index}: ({point.x}, {point.y})')
 
-        # Complete the action
-        goal_handle.succeed()
-        result = DrawPath.Result()
-        result.result = f'Processed {len(goal_handle.request.points)} points.'
-        return result
-    
+                # Move to next point
+                self.point_index += 1
+            else:
+                # Move to next line
+                self.line_index += 1
+                self.point_index = 0
+        else:
+            self.get_logger().info('All lines processed.')
+            self.timer.cancel()  # Stop the timer when all lines are processed
+            self.result.result = "All lines processed successfully!"
+
+
     def publish_messages(self):
-        # Header
-        header = Header()
-        header.stamp = self.get_clock().now().to_msg()
-        header.frame_id = "world"
-
         msg = EEPoseGoals()
-        self.counter = self.counter + 0.01
         # Create Pose
+        #self.counter = self.counter - .001
         pose = Pose()
-        pose.position.x = float(-self.counter)
+        pose.position.x = float(-0.6) - self.x / 1000
         pose.position.y = 0.0
-        pose.position.z = float(self.counter)
+        pose.position.z = float(0.6) - self.y / 1000
+
+        #self.get_logger().info(f'Processing line: x: {self.x}, y: {self.y}')
+
 
         # Keep the orientation fixed (90-degree rotation around X-axis)
         pose.orientation.x = 0.0
-        pose.orientation.y = math.sqrt(0.5)   # Equivalent to math.pow(2, (1/2)/2)
+        pose.orientation.y = math.sqrt(.5)# Equivalent to math.pow(2, (1/2)/2)
         pose.orientation.z = 0.0
-        pose.orientation.w = math.sqrt(0.5)   # Equivalent to math.pow(2, (1/2)/2)
+        pose.orientation.w = math.sqrt(.5)  # Equivalent to math.pow(2, (1/2)/2)
 
 
         # Create Twist
@@ -101,10 +131,6 @@ class EEPublisher(Node):
         # Publish messages
         self.pose_publisher.publish(msg)
 
-        
-
-        self.get_logger().info("Z: " + str(self.counter))
-
 def main(args=None):
     rclpy.init(args=args)
     node = EEPublisher()
@@ -114,6 +140,7 @@ def main(args=None):
         pass
     node.destroy_node()
     rclpy.shutdown()
+    
 
 if __name__ == '__main__':
     main()

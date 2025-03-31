@@ -1,0 +1,9 @@
+# Request: List of lines, each containing a list of X-Y coordinates
+custom_msgs_srvs/Line[] lines
+---
+# Result: Confirmation message
+string result
+---
+# Feedback: Current line and current point being processed
+int32 line_index
+geometry_msgs/Point current_point
