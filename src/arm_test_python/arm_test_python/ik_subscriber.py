@@ -11,7 +11,7 @@ from sensor_msgs.msg import JointState
 
 
 GRIPPER_SPEED_VALUE = .25
-TURN_SPEED = 1 #TODO set this properly
+TURN_SPEED = 1.5 #TODO set this properly
 
 class IKSubscriber(Node):
 
@@ -93,7 +93,7 @@ class IKSubscriber(Node):
         msg.data = self.arm_angles
         #print(msg)
         self.arm_position_publisher.publish(msg)
-        #print("Left Position: " + str(float(self.absolute_left_EE)))
+        print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
         self.msg_wrist.left_position = float(self.arm_angles[2] + self.absolute_left_EE)
         self.msg_wrist.right_position = float(self.arm_angles[2] + self.absolute_right_EE)
         
@@ -130,8 +130,7 @@ class IKSubscriber(Node):
         self.msg_gripper.data = float(gripper_speed)
 
     def set_turning_speed(self, left_turning, right_turning):
-            #TODO: Might have to switch the + and minus
-            print(f"Left turning: {left_turning} Right turning: {right_turning}")
+            #print(f"Left turning: {left_turning} Right turning: {right_turning}")
             if left_turning == 1:
                 self.add_left_EE = TURN_SPEED
                 self.add_right_EE = -TURN_SPEED

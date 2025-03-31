@@ -91,25 +91,25 @@ def receive_canbus(num_messages: int, infty: bool = False):
                     temp_fet_bits = data[0:16]
                     temp_fet_raw = int(temp_fet_bits, 2)
                     temp_fet_degc = temp_fet_raw / 10
-                    print(f"Temperature FET: {temp_fet_degc} °C")
+                    #print(f"Temperature FET: {temp_fet_degc} °C")
 
                     # B2-B3: Temp Motor in DegC (scale factor 10)
                     temp_motor_bits = data[16:32]
                     temp_motor_raw = int(temp_motor_bits, 2)
                     temp_motor_degc = temp_motor_raw / 10
-                    print(f"Temperature Motor: {temp_motor_degc} °C")
+                    #print(f"Temperature Motor: {temp_motor_degc} °C")
 
                     # B4-B5: Current In A (scale factor 10)
                     current_bits = data[32:48]
                     current_raw = int(current_bits, 2)
                     current_amps = current_raw / 10
-                    print(f"Current: {current_amps} A")
+                    #print(f"Current: {current_amps} A")
 
                     # B6-B7: PID Pos Deg (scale factor 50)
                     pid_pos_bits = data[48:64]
                     pid_pos_raw = int(pid_pos_bits, 2)
                     pid_pos_deg = pid_pos_raw / 50
-                    print(f"PID Position: {pid_pos_deg} degrees")
+                    #print(f"PID Position: {pid_pos_deg} degrees")
 
                 # case 28:
                 #     # B0-B1: ADC1 in V (scale factor 1000)

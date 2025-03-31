@@ -59,7 +59,7 @@ class SwerveControlSubsrciber(Node):
        
         can_msg_angle.data = self.vesc_ids["WRIST_LEFT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
-        #self.publisher_.publish(can_msg_angle)
+        self.publisher_.publish(can_msg_angle)
         self.get_logger().info('Publishing Angle WRIST_LEFT: "%s"' % can_msg_angle)
 
     def arm_listener_wrist_right(self, msg):
@@ -68,7 +68,7 @@ class SwerveControlSubsrciber(Node):
         
         can_msg_angle.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
-        #self.publisher_.publish(can_msg_angle)
+        self.publisher_.publish(can_msg_angle)
         self.get_logger().info('Publishing Angle WRIST_RIGHT: "%s"' % can_msg_angle)
 
     def arm_listener_gripper(self, msg):
