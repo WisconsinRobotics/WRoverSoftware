@@ -6,8 +6,8 @@ To use this code, make sure you have the following prerequisites:
 1. **Browser Driver for Selenium**
    - Download the appropriate driver for your browser (e.g., ChromeDriver for Chrome, GeckoDriver for Firefox).
    - You can find the drivers here:
-     - ChromeDriver: https://sites.google.com/a/chromium.org/chromedriver/downloads
-     - GeckoDriver: https://github.com/mozilla/geckodriver/releases
+     - ChromeDriver: https://googlechromelabs.github.io/chrome-for-testing/
+
 
 2. **Virtual Environment**
    - It is recommended to use a virtual environment to manage dependencies.
@@ -28,16 +28,20 @@ To use this code, make sure you have the following prerequisites:
      ```bash
      pip install -r requirements.txt
      ```
+3. **Google Maps API Key
+   - Obtain API keys for Google Maps by this link https://developers.google.com/maps/documentation/javascript/get-api-key using your account
+   - In web/main.js, add
+     ```code
+     apiKey = "YOUR_API_KEY"
+     ```
+     on top
 
 ## Running the Code
 1. Make sure the virtual environment is activated.
 2. Run the script using Python:
    ```bash
-   python launch.py [path to driver] [test number]
+   python launch.py [path to driver] [path to json]
    ```
-## New Tests
-1. To create new tests, make new folder with format "test{number}" and specify the test.json file similar to previous tests.
-2. Add path points in test.json where the first point is the start point and last point is the end point of your path.
 
 
 
