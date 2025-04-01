@@ -28,13 +28,12 @@ To use this code, make sure you have the following prerequisites:
      ```bash
      pip install -r requirements.txt
      ```
-3. **Google Maps API Key
+3. **Google Maps API Key**
    - Obtain API keys for Google Maps by this link https://developers.google.com/maps/documentation/javascript/get-api-key using your account
-   - In web/main.js, add
+   - In web/main.js, include your API key as in this code snippet
      ```code
      apiKey = "YOUR_API_KEY"
      ```
-     on top
 
 ## Running the Code
 1. Make sure the virtual environment is activated.
