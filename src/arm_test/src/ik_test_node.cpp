@@ -5,6 +5,7 @@
 #include <functional> // Include this for std::bind4
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp" // for FeedEnable
 //#include <sensor_msgs/msg/joint_state.hpp>
+#include "std_msgs/msg/bool.hpp"
 
 
 using namespace ctre::phoenix6;
@@ -29,7 +30,13 @@ public:
 
         // subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
         //     "joy", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
-        
+        publisher_ = this->create_publisher<std_msgs::msg::Bool>("position_status", 10);
+
+        timer_ = this->create_wall_timer(
+          std::chrono::seconds(1),
+          std::bind(&BoolPublisher::timer_callback, this)
+        );
+
         ctre::phoenix::unmanaged::SetTransmitEnable(true);
         // fx_cfg is the default config with inverted output
         configs::TalonFXConfiguration fx_cfg{};
@@ -98,6 +105,19 @@ public:
     }
 
 private:
+    void timer_callback()
+    {
+        std_msgs::msg::Bool msg;
+
+        publisher_->publish(msg);
+        if (abs(shoulderMotor.GetPosition() - shoulder_position) < .1 && abs(elbowMotor.GetPosition() - shoulder_position) < .1 ){
+            msg.data = true;
+            RCLCPP_INFO(this->get_logger(), "Publishing: false" );
+        }else{
+            msg.data = false;
+            RCLCPP_INFO(this->get_logger(), "Publishing: true" );
+        }
+    }
 
     void timer_callback_shoulder()
     {
@@ -143,6 +163,11 @@ private:
     // Moved speeds to class members
     double shoulder_position;
     double elbow_position;
+
+    //Timer to see if we have reached position
+    rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr publisher_;
+    rclcpp::TimerBase::SharedPtr timer_;
+
 };
 
 int main(int argc, char *argv[])
