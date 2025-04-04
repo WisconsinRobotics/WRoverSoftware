@@ -1,5 +1,5 @@
 # Request: List of lines, each containing a list of X-Y coordinates
-custom_msgs_srvs/Line[] lines
+custom_msgs_srvs/Line line
 ---
 # Result: Confirmation message
 string result

@@ -9,7 +9,7 @@ from rclpy.action import ActionServer
 from rclpy.action import CancelResponse, GoalResponse
 from custom_msgs_srvs.action import DrawPath
 import asyncio
-
+from std_msgs.msg import Bool
 
 class EEPublisher(Node):
     def __init__(self):
@@ -22,6 +22,14 @@ class EEPublisher(Node):
         #     history=HistoryPolicy.KEEP_LAST,
         #     depth=10
         # )
+
+        #Subscriber
+        self.subscription = self.create_subscription(
+            Bool,
+            '/position_status',
+            self.position_callback,
+            10
+        )
 
         # Publishers
         self.pose_publisher = self.create_publisher(EEPoseGoals, '/relaxed_ik/ee_pose_goals', 1)
@@ -49,6 +57,9 @@ class EEPublisher(Node):
             goal_callback=self.goal_callback,
             cancel_callback=self.cancel_callback
         )
+    def position_callback(self,msg):
+        self.reached_first = msg.data
+        
     def goal_callback(self, goal_request):
         """Accepts all goals."""
         self.get_logger().info('Received new goal request.')
@@ -60,43 +71,59 @@ class EEPublisher(Node):
         return CancelResponse.ACCEPT
 
     async def execute_callback(self, goal_handle):
-        """Execute the action goal."""
+        """Execute a single-line goal."""
         self.get_logger().info('Executing goal...')
+        line = goal_handle.request.line[0]
+        first_point = line.points[0]
+
+        self.x = first_point.x
+        self.y = first_point.y
+
+        self.get_logger().info('Waiting to reach first point...')
+
+        # Wait in a non-blocking way
+        while not self.reached_first:
+            await asyncio.sleep(0.1)
+
+        self.get_logger().info('First point reached! Executing...')
         
+
+        self._goal_handle = goal_handle
         self.result = DrawPath.Result()
-        
-        # Store the lines for processing
-        self.lines = goal_handle.request.lines
-        self.line_index = 0
+
+        self.line = goal_handle.request.line  # Only one Line in the list
         self.point_index = 0
-        
-        # Create the timer to process feedback
-        self.timer = self.create_timer(self.delay, self.process_line_feedback)
-        
-        return self.result
+
+        self._result_future = asyncio.get_event_loop().create_future()
+
+        self.timer = self.create_timer(self.delay, self.process_points)
+
+        return await self._result_future
+
     def process_line_feedback(self):
         """Handle feedback for each line point."""
-        if self.line_index < len(self.lines):
-            line = self.lines[self.line_index]
-            if self.point_index < len(line.points):
-                self.get_logger().info(f'INDEX: {self.point_index}')
-                point = line.points[self.point_index]
-                self.x = point.x
-                self.y = point.y
+        if self.point_index < len(self.line.points):
+            point = self.line.points[self.point_index]
+            self.get_logger().info(f'Processing point {self.point_index}: ({point.x}, {point.y})')
+            self.x = point.x
+            self.y = point.y
+            # Send feedback
+            feedback = DrawPath.Feedback()
+            feedback.line_index = 0
+            feedback.current_point = point
+            self._goal_handle.publish_feedback(feedback)
 
-                self.get_logger().info(f'Processing point {self.point_index} of line {self.line_index}: ({point.x}, {point.y})')
-
-                # Move to next point
-                self.point_index += 1
-            else:
-                # Move to next line
-                self.line_index += 1
-                self.point_index = 0
+            self.point_index += 1
         else:
-            self.get_logger().info('All lines processed.')
-            self.timer.cancel()  # Stop the timer when all lines are processed
-            self.result.result = "All lines processed successfully!"
+            self.get_logger().info('Line fully processed.')
+            self.timer.cancel()
+            self.move_base(1)
+            self._goal_handle.succeed()
+            self.result.result = "Line processed successfully!"
+            self._result_future.set_result(self.result)
 
+    def move_base(self, right):
+        pass
 
     def publish_messages(self):
         msg = EEPoseGoals()

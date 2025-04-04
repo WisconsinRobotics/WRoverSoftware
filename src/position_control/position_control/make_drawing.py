@@ -40,6 +40,9 @@ class DrawApp(Node):
 
         self.reset_btn = tk.Button(btn_frame, text="Reset Canvas", command=self.reset_canvas)
         self.reset_btn.pack(side=tk.LEFT, padx=10)
+        self.i = 0
+        self.drawing = False
+        self.delay = .01
 
     def start_drawing(self, event):
         """Start a new line."""
@@ -61,41 +64,56 @@ class DrawApp(Node):
         self.current_line = []
 
     def send_coordinates(self):
-        """Send the drawn lines to the ROS2 action server."""
+        """Send the drawn lines to the ROS2 action server, waiting for each response before sending the next."""
         if not self._action_client.wait_for_server(timeout_sec=3.0):
             self.get_logger().error('Action server not available!')
             return
+        
+        self.line_index = 0  # Track which line is being sent
+        self.send_next_line()  # Start sending the first line
+
+    def send_next_line(self):
+        """Send the next line if there are more to send."""
+        if self.line_index >= len(self.lines):
+            self.get_logger().info('All lines have been sent.')
+            return  # Stop when all lines are sent
 
         goal_msg = DrawPath.Goal()
+        line_msg = Line()
+        
+        # Convert the current line to a Line message
+        line_msg.points = [Point(x=float(x), y=float(y), z=0.0) for x, y in self.lines[self.line_index]]
+        goal_msg.line = line_msg  # Ensure it's a list
 
-        # Convert each line to a Line message
-        for line in self.lines:
-            line_msg = Line()
-            line_msg.points = [Point(x=float(x), y=float(y), z=0.0) for x, y in line]
-            goal_msg.lines.append(line_msg)
+        self.get_logger().info(f'Sending line {self.line_index + 1} of {len(self.lines)}...')
 
-        # Send goal
-        self.get_logger().info(f'Sending {len(self.lines)} lines...')
+        # Send the goal asynchronously
         self._send_goal_future = self._action_client.send_goal_async(goal_msg, feedback_callback=self.feedback_callback)
-
         self._send_goal_future.add_done_callback(self.goal_response_callback)
-    
-    
+        
+        self.drawing = True  # Mark as drawing
+
     def goal_response_callback(self, future):
+        """Callback executed when the action server responds to the goal request."""
         goal_handle = future.result()
         if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected :(')
+            self.get_logger().warn(f'Goal {self.line_index + 1} was rejected.')
+            self.drawing = False
             return
-
-        self.get_logger().info('Goal accepted :)')
-
+        
+        self.get_logger().info(f'Goal {self.line_index + 1} accepted, waiting for result...')
         self._get_result_future = goal_handle.get_result_async()
-        self._get_result_future.add_done_callback(self.get_result_callback)
-    
-    def get_result_callback(self, future):
+        self._get_result_future.add_done_callback(self.result_callback)
+
+    def result_callback(self, future):
+        """Callback executed when the action server provides a result."""
         result = future.result().result
-        self.get_logger().info('Result: {0}'.format(result.result))
-        rclpy.shutdown()
+        self.get_logger().info(f'Line {self.line_index + 1} completed with result: {result.result}')
+
+        self.drawing = False  # Allow sending the next line
+        self.line_index += 1  # Move to the next line
+        self.send_next_line()  # Send the next line
+
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
