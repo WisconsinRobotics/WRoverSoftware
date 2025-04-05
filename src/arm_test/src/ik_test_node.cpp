@@ -109,7 +109,7 @@ private:
     {
         std_msgs::msg::Bool msg;
 
-        publisher_->publish(msg);
+        
         if (abs(shoulderMotor.GetPosition() - shoulder_position) < .1 && abs(elbowMotor.GetPosition() - shoulder_position) < .1 ){
             msg.data = true;
             RCLCPP_INFO(this->get_logger(), "Publishing: false" );
@@ -117,6 +117,7 @@ private:
             msg.data = false;
             RCLCPP_INFO(this->get_logger(), "Publishing: true" );
         }
+        publisher_->publish(msg);
     }
 
     void timer_callback_shoulder()
