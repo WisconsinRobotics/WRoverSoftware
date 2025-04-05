@@ -10,6 +10,14 @@ from rclpy.action import CancelResponse, GoalResponse
 from custom_msgs_srvs.action import DrawPath
 import asyncio
 from std_msgs.msg import Bool
+import threading
+
+def ros_spin(node):
+    try:
+        print("[ROS Spin Thread] Spinning...")
+        rclpy.spin(node)
+    except Exception as e:
+        print(f"[ROS Spin Thread] Spin crashed: {e}")
 
 class EEPublisher(Node):
     def __init__(self):
@@ -31,11 +39,11 @@ class EEPublisher(Node):
             10
         )
 
-        # Publishers
+        # Publishers    
         self.pose_publisher = self.create_publisher(EEPoseGoals, '/relaxed_ik/ee_pose_goals', 1)
 
         # Timer to publish periodically
-        self.timer = self.create_timer(0.01, self.publish_messages)
+        self.publisher_timer = self.create_timer(0.01, self.publish_messages)
 
         self.x = 0.0
         self.y = 0.0
@@ -46,7 +54,8 @@ class EEPublisher(Node):
         self.point_index = 0
         self.lines = []
         self.delay = 0.1  # Adjust the speed (seconds)
-        self.timer = None  # Timer will be created later
+        self.reached_first = False
+        self._reached_first_cv = threading.Condition()
 
         # Create action server
         self._action_server = ActionServer(
@@ -57,8 +66,12 @@ class EEPublisher(Node):
             goal_callback=self.goal_callback,
             cancel_callback=self.cancel_callback
         )
-    def position_callback(self,msg):
+    async def position_callback(self,msg):
         self.reached_first = msg.data
+        self.get_logger().info(f'Position Callback - set reached first to {self.reached_first}')
+        if(self.reached_first):
+            with self._reached_first_cv:
+                self._reached_first_cv.notify_all()
         
     def goal_callback(self, goal_request):
         """Accepts all goals."""
@@ -70,35 +83,37 @@ class EEPublisher(Node):
         self.get_logger().info('Goal canceled.')
         return CancelResponse.ACCEPT
 
-    async def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle):
         """Execute a single-line goal."""
         self.get_logger().info('Executing goal...')
-        line = goal_handle.request.line[0]
+        line = goal_handle.request.line
         first_point = line.points[0]
 
         self.x = first_point.x
         self.y = first_point.y
 
         self.get_logger().info('Waiting to reach first point...')
-
+        
         # Wait in a non-blocking way
-        while not self.reached_first:
-            await asyncio.sleep(0.1)
+        with self._reached_first_cv:
+            while not self.reached_first:
+                self.get_logger().info(f'Reached_first {self.reached_first}')
+                self._reached_first_cv.wait(timeout=1)
 
         self.get_logger().info('First point reached! Executing...')
         
 
         self._goal_handle = goal_handle
         self.result = DrawPath.Result()
-
+ 
         self.line = goal_handle.request.line  # Only one Line in the list
         self.point_index = 0
 
-        self._result_future = asyncio.get_event_loop().create_future()
 
-        self.timer = self.create_timer(self.delay, self.process_points)
+        self.process_timer = self.create_timer(self.delay, self.process_line_feedback)
 
-        return await self._result_future
+        self._result_event.wait()
+        return self.result
 
     def process_line_feedback(self):
         """Handle feedback for each line point."""
@@ -116,8 +131,9 @@ class EEPublisher(Node):
             self.point_index += 1
         else:
             self.get_logger().info('Line fully processed.')
-            self.timer.cancel()
-            self.move_base(1)
+            self.result.result = "Line processed successfully!"
+
+            self.move_base()
             self._goal_handle.succeed()
             self.result.result = "Line processed successfully!"
             self._result_future.set_result(self.result)
@@ -134,7 +150,7 @@ class EEPublisher(Node):
         pose.position.y = 0.0
         pose.position.z = float(0.6) - self.y / 1000
 
-        #self.get_logger().info(f'Processing line: x: {self.x}, y: {self.y}')
+        self.get_logger().info(f'Processing line: x: {self.x}, y: {self.y}')
 
 
         # Keep the orientation fixed (90-degree rotation around X-axis)
@@ -159,14 +175,24 @@ class EEPublisher(Node):
         self.pose_publisher.publish(msg)
 
 def main(args=None):
-    rclpy.init(args=args)
+    rclpy.init()
     node = EEPublisher()
+
+    # Start ROS spinning in a separate thread
+    ros_thread = threading.Thread(target=ros_spin, args=(node,), daemon=True)
+    ros_thread.start()
+
+    # Run the asyncio event loop in the main thread
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     try:
-        rclpy.spin(node)
+        loop.run_forever()
     except KeyboardInterrupt:
         pass
-    node.destroy_node()
-    rclpy.shutdown()
+    finally:
+        loop.close()
+        node.destroy_node()
+        rclpy.shutdown()
     
 
 if __name__ == '__main__':
