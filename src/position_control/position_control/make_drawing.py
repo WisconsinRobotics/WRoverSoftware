@@ -70,28 +70,31 @@ class DrawApp(Node):
             return
         
         self.line_index = 0  # Track which line is being sent
-        self.send_next_line()  # Start sending the first line
+        self.send_lines()  # Start sending the first line
 
-    def send_next_line(self):
+    def send_lines(self):
         """Send the next line if there are more to send."""
         if self.line_index >= len(self.lines):
-            self.get_logger().info('All lines have been sent.')
-            return  # Stop when all lines are sent
+            self.get_logger().info('All lines have already been sent.')
+            return  # Stop if all lines are already sent
 
         goal_msg = DrawPath.Goal()
-        line_msg = Line()
-        
-        # Convert the current line to a Line message
-        line_msg.points = [Point(x=float(x), y=float(y), z=0.0) for x, y in self.lines[self.line_index]]
-        goal_msg.line = line_msg  # Ensure it's a list
+        goal_msg.lines = []  # Assuming the action accepts a list of Line messages
 
-        self.get_logger().info(f'Sending line {self.line_index + 1} of {len(self.lines)}...')
+        # Convert all lines to Line messages
+        for i, line in enumerate(self.lines[self.line_index:]):
+            line_msg = Line()
+            line_msg.points = [Point(x=float(x), y=float(y), z=0.0) for x, y in line]
+            goal_msg.lines.append(line_msg)
+
+        self.get_logger().info(f'Sending {len(goal_msg.lines)} lines starting from index {self.line_index}...')
 
         # Send the goal asynchronously
         self._send_goal_future = self._action_client.send_goal_async(goal_msg, feedback_callback=self.feedback_callback)
         self._send_goal_future.add_done_callback(self.goal_response_callback)
-        
+
         self.drawing = True  # Mark as drawing
+
 
     def goal_response_callback(self, future):
         """Callback executed when the action server responds to the goal request."""
