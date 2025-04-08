@@ -65,29 +65,26 @@ class DrawApp(Node):
 
     def send_coordinates(self):
         """Send the drawn lines to the ROS2 action server, waiting for each response before sending the next."""
+        self.get_logger().info(f'Lines: {self.lines}')
         if not self._action_client.wait_for_server(timeout_sec=3.0):
             self.get_logger().error('Action server not available!')
             return
         
-        self.line_index = 0  # Track which line is being sent
         self.send_lines()  # Start sending the first line
 
     def send_lines(self):
         """Send the next line if there are more to send."""
-        if self.line_index >= len(self.lines):
-            self.get_logger().info('All lines have already been sent.')
-            return  # Stop if all lines are already sent
 
         goal_msg = DrawPath.Goal()
         goal_msg.lines = []  # Assuming the action accepts a list of Line messages
 
         # Convert all lines to Line messages
-        for i, line in enumerate(self.lines[self.line_index:]):
+        for line in self.lines:
             line_msg = Line()
             line_msg.points = [Point(x=float(x), y=float(y), z=0.0) for x, y in line]
             goal_msg.lines.append(line_msg)
 
-        self.get_logger().info(f'Sending {len(goal_msg.lines)} lines starting from index {self.line_index}...')
+        self.get_logger().info(f'Sending {len(goal_msg.lines)} lines starting')
 
         # Send the goal asynchronously
         self._send_goal_future = self._action_client.send_goal_async(goal_msg, feedback_callback=self.feedback_callback)
@@ -100,22 +97,18 @@ class DrawApp(Node):
         """Callback executed when the action server responds to the goal request."""
         goal_handle = future.result()
         if not goal_handle.accepted:
-            self.get_logger().warn(f'Goal {self.line_index + 1} was rejected.')
+            self.get_logger().warn(f'Goal was rejected.')
             self.drawing = False
             return
         
-        self.get_logger().info(f'Goal {self.line_index + 1} accepted, waiting for result...')
+        self.get_logger().info(f'Goal accepted, waiting for result...')
         self._get_result_future = goal_handle.get_result_async()
         self._get_result_future.add_done_callback(self.result_callback)
 
     def result_callback(self, future):
         """Callback executed when the action server provides a result."""
         result = future.result().result
-        self.get_logger().info(f'Line {self.line_index + 1} completed with result: {result.result}')
-
-        self.drawing = False  # Allow sending the next line
-        self.line_index += 1  # Move to the next line
-        self.send_next_line()  # Send the next line
+        self.get_logger().info(f'Lines completed with result: {result.result}')
 
 
     def feedback_callback(self, feedback_msg):
