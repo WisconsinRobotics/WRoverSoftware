@@ -24,7 +24,7 @@ setup(
     entry_points={
         'console_scripts': [
             'xbox_controller = wr_xbox_controller.xbox_controller:main',
-            'old_xbox_controller = wr_xbox_controller.old_xbox_controller:main',
+            'arm_rail_xbox = wr_xbox_controller.arm_rail_xbox:main',
             'arm_xbox_control = wr_xbox_controller.arm_xbox:main',
         ],
     },

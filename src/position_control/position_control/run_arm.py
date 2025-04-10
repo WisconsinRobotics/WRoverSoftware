@@ -13,13 +13,6 @@ import asyncio
 from std_msgs.msg import Bool
 import threading
 
-def ros_spin(node):
-    try:
-        print("[ROS Spin Thread] Spinning...")
-        rclpy.spin(node)
-    except Exception as e:
-        print(f"[ROS Spin Thread] Spin crashed: {e}")
-
 class RunArm(Node):
     def __init__(self):
         super().__init__('run_arm_draw')
@@ -45,11 +38,11 @@ class RunArm(Node):
         self.rail_publisher = self.create_publisher(Float32MultiArray, 'rail', 1)
 
         self.rail_out_msg = Float32MultiArray()
-        self.rail_out_msg.data = [-1,1,0]
+        self.rail_out_msg.data = [-1.0,1.0,0.0]
         self.rail_in_msg = Float32MultiArray()
-        self.rail_in_msg.data = [1,-1,0]
+        self.rail_in_msg.data = [1.0,-1.0,0.0]
         self.rail_press_in_msg = Float32MultiArray()
-        self.rail_press_in_msg.data = [-.9,-1,0]
+        self.rail_press_in_msg.data = [-.9,-1.0,0.0]
 
         # Timer to publish periodically
         self.publisher_timer = self.create_timer(0.01, self.publish_messages)
@@ -103,17 +96,17 @@ class RunArm(Node):
         self.point_index = 0
 
         self.process_timer = self.create_timer(self.delay, self.process_line_feedback)
-
-        if self.finished:
-            result.success = True
-            return goal
+        goal_handle.succeed()
+        result = DrawPath.Result()
+   
+        return result
 
     def process_line_feedback(self):
-        """Handle feedback for each line point."""
+        """Handle feedback for each liarm_anglesne point."""
         if self.point_index < 1 and self.robot_drawing:
             if self.line_index < len(self.lines):
                 self.point = self.lines[self.line_index].points[self.point_index]
-            #self.get_logger().info(f'Processing point {self.point_index}: ({point.x}, {point.y})')
+            self.get_logger().info(f'Processing point {self.point_index}: ({self.point.x}, {self.point.y})')
             #self.get_logger().info("Moving rail back")
             self.rail_publisher.publish(self.rail_out_msg)
             self.x = self.point.x
@@ -125,12 +118,12 @@ class RunArm(Node):
 
         #Marking that we reached the first point
         if self.reached_first == False and self.reached_point and self.robot_drawing == False:
-            #self.get_logger().info("Setting reached first to true")
+            self.get_logger().info("Setting reached first to true")
             self.reached_first = True
             
         # Move rail in once we reach first point
         if self.reached_first and not self.robot_drawing:
-            #self.get_logger().info("Moving rail in now that I have reached first point")
+            self.get_logger().info("Moving rail in now that I have reached first point")
             self.rail_publisher.publish(self.rail_in_msg) 
             self.counter = self.counter + 1
             if self.counter > 5:
@@ -143,14 +136,14 @@ class RunArm(Node):
                 point = self.lines[self.line_index].points[self.point_index]
             self.point_index = self.point_index + 1
             self.point = point
-            #self.get_logger().info(f"Drawing line with point: {point}")
+            self.get_logger().info(f"Drawing line with point: {point}")
             self.x = point.x
             self.y = point.y
             self.rail_publisher.publish(self.rail_press_in_msg) #Press in to make sure we are drawing
 
         #Reached last point in line
         if self.point_index >= len(self.lines[self.line_index].points):
-            #self.get_logger().info("Reached last point in line")
+            self.get_logger().info("Reached last point in line")
             self.reached_first = False
             self.line_index = self.line_index + 1
             self.point_index = 0
@@ -183,7 +176,7 @@ class RunArm(Node):
         pose.position.y = 0.0
         pose.position.z = float(0.6) - self.y / 1000
 
-        self.get_logger().info(f'Processing line: x: {pose.position.x}, y: {pose.position.z}')
+        #self.get_logger().info(f'Processing line: x: {pose.position.x}, y: {pose.position.z}')
 
 
         # Keep the orientation fixed (90-degree rotation around X-axis)
@@ -209,22 +202,8 @@ class RunArm(Node):
 def main(args=None):
     rclpy.init()
     node = RunArm()
-
-    # Start ROS spinning in a separate thread
-    ros_thread = threading.Thread(target=ros_spin, args=(node,), daemon=True)
-    ros_thread.start()
-
-    # Run the asyncio event loop in the main thread
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    try:
-        loop.run_forever()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        loop.close()
-        node.destroy_node()
-        rclpy.shutdown()
+    node.get_logger().info("Starting to spin RunArm...")
+    rclpy.spin(node)
     
 
 if __name__ == '__main__':

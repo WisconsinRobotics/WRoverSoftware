@@ -62,13 +62,7 @@ def generate_launch_description():
         Node(
             package='position_control',
             namespace='',
-            executable='send_position',
-            name='send_position',
-        ),
-        Node(
-            package='position_control',
-            namespace='',
-            executable='send_position',
-            name='send_position',
+            executable='run_arm',
+            name='run_arm',
         ),
     ])

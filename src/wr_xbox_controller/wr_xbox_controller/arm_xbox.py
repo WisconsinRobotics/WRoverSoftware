@@ -11,6 +11,7 @@ from geometry_msgs.msg import  Twist
 
 
 # NOTE: This might cause problems if called multiple times
+#RUN IK WITH VELOCITY CONTROL
 pygame.init()
 
 class XboxPublisher(Node):
@@ -112,14 +113,14 @@ class XboxPublisher(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    old_xbox_publisher = XboxPublisher()
+    arm_rail_xbox = XboxPublisher()
 
-    rclpy.spin(old_xbox_publisher)
+    rclpy.spin(arm_rail_xbox)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    old_xbox_publisher.destroy_node()
+    arm_rail_xbox.destroy_node()
     rclpy.shutdown()
 
 
