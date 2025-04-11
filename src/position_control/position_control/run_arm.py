@@ -106,14 +106,14 @@ class RunArm(Node):
         if self.point_index < 1 and self.robot_drawing:
             self.rail_publisher.publish(self.rail_out_msg)
             self.counter = self.counter + 1
-            if self.counter > 10:
+            if self.counter > 20:
                 if self.line_index < len(self.lines):
                     self.point = self.lines[self.line_index].points[self.point_index]
                 #self.get_logger().info(f'Processing point {self.point_index}: ({self.point.x}, {self.point.y})')
                 #self.get_logger().info("Moving rail back")
                 self.x = self.point.x
                 self.y = self.point.y
-            if self.counter > 20:
+            if self.counter > 40:
                 self.robot_drawing = False
                 self.counter = 0
                 self.rail_publisher.publish(self.rail_stop) #Stops once we move out
@@ -129,7 +129,7 @@ class RunArm(Node):
             #self.get_logger().info("Moving rail in now that I have reached first point")
             self.rail_publisher.publish(self.rail_in_msg) 
             self.counter = self.counter + 1
-            if self.counter > 20:
+            if self.counter > 40:
                 self.robot_drawing = True
                 self.counter = 0
 
@@ -178,9 +178,9 @@ class RunArm(Node):
         # Create Pose
         #self.counter = self.counter - .001
         pose = Pose()
-        pose.position.x = float(-0.5) - self.x / 3500
+        pose.position.x = float(-1.0) + self.x / 2000
         pose.position.y = 0.0
-        pose.position.z = float(0.5) - self.y / 3500
+        pose.position.z = float(0.35) - self.y / 2000
 
         #self.get_logger().info(f'Processing line: x: {pose.position.x}, y: {pose.position.z}')
 

@@ -95,20 +95,41 @@ class DrawApp(Node):
         offset_x = (canvas_width - bbox_width * scale) / 2
         offset_y = (canvas_height - bbox_height * scale) / 2
 
-        # Transform and store lines
-        for line in raw_lines:
+        # # Group segments into continuous lines
+        grouped_lines = []
+        current_line = []
+
+        def points_are_close(p1, p2, threshold=1e-2):
+            return abs(p1[0] - p2[0]) < threshold and abs(p1[1] - p2[1]) < threshold
+
+        for raw_line in raw_lines:
+            # Transform this raw line
             transformed = [
                 (
                     (x - min_x) * scale + offset_x,
                     (y - min_y) * scale + offset_y
-                ) for x, y in line
+                ) for x, y in raw_line
             ]
-            self.lines.append(transformed)
 
-            # Draw it
-            for i in range(len(transformed) - 1):
-                x0, y0 = transformed[i]
-                x1, y1 = transformed[i + 1]
+            if not current_line:
+                current_line = transformed
+            else:
+                # If last point of current line is close to first point of this one, join
+                if points_are_close(current_line[-1], transformed[0]):
+                    current_line.extend(transformed[1:])  # skip duplicated point
+                else:
+                    grouped_lines.append(current_line)
+                    current_line = transformed
+
+        if current_line:
+            grouped_lines.append(current_line)
+
+        # Now draw and save them
+        for line in grouped_lines:
+            self.lines.append(line)
+            for i in range(len(line) - 1):
+                x0, y0 = line[i]
+                x1, y1 = line[i + 1]
                 self.canvas.create_line(x0, y0, x1, y1, fill="black")
 
         self.get_logger().info(f"Loaded and scaled {len(self.lines)} lines.")
