@@ -5,7 +5,7 @@ from launch import LaunchDescription
 
 path_to_src = get_package_share_directory('relaxed_ik_ros2')
 path_to_current_package = get_package_share_directory('arm_ik')
-setting_file_path = path_to_current_package + '/config/urc_arm.yaml'
+setting_file_path = path_to_current_package + '/config/arm_urdf.yaml'
 
 def generate_launch_description():
     # Load the infomation
@@ -52,5 +52,17 @@ def generate_launch_description():
             name='rviz_viewer',
             output='screen',
             parameters=[{'setting_file_path': setting_file_path}]
+        ),
+        Node(
+            package='wr_xbox_controller',
+            namespace='',
+            executable='arm_rail_xbox',
+            name='arm_rail_xbox',
+        ),
+        Node(
+            package='wr_xbox_controller',
+            namespace='',
+            executable='arm_xbox',
+            name='arm_xbox',
         ),
     ])

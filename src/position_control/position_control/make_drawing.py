@@ -19,7 +19,7 @@ class DrawApp(Node):
         self.root = tk.Tk()
         self.root.title("Draw and Send to ROS2")
 
-        self.canvas = tk.Canvas(self.root, bg="white", width=600, height=600)
+        self.canvas = tk.Canvas(self.root, bg="white", width=1200, height=1000)
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
         self.lines = []  # Store multiple lines

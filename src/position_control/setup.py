@@ -27,6 +27,7 @@ setup(
             'send_position = position_control.send_position:main',
             'make_drawing = position_control.make_drawing:main',
             'run_arm = position_control.run_arm:main',
+            'send_drawing = position_control.send_drawing:main',
         ],
     },
 )

@@ -5,7 +5,7 @@ from launch import LaunchDescription
 
 path_to_src = get_package_share_directory('relaxed_ik_ros2')
 path_to_current_package = get_package_share_directory('arm_ik')
-setting_file_path = path_to_current_package + '/config/urc_arm.yaml'
+setting_file_path = path_to_current_package + '/config/arm_urdf.yaml'
 
 def generate_launch_description():
     # Load the infomation
@@ -56,8 +56,8 @@ def generate_launch_description():
         Node(
             package='position_control',
             namespace='',
-            executable='make_drawing',
-            name='make_drawing',
+            executable='send_drawing',
+            name='send_drawing',
         ),
         Node(
             package='position_control',

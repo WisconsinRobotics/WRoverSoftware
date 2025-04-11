@@ -38,11 +38,11 @@ class RunArm(Node):
         self.rail_publisher = self.create_publisher(Float32MultiArray, 'rail', 1)
 
         self.rail_out_msg = Float32MultiArray()
-        self.rail_out_msg.data = [-1.0,1.0,0.0]
+        self.rail_out_msg.data = [1.0,-1.0,0.0]
         self.rail_in_msg = Float32MultiArray()
-        self.rail_in_msg.data = [1.0,-1.0,0.0]
-        self.rail_press_in_msg = Float32MultiArray()
-        self.rail_press_in_msg.data = [-.9,-1.0,0.0]
+        self.rail_in_msg.data = [-1.0,1.0,0.0]
+        self.rail_stop = Float32MultiArray()
+        self.rail_stop.data = [0.0,0.0,0.0]
 
         # Timer to publish periodically
         self.publisher_timer = self.create_timer(0.01, self.publish_messages)
@@ -56,7 +56,7 @@ class RunArm(Node):
         self.line_index = 0
         self.point_index = 0
         self.lines = []
-        self.delay = 0.25  # Adjust the speed (seconds)
+        self.delay = 0.1  # Adjust the speed (seconds)
         self.reached_point = False
         self.robot_drawing = True
         self.counter = 0
@@ -104,53 +104,59 @@ class RunArm(Node):
     def process_line_feedback(self):
         """Handle feedback for each liarm_anglesne point."""
         if self.point_index < 1 and self.robot_drawing:
-            if self.line_index < len(self.lines):
-                self.point = self.lines[self.line_index].points[self.point_index]
-            self.get_logger().info(f'Processing point {self.point_index}: ({self.point.x}, {self.point.y})')
-            #self.get_logger().info("Moving rail back")
             self.rail_publisher.publish(self.rail_out_msg)
-            self.x = self.point.x
-            self.y = self.point.y
             self.counter = self.counter + 1
-            if self.counter > 5:
+            if self.counter > 10:
+                if self.line_index < len(self.lines):
+                    self.point = self.lines[self.line_index].points[self.point_index]
+                #self.get_logger().info(f'Processing point {self.point_index}: ({self.point.x}, {self.point.y})')
+                #self.get_logger().info("Moving rail back")
+                self.x = self.point.x
+                self.y = self.point.y
+            if self.counter > 20:
                 self.robot_drawing = False
                 self.counter = 0
+                self.rail_publisher.publish(self.rail_stop) #Stops once we move out
 
         #Marking that we reached the first point
         if self.reached_first == False and self.reached_point and self.robot_drawing == False:
-            self.get_logger().info("Setting reached first to true")
+            self.rail_publisher.publish(self.rail_stop) #Making sure rail stops once we move out
+            #self.get_logger().info("Setting reached first to true")
             self.reached_first = True
             
         # Move rail in once we reach first point
         if self.reached_first and not self.robot_drawing:
-            self.get_logger().info("Moving rail in now that I have reached first point")
+            #self.get_logger().info("Moving rail in now that I have reached first point")
             self.rail_publisher.publish(self.rail_in_msg) 
             self.counter = self.counter + 1
-            if self.counter > 5:
+            if self.counter > 20:
                 self.robot_drawing = True
                 self.counter = 0
 
         # Move through line now that we have reached first point and have moved in
         if self.robot_drawing and self.reached_first: 
+            self.rail_publisher.publish(self.rail_stop) #Making sure rail stops once we move in enough
+
             if (self.point_index < len(self.lines[self.line_index].points)) and self.line_index < len(self.lines):
                 point = self.lines[self.line_index].points[self.point_index]
             self.point_index = self.point_index + 1
             self.point = point
-            self.get_logger().info(f"Drawing line with point: {point}")
+            #self.get_logger().info(f"Drawing line with point: {point}")
             self.x = point.x
             self.y = point.y
-            self.rail_publisher.publish(self.rail_press_in_msg) #Press in to make sure we are drawing
+            self.rail_publisher.publish(self.rail_stop) #Stop the rail from moving while drawing
 
         #Reached last point in line
         if self.point_index >= len(self.lines[self.line_index].points):
-            self.get_logger().info("Reached last point in line")
+            self.rail_publisher.publish(self.rail_stop) #Making sure rail stops once we reach the end
+            #self.get_logger().info("Reached last point in line")
             self.reached_first = False
             self.line_index = self.line_index + 1
             self.point_index = 0
 
         #Finished processing lines
         if self.line_index >= len(self.lines):
-            self.get_logger().info("Reached last line")
+            #self.get_logger().info("Reached last line")
             self.finshed = True
             self.line_index = 0
             self.point_index = 0
@@ -172,9 +178,9 @@ class RunArm(Node):
         # Create Pose
         #self.counter = self.counter - .001
         pose = Pose()
-        pose.position.x = float(-0.6) - self.x / 1000
+        pose.position.x = float(-0.5) - self.x / 3500
         pose.position.y = 0.0
-        pose.position.z = float(0.6) - self.y / 1000
+        pose.position.z = float(0.5) - self.y / 3500
 
         #self.get_logger().info(f'Processing line: x: {pose.position.x}, y: {pose.position.z}')
 

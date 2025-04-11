@@ -33,7 +33,7 @@ class XboxPublisher(Node):
         if len(self.joysticks) > 0:
             self.motion = [self.joysticks[0].get_axis(2), #Left trigger
                       self.joysticks[0].get_axis(5) ] #Right trigger
-        
+
         self.motion_command.data = self.motion
         self.arm_publisher.publish(self.motion_command)
         for event in pygame.event.get():
