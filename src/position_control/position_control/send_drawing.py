@@ -20,7 +20,7 @@ class DrawApp(Node):
         self.root = tk.Tk()
         self.root.title("Load SVG and Send to ROS2")
 
-        self.canvas = tk.Canvas(self.root, bg="white", width=1200, height=1000)
+        self.canvas = tk.Canvas(self.root, bg="white", width=120, height=100)
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
         self.lines = []
@@ -36,6 +36,12 @@ class DrawApp(Node):
 
         self.reset_btn = tk.Button(btn_frame, text="Reset Canvas", command=self.reset_canvas)
         self.reset_btn.pack(side=tk.LEFT, padx=10)
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        self.root.geometry(f"{screen_width}x{screen_height}+0+0")
+
+        self.root.bind('<Escape>', lambda e: self.root.attributes('-fullscreen', False))
+
 
     def load_svg(self):
         """Open an SVG file and extract path data, scaled and centered on canvas."""
