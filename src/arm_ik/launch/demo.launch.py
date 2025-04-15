@@ -53,16 +53,16 @@ def generate_launch_description():
             output='screen',
             parameters=[{'setting_file_path': setting_file_path}]
         ),
-        Node(
-            package='wr_xbox_controller',
-            namespace='',
-            executable='arm_rail_xbox',
-            name='arm_rail_xbox',
-        ),
-        Node(
-            package='wr_xbox_controller',
-            namespace='',
-            executable='arm_xbox',
-            name='arm_xbox',
-        ),
+        # Node(
+        #     package='wr_xbox_controller',
+        #     namespace='',
+        #     executable='arm_rail_xbox',
+        #     name='arm_rail_xbox',
+        # ),
+        # Node(
+        #     package='wr_xbox_controller',
+        #     namespace='',
+        #     executable='arm_xbox',
+        #     name='arm_xbox',
+        # ),
     ])
