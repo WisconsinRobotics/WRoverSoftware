@@ -11,5 +11,5 @@ Move_Out -> Go_To_First_point : .5 second passed
 Go_To_First_point -> Move_In : Reached first point
 Move_In -> Draw_Line : 1 second passed
 Draw_Line -> Move_Out : reached last point
-Draw_Line --> [*] : Reached last line
+Draw_Line --> WaitingForDrawing : Reached last line
 @enduml

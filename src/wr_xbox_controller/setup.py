@@ -23,8 +23,8 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
-            'xbox_controller = wr_xbox_controller.xbox_controller:main',
-            'arm_rail_xbox = wr_xbox_controller.arm_rail_xbox:main',
+            'drive_controller = wr_xbox_controller.drive_controller:main',
+            'rail_gripper_controller = wr_xbox_controller.rail_gripper_controller:main',
             'arm_xbox = wr_xbox_controller.arm_xbox:main',
         ],
     },

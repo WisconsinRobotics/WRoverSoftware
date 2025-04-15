@@ -9,7 +9,7 @@ from relaxed_ik_ros2.msg import  EEVelGoals
 from geometry_msgs.msg import  Twist
 
 
-
+CONTROLLER = 0
 # NOTE: This might cause problems if called multiple times
 #RUN IK WITH VELOCITY CONTROL
 pygame.init()
@@ -24,7 +24,7 @@ class XboxPublisher(Node):
         self.joysticks = {}
         self.AXIS_BOUNDARY = 0.1
 
-        self.buttons=[0,0,0,0,0,0] #Up, Down, Left, Right
+        self.buttons=[0,0,0,0,0,0] #Up, Down, Left, Right, A, B
 
         self.ee_vel_goals_pub = self.create_publisher(EEVelGoals, 'relaxed_ik/ee_vel_goals', 5)
         self.linear = [0.0,0.0,0.0]
@@ -36,7 +36,8 @@ class XboxPublisher(Node):
         running = True
         #self.get_logger().debug("BBBBBBBBBB")
         #print(len(self.joysticks))
-        if len(self.joysticks) > 0:
+        if (running):#TODO:CHANGE THIS IS FOR TESTING
+            
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
             motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(0),-self.joysticks[0].get_axis(4)]
             # Ignore jitter in sticks
@@ -44,12 +45,27 @@ class XboxPublisher(Node):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
             print(motion)
-
-            #### TEMP ######################
-            self.angular[0] = (motion[0])/100000
-            self.linear[0] = -motion[1]/15000
+    
+            self.angular[0] = (motion[0])/100000 #Rotation of Arm
+            self.linear[0] = -motion[1]/15000 #Moving UP and DOWN
             # No Y movement (linear[1])
-            self.linear[2] = motion[2] /15000
+            self.linear[2] = motion[2] /15000 #Moving side to side
+            #LOGIC FOR D_PAD Side to side
+            if self.buttons[3] == 1: #RIGHT D_Pad
+                self.angular[0] = (-2)/100000.0 #Rotation of Arm
+            elif self.buttons[2] == 1: #LEFT D_Pad
+                self.angular[0] = (2)/100000.0
+            else:
+                self.angular[0] = 0.0
+
+            if self.buttons[0] == 1: #UP D_PAD
+                self.angular[1] = 1.0/10000.0 #Rotate end effector up
+            elif self.buttons[2] == 1: #DOWN D_PAD
+                self.angular[1] = -1.0/10000.0 #Rotate end effector down
+            else:
+                self.angular[1] = 0.0
+
+            self.get_logger().info("Publishing")
             
             msg = EEVelGoals()
             for i in range(1):
@@ -72,14 +88,29 @@ class XboxPublisher(Node):
 
                 msg.ee_vels.append(twist)
                 msg.tolerances.append(tolerance)
-            self.ee_vel_goals_pub.publish(msg)
-            ################################################
-        
+            self.ee_vel_goals_pub.publish(msg)        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
+            if event.type == pygame.JOYHATMOTION:
+                if event.joy == CONTROLLER:
+                    if event.value[1] == 1:  # D-Pad Up
+                        self.buttons[0] = 1
+                    else:
+                        self.buttons[0] = 0
+                    if event.value[1] == -1:  # D-Pad Down
+                        self.buttons[1] = 1
+                    else:
+                        self.buttons[1] = 0
+                    if event.value[0] == -1:  # D-Pad Left
+                        self.buttons[2] = 1
+                    else:
+                        self.buttons[2] = 0
+                    if event.value[0] == 1:  # D-Pad Right
+                        self.buttons[3] = 1
+                    else:
+                        self.buttons[3] = 0  # Reset to False
             # Handle hotplugging
             if event.type == pygame.JOYDEVICEADDED:
                 # This event will be generated when the program starts for every
