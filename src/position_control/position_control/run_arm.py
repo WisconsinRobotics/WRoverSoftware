@@ -178,9 +178,9 @@ class RunArm(Node):
         # Create Pose
         #self.counter = self.counter - .001
         pose = Pose()
-        pose.position.x = float(-1.0) + self.x / 2000
+        pose.position.x = float(-1.1) + self.x / 2200
         pose.position.y = 0.0
-        pose.position.z = float(0.35) - self.y / 2000
+        pose.position.z = float(0.23) - self.y / 2200
 
         #self.get_logger().info(f'Processing line: x: {pose.position.x}, y: {pose.position.z}')
 

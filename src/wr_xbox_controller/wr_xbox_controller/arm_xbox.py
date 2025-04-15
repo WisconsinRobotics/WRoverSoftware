@@ -38,7 +38,7 @@ class XboxPublisher(Node):
         #print(len(self.joysticks))
         if len(self.joysticks) > 0:
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-            motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
+            motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(0),-self.joysticks[0].get_axis(4)]
             # Ignore jitter in sticks
             for i in range(3):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
