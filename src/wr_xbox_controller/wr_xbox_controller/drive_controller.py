@@ -49,8 +49,25 @@ class XboxPublisher(Node):
             if event.type == pygame.QUIT:
                 running = False
            
-
-            if event.type == pygame.JOYBUTTONDOWN:
+            if event.type == pygame.JOYHATMOTION:
+                if event.joy == CONTROLLER:
+                    if event.value[1] == 1:  # D-Pad Up
+                        self.buttons[0] = 1
+                    else:
+                        self.buttons[0] = 0
+                    if event.value[1] == -1:  # D-Pad Down
+                        self.buttons[1] = 1
+                    else:
+                        self.buttons[1] = 0
+                    if event.value[0] == -1:  # D-Pad Left
+                        self.buttons[2] = 1
+                    else:
+                        self.buttons[2] = 0
+                    if event.value[0] == 1:  # D-Pad Right
+                        self.buttons[3] = 1
+                    else:
+                        self.buttons[3] = 0  # Reset to False
+            elif event.type == pygame.JOYBUTTONDOWN:
                 if event.joy == CONTROLLER:
                     if event.button == 0:  # A button
                         self.buttons[4] = 1

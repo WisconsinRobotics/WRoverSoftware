@@ -25,7 +25,7 @@ setup(
         'console_scripts': [
             'drive_controller = wr_xbox_controller.drive_controller:main',
             'rail_gripper_controller = wr_xbox_controller.rail_gripper_controller:main',
-            'arm_xbox = wr_xbox_controller.arm_xbox:main',
+            'arm_xbox_ik = wr_xbox_controller.arm_xbox_ik:main',
         ],
     },
 )

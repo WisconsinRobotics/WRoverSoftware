@@ -35,37 +35,31 @@ class XboxPublisher(Node):
         #We have button capability, yippee. 
         running = True
         #self.get_logger().debug("BBBBBBBBBB")
-        #print(len(self.joysticks))
-        if (running):#TODO:CHANGE THIS IS FOR TESTING
+        if (len(self.joysticks)):#TODO:CHANGE THIS IS FOR TESTING
             
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-            motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(0),-self.joysticks[0].get_axis(4)]
+            motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
+            print(motion)
             # Ignore jitter in sticks
             for i in range(3):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
-            print(motion)
     
-            self.angular[0] = (motion[0])/100000 #Rotation of Arm
             self.linear[0] = -motion[1]/15000 #Moving UP and DOWN
             # No Y movement (linear[1])
             self.linear[2] = motion[2] /15000 #Moving side to side
-            #LOGIC FOR D_PAD Side to side
-            if self.buttons[3] == 1: #RIGHT D_Pad
-                self.angular[0] = (-2)/100000.0 #Rotation of Arm
-            elif self.buttons[2] == 1: #LEFT D_Pad
-                self.angular[0] = (2)/100000.0
-            else:
-                self.angular[0] = 0.0
+            
+            #NO angular rotation for simulation
+            self.angular[0] = 0.0
 
             if self.buttons[0] == 1: #UP D_PAD
-                self.angular[1] = 1.0/10000.0 #Rotate end effector up
-            elif self.buttons[2] == 1: #DOWN D_PAD
-                self.angular[1] = -1.0/10000.0 #Rotate end effector down
+                self.angular[1] = 8.0/10000.0 #Rotate end effector up
+            elif self.buttons[1] == 1: #DOWN D_PAD
+                self.angular[1] = -8.0/10000.0 #Rotate end effector down
             else:
                 self.angular[1] = 0.0
 
-            self.get_logger().info("Publishing")
+            #self.get_logger().info("Publishing")
             
             msg = EEVelGoals()
             for i in range(1):
