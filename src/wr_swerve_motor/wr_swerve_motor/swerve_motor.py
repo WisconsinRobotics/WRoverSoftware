@@ -76,15 +76,15 @@ class SwerveSubscriber(Node):
         wheel_vectors = get_wheel_vectors([motion[1],motion[0]],[motion[2], motion[3]])
         wheel_speeds  = get_wheel_speeds(wheel_vectors)
         wheel_angles  = get_wheel_angles(wheel_vectors)
-        print("Wheel Speeds", wheel_speeds)
-        print("Wheel Angles", wheel_angles)
         for i in range (0, 4):
             if wheel_angles[i] < -90.0:
                 wheel_angles[i] += 180.0
                 wheel_speeds[i] *= -1.0
-            elif wheel_angles[i] > 90.0: 
+            elif wheel_angles[i] >= 90.0: 
                 wheel_angles[i] -= 180.0
                 wheel_speeds[i] *= -1.0
+        self.get_logger().info('Wheel Speeds "%s"' % wheel_speeds)
+        self.get_logger().info('Wheel Angles "%s"' % wheel_angles)
 
 
         # TODO: Make this more abstract for actual control
