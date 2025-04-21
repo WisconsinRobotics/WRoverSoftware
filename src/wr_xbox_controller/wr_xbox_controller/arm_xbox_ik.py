@@ -32,22 +32,20 @@ class XboxPublisher(Node):
 
     def timer_callback(self):
         
-        #We have button capability, yippee. 
-        running = True
         #self.get_logger().debug("BBBBBBBBBB")
-        if (len(self.joysticks)):#TODO:CHANGE THIS IS FOR TESTING
+        if (len(self.joysticks) or True):#TODO:CHANGE THIS IS FOR TESTING
             
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-            motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
-            print(motion)
-            # Ignore jitter in sticks
-            for i in range(3):
-                if abs(motion[i]) < self.AXIS_BOUNDARY:
-                    motion[i] = 0.0
+            # motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
+            # print(motion)
+            # # Ignore jitter in sticks
+            # for i in range(3):
+            #     if abs(motion[i]) < self.AXIS_BOUNDARY:
+            #         motion[i] = 0.0
     
-            self.linear[0] = -motion[1]/15000 #Moving UP and DOWN
-            # No Y movement (linear[1])
-            self.linear[2] = motion[2] /15000 #Moving side to side
+            # self.linear[0] = -motion[1]/15000 #Moving UP and DOWN
+            # # No Y movement (linear[1])
+            # self.linear[2] = motion[2] /15000 #Moving side to side
             
             #NO angular rotation for simulation
             self.angular[0] = 0.0
@@ -59,6 +57,12 @@ class XboxPublisher(Node):
             else:
                 self.angular[1] = 0.0
 
+            if self.buttons[2] == 1:
+                self.angular[0] = 8/10000.0 #Rotate end effector left
+            elif self.buttons[3] == 1:
+                self.angular[0] = -8.0/10000.0 #Rotate end effector right
+            else:
+                self.angular[0] = 0.0
             #self.get_logger().info("Publishing")
             
             msg = EEVelGoals()
