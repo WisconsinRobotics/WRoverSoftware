@@ -11,6 +11,7 @@ from sensor_msgs.msg import JointState
 
 
 GRIPPER_SPEED_VALUE = .25
+TURN_SPEED = 1 #TODO set this properly
 
 class IKSubscriber(Node):
 
@@ -58,6 +59,8 @@ class IKSubscriber(Node):
         self.msg_wrist = GripperPosition()
         self.msg_wrist.left_position = 180.0
         self.msg_wrist.right_position = 180.0
+        self.add_left_EE = 0.0
+        self.add_right_EE = 0.0
 
         self.msg_gripper = Float64()
         self.msg_gripper.data = 0.0
@@ -86,8 +89,8 @@ class IKSubscriber(Node):
         print(msg)
         self.arm_position_publisher.publish(msg)
         
-        #self.msg_wrist.left_position = float(self.arm_angles[2])
-        #self.msg_wrist.right_position = float(self.arm_angles[2])
+        self.msg_wrist.left_position = float(self.arm_angles[2] + self.add_left_EE)
+        self.msg_wrist.right_position = float(self.arm_angles[2] + self.add_right_EE)
         
         #self.arm_publisher_wrist_left.publish(self.msg_wrist)
         #self.arm_publisher_wrist_right.publish(self.msg_wrist)
@@ -103,7 +106,7 @@ class IKSubscriber(Node):
         #Elbow
         self.arm_angles[1] = -arm_positions[1] *(105.0 / (math.pi/2))
 
-        #Gripper
+        #End Effector up and down
         self.arm_angles[2] = (arm_positions[2]* (50.0 / (math.pi/2))) + 50 + self.kohler_shift
     
     def listener_callback_buttons(self, msg):
@@ -112,7 +115,19 @@ class IKSubscriber(Node):
         #Expecting A and B buttons
         gripper_speed = self.get_gripper_speed(buttons[4], buttons[5])
 
+        #Expecting Left and Right of D_pad
+        self.set_turning_speed(buttons[2], buttons[3])
+
         self.msg_gripper.data = float(gripper_speed)
+
+    def set_turning_speed(self, left_turning, right_turning):
+            #TODO: Might have to switch the + and minus
+            if left_turning == 1:
+                self.add_left_EE += -TURN_SPEED
+                self.add_right_EE += TURN_SPEED
+            elif right_turning == 1:
+                self.add_left_EE += -TURN_SPEED
+                self.add_right_EE += TURN_SPEED
 
     def get_gripper_speed(self, a, b) -> float:
         if a == 1:
