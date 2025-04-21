@@ -8,6 +8,7 @@ from std_msgs.msg import Int16MultiArray
 # NOTE: This might cause problems if called multiple times
 pygame.init()
 
+CONTROLLER = 0 # Choose controller for the arm TODO 
 
 class XboxPublisher(Node):
 
@@ -40,7 +41,7 @@ class XboxPublisher(Node):
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.joy == 0:
+                if event.joy == CONTROLLER:
                     if event.button == 0:  # A button
                         self.buttons[4] = 1
                     elif event.button == 1:  # B button
@@ -49,12 +50,21 @@ class XboxPublisher(Node):
                         self.get_logger().info("Pressed ARM controller (ARM)")
 
             elif event.type == pygame.JOYBUTTONUP:
-                if event.joy == 0:
+                if event.joy == CONTROLLER:
                     if event.button == 0:  # A button
                         self.buttons[4] = 0
                     elif event.button == 1:  # B button
                         self.buttons[5] = 0
-
+            if event.type == pygame.JOYHATMOTION:
+                if event.joy == CONTROLLER:
+                    if event.value[0] == -1:  # D-Pad Left
+                        self.buttons[2] = 1
+                    else:
+                        self.buttons[2] = 0
+                    if event.value[0] == 1:  # D-Pad Right
+                        self.buttons[3] = 1
+                    else:
+                        self.buttons[3] = 0  # Reset to False
             #print(self.buttons)
             buttons_command = Int16MultiArray()
             buttons_command.data = self.buttons  

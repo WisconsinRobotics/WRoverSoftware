@@ -57,6 +57,8 @@ class XboxPublisher(Node):
             else:
                 self.angular[1] = 0.0
 
+            #The actual turning of the end effector will be controlled by the 
+            #               rail_gripper_controller as it is not IK dependent
             if self.buttons[2] == 1:
                 self.angular[0] = 8/10000.0 #Rotate end effector left
             elif self.buttons[3] == 1:
@@ -92,7 +94,7 @@ class XboxPublisher(Node):
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.JOYHATMOTION:
-                if event.joy == CONTROLLER:
+                if event.joy ==0:
                     if event.value[1] == 1:  # D-Pad Up
                         self.buttons[0] = 1
                     else:
