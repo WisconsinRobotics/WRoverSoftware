@@ -92,10 +92,10 @@ class IKSubscriber(Node):
         self.msg_wrist.left_position = float(self.arm_angles[2] + self.add_left_EE)
         self.msg_wrist.right_position = float(self.arm_angles[2] + self.add_right_EE)
         
-        #self.arm_publisher_wrist_left.publish(self.msg_wrist)
-        #self.arm_publisher_wrist_right.publish(self.msg_wrist)
+        self.arm_publisher_wrist_left.publish(self.msg_wrist)
+        self.arm_publisher_wrist_right.publish(self.msg_wrist)
         
-        #self.arm_publisher_gripper.publish(self.msg_gripper)
+        self.arm_publisher_gripper.publish(self.msg_gripper)
         self.arm_publisher_base.publish(self.msg_linear_rail)
 
 
