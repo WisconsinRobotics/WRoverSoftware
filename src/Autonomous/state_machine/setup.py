@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'state_machine = state_machine.state_machine:main'
+            'state_machine = state_machine.Autonomous_State_Machine:main'
         ],
     },
 )
