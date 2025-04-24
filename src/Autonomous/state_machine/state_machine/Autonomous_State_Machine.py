@@ -31,7 +31,7 @@ class AutonomousStateMachine(StateMachine):
         self.GPSPrecision = 7
         self.pathBacktrack = []
 
-        self.currTime = time.localtime
+        # self.currTime = time.localtime
         self.timeElapsed = 0
 
         self.pointDict = {} #pointDictInput
@@ -96,7 +96,7 @@ class AutonomousStateMachine(StateMachine):
         This is the decided for if we abandon trying to reach the point, and move on to the next point
         """
         if self.flagStuck == True:
-            # Here, we move to the next target point
+            # Here, we give up on going to this target point, and move to the next
             pass #Implement this
         #Otherwise we do nothing
         pass
@@ -188,10 +188,17 @@ class AutonomousStateMachine(StateMachine):
             self.flagStuck = False
 
     @danceOff.enter
-    def arbitraryMovementsToFree(self):
+    def arbitraryMovementsToFreeRover(self):
+        """This function will essentially wiggle the rover, now I don't know how to make the rover move, but that's what it should do"""
         pass
     # Define the conditions for transitions. For passing in parameters we use sm.send with event name and param=param as arguments
+    @danceOff.enter
+    def startTrackTime(self):
+        self.timeElapsed = self.timeElapsed + time.localtime
 
+    @danceOff.exit
+    def trackTime(self):
+        self.timeElapsed = time.localtime - self.timeElapsed # keeps track of seconds
     # Checks if the rover is still moving keeps looping the Navigation state (Gonna take Euclidean from target point and check)
     def reachedTargetPoint(self):
         # TODO: Implement estimation functionality +/- 2 metres of target point 
@@ -256,8 +263,11 @@ class AutonomousStateMachine(StateMachine):
             return False
 
     def haveTime(self):
-        
-        pass
+        """This function checks if we have enough time left in our Unstuck algorithm"""
+        if(self.timeElapsed <= 120):
+            return True
+        else:
+            return False
 
     def isStuck(self):
         if(self.flagStuck == True):
