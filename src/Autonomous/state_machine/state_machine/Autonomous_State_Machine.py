@@ -1,7 +1,10 @@
+from multiprocessing import get_context
+from pyparsing import removeQuotes
 from statemachine import StateMachine, State
 from statemachine.contrib.diagram import DotGraphMachine
 from typing import Dict, List, Optional, Tuple
 import time
+from decimal import Decimal, getcontext
 
 
 class AutonomousStateMachine(StateMachine):
@@ -25,6 +28,8 @@ class AutonomousStateMachine(StateMachine):
         self.tagFound = False
         self.objFound = False
         self.nextCommand = True
+        self.GPSPrecision = 7
+        self.pathBacktrack = []
 
         self.currTime = time.localtime
         self.timeElapsed = 0
@@ -51,7 +56,7 @@ class AutonomousStateMachine(StateMachine):
     start = Start.to(Navigation, cond="evaluateInput") # Load the first coordinate and path
     navigate = Navigation.to(Navigation, cond="!reachedTargetPoint")
     reachTarget = Navigation.to(Check_Point, cond = "reachedTargetPoint") # Need to find a way to keep track of goal points as something else, and not just part of path
-    runUnstuck = Navigation.to(BackonPath)
+    runUnstuck = Navigation.to(BackonPath, cond="roverStuck")
     backToNav = BackonPath.to(Navigation, cond = "backtrack")
     tryUnstuck = BackonPath.to(danceOff, cond = "!backtrack")
     keepBanging = danceOff.to(danceOff, cond="haveTime and isStuck")
@@ -103,6 +108,7 @@ class AutonomousStateMachine(StateMachine):
         """
 
         self.currPoint = roverGPSReading # Replace with the GPS reading coming from the Rover
+        self.pathBacktrack.append(roverGPSReading)
         self.heading = roverHeading # Replace with direction angle of rover(don't know what will be) and don't know if needed
 
 
@@ -153,14 +159,38 @@ class AutonomousStateMachine(StateMachine):
     def driveTrain(self):
         """Will Call the drive algorithm being worked on by Brady, Nick and Ryan"""
         pass
-
+    @BlinkLights.enter
+    def blinkLights(self):
+        """Makes the lights green or smtg, depending on reqs"""
+        pass
+    @BlinkLights.exit
+    def revertLights(self):
+        """Makes the lights go back"""
+        pass
     @UserInput.enter
     def awaitNextCommand(self):
         """How are we planning to do this? Should I do command line input here?"""
         pass
 
+    @BackonPath.enter
+    def tryAndRouteToPath(self, roverGPSReading):
+        """This function will try to retrace our steps backwards to get back on the path.
+        This means that in our drive function we will essentially create a small path on every entry and exit of Navigation keep appending
+        This will be a stack, and then we traverse in reverse order if we get stuck. Will have to be done in ROS2, will do a demo here"""
+        for _ in len(self.pathBacktrack):
+            self.pathBacktrack.pop()
+        
+            # Try and drive to this point using our drive function
+            # after this attempt, check if we have moved back!
+        if(self.currPoint != roverGPSReading):
+            self.flagStuck = True
+        else:
+            self.flagStuck = False
 
-    # Define the conditions for transitions
+    @danceOff.enter
+    def arbitraryMovementsToFree(self):
+        pass
+    # Define the conditions for transitions. For passing in parameters we use sm.send with event name and param=param as arguments
 
     # Checks if the rover is still moving keeps looping the Navigation state (Gonna take Euclidean from target point and check)
     def reachedTargetPoint(self):
@@ -174,12 +204,12 @@ class AutonomousStateMachine(StateMachine):
            as we have a continuous value feed tape for determining if the rover is stuck. So removing this condition"""
         pass
 
-    def checkAruco(self, currPoint):
+    def checkAruco(self):
         if(self.lastTraversedPoint=="Aruco"):
             return True
         return False
 
-    def checkObj(self, currPoint):
+    def checkObj(self):
         if(self.lastTraversedPoint=="object"):
             return True
         return False
@@ -215,14 +245,24 @@ class AutonomousStateMachine(StateMachine):
             return True
         return False
     
-    def backtrack(self):
-        pass
+    def backtrack(self, roverGPSReading):
+        getcontext().prec = self.GPSPrecision #GPS units of precision for recognizing as a different point, can be changed,
+        tupCurrPoint = (Decimal(self.currPoint[0]), Decimal(self.currPoint[1]), Decimal(self.currPoint[2]))
+        tupRoverPoint = (Decimal(roverGPSReading[0]), Decimal(roverGPSReading[1]), Decimal(roverGPSReading[2]))
+
+        if(tupCurrPoint != tupRoverPoint):
+            return True
+        else:
+            return False
 
     def haveTime(self):
+        
         pass
 
     def isStuck(self):
-        pass
+        if(self.flagStuck == True):
+            return True
+        return False
 
 def main():
 
