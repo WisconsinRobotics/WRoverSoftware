@@ -77,7 +77,7 @@ class SwerveSubscriber(Node):
         wheel_speeds  = get_wheel_speeds(wheel_vectors)
         wheel_angles  = get_wheel_angles(wheel_vectors)
         for i in range (0, 4):
-            if wheel_angles[i] <= -90.0:
+            if wheel_angles[i] < -90.0:
                 wheel_angles[i] += 180.0
                 wheel_speeds[i] *= -1.0
             elif wheel_angles[i] >= 90.0: 
