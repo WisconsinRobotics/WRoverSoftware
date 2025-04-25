@@ -7,7 +7,9 @@ from std_msgs.msg import Int16MultiArray
 import math
 from sensor_msgs.msg import JointState
 from sensor_msgs.msg import Image
+import numpy
 import cv2
+
 from cv_bridge import CvBridge
 
 
