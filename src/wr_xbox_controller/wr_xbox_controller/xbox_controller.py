@@ -25,14 +25,14 @@ class XboxPublisher(Node):
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 2 is right stick x-axis
             motion = [-self.joysticks[0].get_axis(1),
                         self.joysticks[0].get_axis(3),
-                        self.joysticks[0].get_axis(2),
-                        self.joysticks[0].get_axis(5) ]
+                        self.joysticks[0].get_axis(2), #Left Trigger
+                        self.joysticks[0].get_axis(5) ] #Right Trigger
             # Ignore jitter in sticks
             for i in range(len(motion)):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
 
-            #print(motion)
+            self.get_logger().info("MOTION: " + str(motion))
             # Publish to topic swerve
             swerve_command = Float32MultiArray()
             swerve_command.data = motion
