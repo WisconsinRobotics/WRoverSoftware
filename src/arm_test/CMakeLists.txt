@@ -28,23 +28,33 @@ ament_target_dependencies(ik_test_node rclcpp std_msgs)
 add_executable(arm_test_node src/arm_test_node.cpp)
 ament_target_dependencies(arm_test_node rclcpp std_msgs)
 
+add_executable(arm_orchestra_node src/arm_orchestra_node.cpp)
+ament_target_dependencies(arm_orchestra_node rclcpp std_msgs)
+
 target_include_directories(ik_test_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_include_directories(arm_test_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
+target_include_directories(arm_orchestra_node PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 
 target_compile_features(ik_test_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 target_compile_features(arm_test_node PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(arm_orchestra_node PUBLIC c_std_99 cxx_std_17)
 
 # Link against the correct libraries
 target_link_libraries(ik_test_node phoenix6 Threads::Threads ${SDL2_LIBRARIES})
 target_link_libraries(arm_test_node phoenix6 Threads::Threads ${SDL2_LIBRARIES})
+target_link_libraries(arm_orchestra_node phoenix6 Threads::Threads ${SCL2_LIBRARIES})
 
 install(TARGETS ik_test_node
   DESTINATION lib/${PROJECT_NAME})
 install(TARGETS arm_test_node
+  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS arm_orchestra_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
