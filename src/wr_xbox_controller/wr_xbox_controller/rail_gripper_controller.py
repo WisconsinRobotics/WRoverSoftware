@@ -31,7 +31,7 @@ class XboxPublisher(Node):
         #We have button capability, yippee. 
         #print(len(self.joysticks))
         #print(self.joysticks[0])
-        if len(self.joysticks) > 0:
+        if len(self.joysticks) > CONTROLLER:
             self.motion = [self.joysticks[0].get_axis(2), #Left trigger
                       self.joysticks[0].get_axis(5) ] #Right trigger
 
