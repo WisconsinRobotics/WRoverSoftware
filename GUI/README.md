@@ -5,6 +5,9 @@
 
 # To start the GUI from ./WR_HCI_HUD
 npm install
+
+start a venv
+
 pip install -r requirements.txt
 
 # To start the video streaming and ros server
