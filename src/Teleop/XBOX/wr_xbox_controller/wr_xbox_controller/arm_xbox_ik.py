@@ -9,7 +9,7 @@ from relaxed_ik_ros2.msg import  EEVelGoals
 from geometry_msgs.msg import  Twist
 
 
-CONTROLLER = 0
+CONTROLLER = 1
 # NOTE: This might cause problems if called multiple times
 #RUN IK WITH VELOCITY CONTROL
 pygame.init()
