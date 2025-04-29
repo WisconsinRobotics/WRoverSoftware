@@ -1,0 +1,24 @@
+[3.024s] Invoking command in '/home/aarav/objectAvoidance_ws/src/object_avoidance': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aarav/objectAvoidance_ws/build/object_avoidance/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aarav/objectAvoidance_ws/install/object_avoidance/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/object_avoidance build --build-base /home/aarav/objectAvoidance_ws/build/object_avoidance/build install --record /home/aarav/objectAvoidance_ws/build/object_avoidance/install.log --single-version-externally-managed install_data
+[3.453s] running egg_info
+[3.476s] writing ../../build/object_avoidance/object_avoidance.egg-info/PKG-INFO
+[3.488s] writing dependency_links to ../../build/object_avoidance/object_avoidance.egg-info/dependency_links.txt
+[3.499s] writing entry points to ../../build/object_avoidance/object_avoidance.egg-info/entry_points.txt
+[3.523s] writing requirements to ../../build/object_avoidance/object_avoidance.egg-info/requires.txt
+[3.523s] writing top-level names to ../../build/object_avoidance/object_avoidance.egg-info/top_level.txt
+[3.586s] reading manifest file '../../build/object_avoidance/object_avoidance.egg-info/SOURCES.txt'
+[3.606s] writing manifest file '../../build/object_avoidance/object_avoidance.egg-info/SOURCES.txt'
+[3.612s] running build
+[3.612s] running build_py
+[3.617s] copying object_avoidance/object_avoider.py -> /home/aarav/objectAvoidance_ws/build/object_avoidance/build/lib/object_avoidance
+[3.618s] running install
+[3.625s] running install_lib
+[3.657s] copying /home/aarav/objectAvoidance_ws/build/object_avoidance/build/lib/object_avoidance/object_avoider.py -> /home/aarav/objectAvoidance_ws/install/object_avoidance/lib/python3.12/site-packages/object_avoidance
+[3.665s] byte-compiling /home/aarav/objectAvoidance_ws/install/object_avoidance/lib/python3.12/site-packages/object_avoidance/object_avoider.py to object_avoider.cpython-312.pyc
+[3.666s] running install_data
+[3.669s] running install_egg_info
+[3.716s] removing '/home/aarav/objectAvoidance_ws/install/object_avoidance/lib/python3.12/site-packages/object_avoidance-0.0.0-py3.12.egg-info' (and everything under it)
+[3.716s] Copying ../../build/object_avoidance/object_avoidance.egg-info to /home/aarav/objectAvoidance_ws/install/object_avoidance/lib/python3.12/site-packages/object_avoidance-0.0.0-py3.12.egg-info
+[3.719s] running install_scripts
+[3.886s] Installing object_avoider script to /home/aarav/objectAvoidance_ws/install/object_avoidance/lib/object_avoidance
+[3.890s] writing list of installed files to '/home/aarav/objectAvoidance_ws/build/object_avoidance/install.log'
+[3.968s] Invoked command in '/home/aarav/objectAvoidance_ws/src/object_avoidance' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/aarav/objectAvoidance_ws/build/object_avoidance/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/aarav/objectAvoidance_ws/install/object_avoidance/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/object_avoidance build --build-base /home/aarav/objectAvoidance_ws/build/object_avoidance/build install --record /home/aarav/objectAvoidance_ws/build/object_avoidance/install.log --single-version-externally-managed install_data
