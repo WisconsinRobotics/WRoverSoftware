@@ -7,9 +7,9 @@ If you want to run this repo on a docker container (recommended), please follow 
 
 Now build and source ros:
 ```bash
-cd src/Teleop/ARM/relaxed_ik_ros2/relaxed_ik_core
+cd src/relaxed_ik_ros2/relaxed_ik_core
 cargo build
-cd ../../../../..
+cd ../../..
 
 source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
