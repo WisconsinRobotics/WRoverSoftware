@@ -93,7 +93,7 @@ class IKSubscriber(Node):
         msg.data = self.arm_angles
         #print(msg)
         self.arm_position_publisher.publish(msg)
-        print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
+        #print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
         self.msg_wrist.left_position = float(self.arm_angles[2] + self.absolute_left_EE)
         self.msg_wrist.right_position = float(self.arm_angles[2] + self.absolute_right_EE)
         
