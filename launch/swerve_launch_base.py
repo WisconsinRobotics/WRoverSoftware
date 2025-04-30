@@ -27,5 +27,10 @@ def generate_launch_description():
             package='wr_xbox_controller',
             executable='rail_gripper_controller',
             name='rail_gripper_controller'
-        )
+        )#,
+       # Node(
+       #     package='wr_depth_camera',
+       #     executable='display',
+       #     name='display'
+       # )
     ])
