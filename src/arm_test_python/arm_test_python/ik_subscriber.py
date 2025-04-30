@@ -99,7 +99,7 @@ class IKSubscriber(Node):
         
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
-        
+        print("Msg Gripper: " + str(self.msg_gripper))
         self.arm_publisher_gripper.publish(self.msg_gripper)
         self.arm_publisher_base.publish(self.msg_linear_rail)
 
@@ -115,8 +115,9 @@ class IKSubscriber(Node):
         #Elbow
         self.arm_angles[1] = -(arm_positions[1] - 2*math.pi) *(105.0 / (math.pi/2))
 
-        #End Effector up and down
-        self.arm_angles[2] = (arm_positions[2]* (50.0 / (math.pi/2))) + 50 + self.kohler_shift
+        #End Effector up and down 
+            #(20.0/12.0) -> Increased gear ratio from 3*4 to 4*5
+        self.arm_angles[2] = (arm_positions[2]* (50.0/(math.pi/2))  *  (20.0/12.0)) + 50 + self.kohler_shift
     
     def listener_callback_buttons(self, msg):
         buttons = msg.data

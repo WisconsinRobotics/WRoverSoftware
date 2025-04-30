@@ -11,8 +11,8 @@ class SwerveControlSubsrciber(Node):
         super().__init__('swerve_control')
         #TODO:CHANGE IDS
         self.vesc_ids = {"BASE":["79"],
-                         "WRIST_LEFT":["80"],
-                         "WRIST_RIGHT":["81"],
+                         "WRIST_LEFT":["81"],
+                         "WRIST_RIGHT":["80"],
                          "GRIPPER":["78"]
                         }
         self.max_rpm = 6000
