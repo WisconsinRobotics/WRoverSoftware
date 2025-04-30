@@ -28,8 +28,8 @@ class CompassDataPublisher : public rclcpp::Node {
         void timer_callback()
         {
             std_msgs::msg::Float64 message; // this is potentially wrong
-            //StatusSignal<units::angle::degree_t> &sig = pigeon2imu.GetYaw(); // this should fix the warnings theoretically
-            auto &sig = pigeon2imu.GetYaw();
+            StatusSignal<units::angle::degree_t> &sig = pigeon2imu.GetYaw(); // this should fix the warnings theoretically
+            //auto &sig = pigeon2imu.GetYaw();
             message.data = sig.GetValue().value();
             publisher_->publish(message);
         }
