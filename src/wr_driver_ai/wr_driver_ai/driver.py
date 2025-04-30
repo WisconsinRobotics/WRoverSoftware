@@ -1,9 +1,10 @@
 import math
+import json
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import NavSatFix
-from nav_msgs.msg import Path, Odometry
+from std_msgs.msg import Float64
 
 # import helper for lat/lon → local ENU conversion
 from swerve_autonomy.path_utils import ll_to_xy
@@ -29,52 +30,49 @@ class WaypointFollower(Node):
     def __init__(self):
         super().__init__('waypoint_follower')
 
-        # Buffer for incoming waypoints
-        self.waypoints = []  # list of (x, y) tuples
-        self.current_index = 0
+        # Read target points
+        with open("points.json") as f:
+            js = json.loads(f)
+        
+        self.targets = js["targets"]
 
-        # Latest pose
-        self.cur_x = None
-        self.cur_y = None
+        # Set for current gps location and target we need
+        self.current_gps = None
+        self.target_indx = 0
+        self.target_gps = self.targets[self.target_indx]
+
+        # Info for angles
+        self.compass_angle = None
 
         # Subscribers
-        self.create_subscription(Path, '/search_waypoints', self.path_cb, 1)
-        self.create_subscription(Odometry, '/odom', self.odom_cb, 5)
-        self.create_subscription(NavSatFix, '/gps/fix', self.gps_cb, 5)
+        self.create_subscription(Float64, 'compass_data_topic', self.compass_callback, 5)
+        self.create_subscription(NavSatFix, 'fix', self.gps_callback, 5)
 
         # Publisher for drive commands
-        self.cmd_pub = self.create_publisher(Float32MultiArray, '/swerve_motor', 1)0
+        self.cmd_pub = self.create_publisher(Float32MultiArray, 'swerve', 1)
 
-        # Timer to run control loop
-        self.create_timer(1.0 / CMD_RATE, self.control_loop)
+        # Timer to run callbacks
+        self.create_timer(1.0 / CMD_RATE, self.compass_callback)
+        self.create_timer(1.0 / CMD_RATE, self.gps_callback)
+        self.create_timer(1.0 / CMD_RATE, self.swerve_callback)
 
-    def gps_cb(self, msg: NavSatFix):
+    def gps_callback(self, msg: NavSatFix):
         """
         Update current robot position from GPS.
         Converts lat/lon into local ENU x,y relative to centre.
         """
-        ex, ny = ll_to_xy(CENTRE_LAT, CENTRE_LON, msg.latitude, msg.longitude)
-        self.cur_x, self.cur_y = ex, ny
+        x, y 
 
-    def path_cb(self, msg: Path):
+
+    def compass_callback(self, msg: Float64):
         """
         Callback when a new Path of waypoints arrives.
         Extract x,y from each PoseStamped.
         """
-        self.waypoints = [(pose.pose.position.x,
-                           pose.pose.position.y)
-                          for pose in msg.poses]
-        self.current_index = 0
-        self.get_logger().info(f"Received {len(self.waypoints)} waypoints.")
+        pass        
 
-    def odom_cb(self, msg: Odometry):
-        """
-        Update current robot position from odometry.
-        """
-        self.cur_x = msg.pose.pose.position.x
-        self.cur_y = msg.pose.pose.position.y
 
-    def control_loop(self):
+    def swerve_callback(self):
         """
         Runs at CMD_RATE Hz. Computes and publishes drive commands.
         """
