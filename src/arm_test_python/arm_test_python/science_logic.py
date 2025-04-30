@@ -15,7 +15,7 @@ class ArmLogic(Node):
         super().__init__('arm_logic')
         self.subscription_joy = self.create_subscription(
             Float32MultiArray,
-            'joy',
+            'swerve',
             self.listener_callback_joy,
             10)
         
@@ -43,7 +43,7 @@ class ArmLogic(Node):
         self.msg_auger.data = 0.0
 
         self.msg_insert = Float64()
-        self.msg_insert.data = 0.0
+        self.msg_insert.data = -0.6
 
         self.msg_chute = Float64()
         self.msg_chute.data = 1.0
@@ -72,7 +72,7 @@ class ArmLogic(Node):
         self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
 
         # Insertion controlled by up/down
-        self.msg_insert.data = (buttons[1]-buttons[0])*0.9
+        self.msg_insert.data = (int(buttons[3])-int(buttons[2]))*0.9
 
         # Chute controlled by left/right
         if buttons[3]: # eject

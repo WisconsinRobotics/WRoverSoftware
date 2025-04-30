@@ -11,7 +11,7 @@ class SwerveControlSubsrciber(Node):
         #TODO:CHANGE IDS
         self.vesc_ids = {"CAROUSEL":["79"],
                          "AUGER":["80"],
-                         "INSERTION":["78"]
+                         "INSERT":["78"]
                         }
         self.max_rpm = 6000
         self.limit_rotation = 0
@@ -34,11 +34,6 @@ class SwerveControlSubsrciber(Node):
             self.listener_insert,
             10)
                 
-        self.subscription_chute = self.create_subscription(
-            Float64,
-            'sci_chute',
-            self.listener_chute,
-            10)
 
         self.publisher_ = self.create_publisher(String, 'can_msg', 10)
 
