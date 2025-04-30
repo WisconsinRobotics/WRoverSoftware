@@ -43,7 +43,7 @@ class ArmLogic(Node):
         self.msg_auger.data = 0.0
 
         self.msg_insert = Float64()
-        self.msg_insert.data = -0.6
+        self.msg_insert.data = 0.0
 
         self.msg_chute = Float64()
         self.msg_chute.data = 1.0
@@ -59,11 +59,7 @@ class ArmLogic(Node):
         #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
 
-        #Expecting (left trigger, rigt trigger)
-        carousel_speed = (motion[3]-motion[2])*0.2
         
-        #Publishing
-        self.msg_carousel.data = carousel_speed
 
     def listener_callback_buttons(self, msg):
         buttons = msg.data
@@ -82,6 +78,12 @@ class ArmLogic(Node):
         
         #Expecting A and B buttons
         self.msg_auger.data = buttons[4]*0.7 # auger spin when A
+
+        #Expecting (left trigger, rigt trigger)
+        carousel_speed = (buttons[6]-motion[7])*0.2 #6 is left bumper, 7 is right
+        
+        #Publishing
+        self.msg_carousel.data = carousel_speed
         
 
 
