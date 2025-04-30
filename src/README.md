@@ -42,3 +42,22 @@ Follow these steps to launch the GUI:
 Your GUI should now display and update with the GPS location.
 
 >>>>>>> d8c6f4786f364224b94f6539cd283bf66a9d26e2
+
+
+## GPS Setup instructions
+
+Link to library used: https://github.com/gokulp01/ros2-ublox-zedf9p
+
+1. Run the following command inside the `WRoverSoftware/` directory:
+   ```bash
+   colcon build
+   ```
+2. To run the driver:
+   ```bash
+   ros2 launch ublox_gps ublox_gps_node_zedf9p-launch.py
+   ```
+   Then values will be published to /fix topic
+
+Refer to the readme of the library for error fixes and option customization (They have quite a few of those listed under Common Errors)
+
+
