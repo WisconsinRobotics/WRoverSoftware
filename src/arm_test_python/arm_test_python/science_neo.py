@@ -62,7 +62,7 @@ class SwerveControlSubsrciber(Node):
         self.publisher_.publish(can_msg_duty)
 
 
-def listener_servo(self, msg):
+    def listener_chute(self, msg):
         can_msg_servo = String()
 
         # I cannot find any CAN command for controlling a servo so it will not be implemented

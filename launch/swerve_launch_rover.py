@@ -18,7 +18,11 @@ def generate_launch_description():
             executable='science_logic',
             name='science_logic'
         ),
-
+        Node(
+            package='arm_test_python',
+            executable='science_data',
+            name='science_data'
+        ),
         Node(
             package='arm_test_python',
             executable='ik_subscriber',
