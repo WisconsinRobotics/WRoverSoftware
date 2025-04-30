@@ -117,7 +117,7 @@ class IKSubscriber(Node):
 
         #End Effector up and down 
             #(20.0/12.0) -> Increased gear ratio from 3*4 to 4*5
-        self.arm_angles[2] = (arm_positions[2]* (50.0/(math.pi/2))  *  (20.0/12.0)) + 50 + self.kohler_shift
+        self.arm_angles[2] = (-arm_positions[2]* (50.0/(math.pi/2))  *  (20.0/12.0)) + 50 + self.kohler_shift
     
     def listener_callback_buttons(self, msg):
         buttons = msg.data

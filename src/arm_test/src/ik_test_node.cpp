@@ -144,10 +144,10 @@ private:
         
         if (abs(static_cast<double>((shoulderMotor.GetPosition().GetValue()) - shoulder_position*1_tr)) < .2 && abs(static_cast<double>((elbowMotor.GetPosition().GetValue()) - elbow_position*1_tr)) < .2 ){
             msg.data = true;
-            RCLCPP_INFO(this->get_logger(), "Publishing: true" );
+            //RCLCPP_INFO(this->get_logger(), "Publishing: true" );
         }else{
             msg.data = false;
-            RCLCPP_INFO(this->get_logger(), "Publishing: false" );
+            //RCLCPP_INFO(this->get_logger(), "Publishing: false" );
         }
         publisher_->publish(msg);
     }
