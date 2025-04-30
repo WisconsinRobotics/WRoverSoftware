@@ -44,11 +44,12 @@ class DepthImageSubscriber(Node):
             else:
                 histogram[i] = np.float32(0)
 
-        histogram_threshold = np.float32(1039)
-
+        histogram_threshold = np.float32(5039)
+        #print(h)
         #Check if there is an obstacle in middle half 
-        for i in range(num_sectors/4, (3/4)*num_sectors):
+        for i in range(int(num_sectors/4), int((3/4)*num_sectors)):
             if histogram[i] > histogram_threshold:
+                print(f"section:{i} has an obstacle with value {histogram[i]}") 
                 self.obstacle_there = True
                 break
             else:
