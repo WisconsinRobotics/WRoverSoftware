@@ -13,15 +13,9 @@ CMD_RATE = 10
 
 # Motor command presets
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
-FWD      = [  1,   0,  0,  0]
-BWD      = [ -1,   0,  0,  0]
-STRAFE_R = [  0,   1,  0,  0]
-STRAFE_L = [  0,  -1,  0,  0]
-R90      = [  0,   0,  1, -1]
-L90      = [  0,   0, -1,  1]
-LEFT_90  = [  0,   0,  1,  0]
-DONUT    = [0.5, -0.5,0.2,  0]
-STOP     = [  0,   0,  0,  0]
+FWD      = [  1.0,   0.0,  0.0,  0.0]
+R90      = [  0.0,   0.0,  1.0, -1.0]
+STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
     def __init__(self):
@@ -50,8 +44,6 @@ class WaypointFollower(Node):
         self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
 
         # Timer to run callbacks
-        self.create_timer(1.0 / CMD_RATE, self.compass_callback)
-        self.create_timer(1.0 / CMD_RATE, self.gps_callback)
         self.create_timer(1.0 / CMD_RATE, self.swerve_callback)
 
     def gps_callback(self, msg: NavSatFix):
@@ -59,9 +51,8 @@ class WaypointFollower(Node):
         Update current robot position from GPS.
         Converts lat/lon into local ENU x,y relative to centre.
         """
-        lat, lon = msg.data.latitude, msg.data.longitude
+        lat, lon = msg.latitude, msg.longitude
         self.current_gps = [lat, lon]
-        self.get_logger().info(f"Current GPS: {self.current_gps}")
 
 
     def compass_callback(self, msg: Float64):
@@ -69,10 +60,8 @@ class WaypointFollower(Node):
         Pigeonhole returns data with negative values, need to refactor it
         to be positive and also it poits to north-west relative to the front wheels
         """
-        angle = -msg.data
-        angle = (angle + 90) % 360 
+        angle = (msg.data - 90) % 360 
         self.compass_angle = angle
-        self.get_logger().info(f"Current angle: {self.compass_angle}")       
 
     @staticmethod
     def compute_bearing(p1, p2):
