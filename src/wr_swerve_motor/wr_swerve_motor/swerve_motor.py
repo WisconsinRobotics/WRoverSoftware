@@ -3,6 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
 import math
+from custom_msgs_srvs.msg import SwervePrevAngle
 
 def get_wheel_vectors(vehicle_translation, rotational_velocity):
     # x component is vehicle_translation +/- rot_vel*body_width/2
@@ -62,6 +63,11 @@ class SwerveSubscriber(Node):
             'swerve',
             self.listener_callback,
             10)
+        self.prev_pid_subscription = self.create_subscription(
+            SwervePrevAngle,
+            'prev_pid',
+            self.prev_pid_listener_callback,
+            10)
 
         self.swerve_publisher_FL = self.create_publisher(Float32MultiArray, 'swerve_FL', 10)
         self.swerve_publisher_FR = self.create_publisher(Float32MultiArray, 'swerve_FR', 10)
@@ -69,6 +75,9 @@ class SwerveSubscriber(Node):
         self.swerve_publisher_BR = self.create_publisher(Float32MultiArray, 'swerve_BR', 10)
 
         self.subscription  # prevent unused variable warning
+
+    def prev_pid_listener_callback(self,msg):
+        self.get_logger().info('VESC ID: "%d", CURRENT PID Angle: "%d"' % (msg.vesc_id, msg.pid_angle))
 
     def listener_callback(self, msg):
         #self.get_logger().info('I heard: "%s"' % msg.data)
