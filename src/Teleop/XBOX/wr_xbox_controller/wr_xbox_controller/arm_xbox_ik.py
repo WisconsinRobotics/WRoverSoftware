@@ -33,10 +33,10 @@ class XboxPublisher(Node):
     def timer_callback(self):
         
         #self.get_logger().debug("BBBBBBBBBB")
-        if (len(self.joysticks) >1):#TODO:CHANGE THIS IS FOR TESTING
+        if (len(self.joysticks) >CONTROLLER):#TODO:CHANGE THIS IS FOR TESTING
             
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-            motion = [self.joysticks[1].get_axis(2),-self.joysticks[1].get_axis(1),-self.joysticks[1].get_axis(4)]
+            motion = [self.joysticks[CONTROLLER].get_axis(2),-self.joysticks[CONTROLLER].get_axis(1),-self.joysticks[CONTROLLER].get_axis(4)]
             print(motion)
             # Ignore jitter in sticks
             for i in range(3):
@@ -95,7 +95,7 @@ class XboxPublisher(Node):
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.JOYHATMOTION:
-                if event.joy ==1:
+                if event.joy ==CONTROLLER:
                     if event.value[1] == 1:  # D-Pad Up
                         self.buttons[0] = 1
                     else:
