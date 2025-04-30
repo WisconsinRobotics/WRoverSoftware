@@ -14,7 +14,7 @@ CMD_RATE = 10
 
 # Motor command presets
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
-FWD      = [  1.0,   0.0,  0.0,  0.0]
+FWD      = [  -1.0,   0.0,  0.0,  0.0]
 R90      = [  0.0,   0.0,  1.0, -1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
@@ -148,13 +148,13 @@ class WaypointFollower(Node):
         rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
 
         ## self.get_logger().info(f"Rover angle: {rover_angle}, compass angle: {self.compass_angle}")
-        if abs(rover_angle - self.compass_angle) < 10:
+        if abs(rover_angle - self.compass_angle) < 30:
             ## If angles are relatively the same, drive forward
-            ##self.get_logger().info("Driving Forward")
+            self.get_logger().info("Driving Forward")
             msg.data = FWD
         else:
             ## Otherwise, spin
-            ## self.get_logger().info("Spinning in place")
+            self.get_logger().info("Spinning in place")
             msg.data = R90
         self.swerve_publisher.publish(msg)
 
