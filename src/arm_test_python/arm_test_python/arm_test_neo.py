@@ -11,8 +11,8 @@ class SwerveControlSubsrciber(Node):
         super().__init__('swerve_control')
         #TODO:CHANGE IDS
         self.vesc_ids = {"BASE":["79"],
-                         "WRIST_LEFT":["80"],
-                         "WRIST_RIGHT":["81"],
+                         "WRIST_LEFT":["81"],
+                         "WRIST_RIGHT":["80"],
                          "GRIPPER":["78"]
                         }
         self.max_rpm = 6000
@@ -69,7 +69,7 @@ class SwerveControlSubsrciber(Node):
         can_msg_angle.data = self.vesc_ids["WRIST_RIGHT"][0] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
         #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
         self.publisher_.publish(can_msg_angle)
-        self.get_logger().info('Publishing Angle WRIST_RIGHT: "%s"' % can_msg_angle)
+        #self.get_logger().info('Publishing Angle WRIST_RIGHT: "%s"' % can_msg_angle)
 
     def arm_listener_gripper(self, msg):
         can_msg_rpm = String()
