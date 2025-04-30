@@ -12,10 +12,10 @@ ublox_gps_node:
       qzss: false
       galileo: false
       imes: false
-    # Survey-In Mode
-    tmode3: 0
+    # TMODE3 Config
+    tmode3: 1                   # Survey-In Mode
     sv_in:
-      reset: False               # True: disables and re-enables survey-in (resets)
+      reset: True               # True: disables and re-enables survey-in (resets)
                                 # False: Disables survey-in only if TMODE3 is
                                 # disabled
       min_dur: 300              # Survey-In Minimum Duration [s]

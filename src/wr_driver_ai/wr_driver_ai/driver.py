@@ -6,9 +6,6 @@ from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float64
 from math import atan2, radians, degrees, sin, cos 
 
-# import helper for lat/lon → local ENU conversion
-from swerve_autonomy.path_utils import ll_to_xy
-
 # Threshold to consider a waypoint "reached" (meters)
 WAYPOINT_THRESHOLD = 1.524  # 5 feet in meters
 # Publisher rate (Hz)
@@ -31,8 +28,8 @@ class WaypointFollower(Node):
         super().__init__('waypoint_follower')
 
         # Read target points
-        with open("points.json") as f:
-            js = json.loads(f)
+        with open("/home/wiscrobo/workspace/WRoverSoftware/src/wr_driver_ai/wr_driver_ai/points.json") as f:
+            js = json.load(f)
         
         self.targets = js["targets"]
         self.done = False
