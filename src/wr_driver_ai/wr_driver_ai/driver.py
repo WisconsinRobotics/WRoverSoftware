@@ -1,10 +1,13 @@
 import json
 import math
+import os
+import threading
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, Float64, Bool
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float64
+from std_msgs.msg import Bool
 from math import atan2, radians, degrees, sin, cos, sqrt
 
 # Threshold to consider a waypoint "reached" (meters)
@@ -16,14 +19,29 @@ CMD_RATE = 10
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
 FWD      = [  -1.0,   0.0,  0.0,  0.0]
 R90      = [  0.0,   0.0,  1.0, -1.0]
+FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
+FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
+    def start_input_thread(self):
+        thread = threading.Thread(target=self.user_input_loop)
+        thread.daemon = True
+        thread.start()
+
+    def user_input_loop(self):
+        while rclpy.ok():
+            if not self.to_drive:
+                user_input = input("To start autonomous driving type START: ")
+                if user_input == "START":
+                    self.to_drive = True
+
     def __init__(self):
         super().__init__('waypoint_follower')
 
         # Read target points
-        with open("/home/wiscrobo/workspace/WRoverSoftware/src/wr_driver_ai/wr_driver_ai/points.json") as f:
+        file_path = os.path.abspath("points.json")
+        with open(file_path) as f:
             js = json.load(f)
         
         self.targets = js["targets"]
@@ -34,18 +52,33 @@ class WaypointFollower(Node):
         self.target_indx = 0
         self.target_gps = self.targets[self.target_indx]
 
-        # Info for angles
+        # Info for angles and obstacle
         self.compass_angle = None
+        self.obstacle_detected = None
+
+        # Control driving
+        self.to_drive = True
+        self.start_input_thread()
 
         # Subscribers
         self.create_subscription(Float64, 'compass_data_topic', self.compass_callback, 5)
         self.create_subscription(NavSatFix, 'fix', self.gps_callback, 5)
+        self.create_subscription(Bool, 'obstacle_there', self.obstacle_callback, 5)
+
+        # Obstacle checker
+        self.obstacle = False
 
         # Publisher for drive commands
         self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
 
         # Timer to run callbacks
         self.create_timer(1.0 / CMD_RATE, self.swerve_callback)
+
+    def obstacle_callback(self, msg: Bool):
+        """
+        Just gets the data if we have detected the obstacle in the way
+        """
+        self.obstacle_detected = msg.data
 
     def gps_callback(self, msg: NavSatFix):
         """
@@ -55,7 +88,6 @@ class WaypointFollower(Node):
         lat, lon = msg.latitude, msg.longitude
         self.current_gps = [lat, lon]
         self.get_logger().info(f"Current GPS {self.current_gps}")
-
 
     def compass_callback(self, msg: Float64):
         """
@@ -121,11 +153,14 @@ class WaypointFollower(Node):
         Returns:
             true if they are close and false otherwise
         """
-        return WaypointFollower.gps_distance(p1, p2) < 0.1
+        return WaypointFollower.gps_distance(p1, p2) < 1
     
+    def obstacle_callback(self, msg):
+        self.obstacle = msg.data
+
     def swerve_callback(self):
         msg = Float32MultiArray()
-        if self.done:
+        if self.done or (not self.to_drive):
             msg.data = STOP
             self.swerve_publisher.publish(msg)
             self.get_logger().info("Done driving")
@@ -143,9 +178,15 @@ class WaypointFollower(Node):
                 self.get_logger().info(f"Reached the final target {self.target_gps}")
             else:
                 self.target_gps = self.targets[self.target_indx]
+                ## Make rover stop and wait for the user
+                self.to_drive = False
             return
         
+        #rover_angle: 
         rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
+    
+        # This will make an array that goes from 0 to 360. This goes counter clockwise (sorry)
+        difference_angle = (self.compass_angle - rover_angle)%360
 
         ## self.get_logger().info(f"Rover angle: {rover_angle}, compass angle: {self.compass_angle}")
         if abs(rover_angle - self.compass_angle) < 30:
@@ -155,9 +196,27 @@ class WaypointFollower(Node):
         else:
             ## Otherwise, spin
             self.get_logger().info("Spinning in place")
+        #
+        """
+        if self.obstacle:
             msg.data = R90
+            if difference_angle <= 10 or difference_angle >= 350:
+                ## If angles are relatively the same, drive forward
+                ##self.get_logger().info("Driving Forward")
+                msg.data = FWD
+            elif difference_angle < 60 and difference_angle > 10:
+                ## If angles are relatively the same, drive forward
+                ##self.get_logger().info("Driving Forward")
+                msg.data = FWD_ROT_270
+            elif difference_angle < 350 and difference_angle > 300:
+                msg.data = FWD_ROT_90
+            else:
+                ## Otherwise, spin
+                ## self.get_logger().info("Spinning in place")
+                msg.data = R90
+        """
         self.swerve_publisher.publish(msg)
-
+    
 def main():
     rclpy.init()
     node = WaypointFollower()
