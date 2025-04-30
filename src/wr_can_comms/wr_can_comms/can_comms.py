@@ -57,9 +57,9 @@ class CANSubscriber(Node):
         # TODO if someone needs to manually send status commands, deal with that here
 
     def timer_callback(self):
-        receive_canbus(2)
+        receive_canbus(self,2)
 
-def receive_canbus(num_messages: int, infty: bool = False):
+def receive_canbus(self,num_messages: int, infty: bool = False):
     """
     Queries the canbus for data. 
 
