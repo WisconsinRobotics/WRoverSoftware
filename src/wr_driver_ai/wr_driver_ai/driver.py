@@ -1,10 +1,10 @@
-import math
 import json
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float64
+from math import atan2, radians, degrees, sin, cos 
 
 # import helper for lat/lon → local ENU conversion
 from swerve_autonomy.path_utils import ll_to_xy
@@ -35,6 +35,7 @@ class WaypointFollower(Node):
             js = json.loads(f)
         
         self.targets = js["targets"]
+        self.done = False
 
         # Set for current gps location and target we need
         self.current_gps = None
@@ -49,7 +50,7 @@ class WaypointFollower(Node):
         self.create_subscription(NavSatFix, 'fix', self.gps_callback, 5)
 
         # Publisher for drive commands
-        self.cmd_pub = self.create_publisher(Float32MultiArray, 'swerve', 1)
+        self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
 
         # Timer to run callbacks
         self.create_timer(1.0 / CMD_RATE, self.compass_callback)
@@ -61,57 +62,93 @@ class WaypointFollower(Node):
         Update current robot position from GPS.
         Converts lat/lon into local ENU x,y relative to centre.
         """
-        x, y 
+        lat, lon = msg.data.latitude, msg.data.longitude
+        self.current_gps = [lat, lon]
+        self.get_logger().info(f"Current GPS: {self.current_gps}")
 
 
     def compass_callback(self, msg: Float64):
         """
-        Callback when a new Path of waypoints arrives.
-        Extract x,y from each PoseStamped.
+        Pigeonhole returns data with negative values, need to refactor it
+        to be positive and also it poits to north-west relative to the front wheels
         """
-        pass        
+        angle = -msg.data
+        angle = (angle + 90) % 360 
+        self.compass_angle = angle
+        self.get_logger().info(f"Current angle: {self.compass_angle}")       
 
+    @staticmethod
+    def compute_bearing(p1, p2):
+        """
+        Computes the angle between two gps coordinates in degrees
 
+        Args:
+            p1 - first gps coordinate
+            p2 - second gps coordinate
+        Returns:
+            angle with respect to north that points into the direction
+        """
+        lat1, lon1 = p1
+        lat2, lon2 = p2
+        
+        # Convert from degrees to radians
+        lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
+        
+        delta_lon = lon2 - lon1
+        x = sin(delta_lon) * cos(lat2)
+        y = cos(lat1)*sin(lat2) - sin(lat1)*cos(lat2)*cos(delta_lon)
+        
+        initial_bearing = atan2(x, y)
+        compass_bearing = (degrees(initial_bearing) + 360) % 360
+        return compass_bearing
+    
+    @staticmethod
+    def is_same(p1, p2):
+        """
+        Determines if two points are close
+
+        Args:
+            p1 - first gps coordinate
+            p2 - second gps coordinate
+        Returns:
+            true if they are close and false otherwise
+        """
+        lat1, lon1 = p1
+        lat2, lon2 = p2
+
+        dist = (lat1 - lat2)**2 + (lon1 - lon2)**2
+        return dist < 0.01
+    
     def swerve_callback(self):
-        """
-        Runs at CMD_RATE Hz. Computes and publishes drive commands.
-        """
-        # Need a valid pose
-        if self.cur_x is None or self.cur_y is None:
-            return
-        # Need waypoints
-        if not self.waypoints or self.current_index >= len(self.waypoints):
-            self.publish_cmd(STOP)
+        msg = Float32MultiArray()
+        if self.done:
+            msg.data = STOP
+            self.swerve_publisher.publish(msg)
+            self.get_logger().info("Done driving")
             return
 
-        # Current target
-        tx, ty = self.waypoints[self.current_index]
-        dx = tx - self.cur_x
-        dy = ty - self.cur_y
-        dist = math.hypot(dx, dy)
-
-        # Check if we reached this waypoint
-        if dist < WAYPOINT_THRESHOLD:
-            self.get_logger().info(
-                f"Reached waypoint {self.current_index} at ({tx:.2f}, {ty:.2f}).")
-            self.current_index += 1
+        ## Check that both current gps and angles are set up
+        if (not self.current_gps) or (not self.compass_angle):
             return
 
-        # Movement logic: move along dominant axis
-        if abs(dx) > abs(dy):
-            cmd = STRAFE_R if dx > 0 else STRAFE_L
+        ## Check that we reached the target
+        if WaypointFollower.is_same(self.current_gps, self.target_gps):
+            self.target_indx += 1
+            if self.target_indx >= len(self.targets):
+                self.done = True
+                self.get_logger().info(f"Reached the final target {self.target_gps}")
+            else:
+                self.target_gps = self.targets[self.target_indx]
+            return
+        
+        rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
+        if abs(rover_angle - self.compass_angle) < 10:
+            ## If angles are relatively the same, drive forward
+            msg.data = FWD
         else:
-            cmd = FWD if dy > 0 else BWD
-
-        self.publish_cmd(cmd)
-
-    def publish_cmd(self, cmd_list):
-        """
-        Wrap a list of 4 numbers into Float32MultiArray and publish.
-        """
-        msg = Float32MultiArray(data=cmd_list)
-        self.cmd_pub.publish(msg)
-
+            ## Otherwise, spin
+            msg.data = R90
+        self.swerve_publisher.publish(msg)
 
 def main():
     rclpy.init()
