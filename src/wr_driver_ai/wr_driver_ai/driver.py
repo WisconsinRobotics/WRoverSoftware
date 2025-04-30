@@ -1,10 +1,11 @@
 import json
+import math
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float64
-from math import atan2, radians, degrees, sin, cos 
+from math import atan2, radians, degrees, sin, cos, sqrt
 
 # Threshold to consider a waypoint "reached" (meters)
 WAYPOINT_THRESHOLD = 1.524  # 5 feet in meters
@@ -53,6 +54,7 @@ class WaypointFollower(Node):
         """
         lat, lon = msg.latitude, msg.longitude
         self.current_gps = [lat, lon]
+        self.get_logger().info(f"Current GPS {self.current_gps}")
 
 
     def compass_callback(self, msg: Float64):
@@ -60,8 +62,18 @@ class WaypointFollower(Node):
         Pigeonhole returns data with negative values, need to refactor it
         to be positive and also it poits to north-west relative to the front wheels
         """
-        angle = (msg.data - 90) % 360 
+        self.get_logger().info(f"Got angle {msg.data}")
+        angle = (90 - msg.data) % 360 
         self.compass_angle = angle
+
+    @staticmethod
+    def gps_distance(p1, p2):
+        lat1, lon1 = p1
+        lat2, lon2 = p2
+
+        dx = (lon2 - lon1) * cos(radians((lat1 + lat2) / 2)) * 111320  # meters
+        dy = (lat2 - lat1) * 110540  # meters
+        return sqrt(dx*dx + dy*dy)
 
     @staticmethod
     def compute_bearing(p1, p2):
@@ -77,16 +89,26 @@ class WaypointFollower(Node):
         lat1, lon1 = p1
         lat2, lon2 = p2
         
-        # Convert from degrees to radians
-        lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-        
-        delta_lon = lon2 - lon1
-        x = sin(delta_lon) * cos(lat2)
-        y = cos(lat1)*sin(lat2) - sin(lat1)*cos(lat2)*cos(delta_lon)
-        
-        initial_bearing = atan2(x, y)
-        compass_bearing = (degrees(initial_bearing) + 360) % 360
-        return compass_bearing
+        # Convert degrees to radians
+        lat1_rad = math.radians(lat1)
+        lon1_rad = math.radians(lon1)
+        lat2_rad = math.radians(lat2)
+        lon2_rad = math.radians(lon2)
+
+        # Calculate differences in coordinates
+        dlon = lon2_rad - lon1_rad
+
+        # Calculate bearing using atan2
+        x = math.sin(dlon) * math.cos(lat2_rad)
+        y = math.cos(lat1_rad) * math.sin(lat2_rad) - math.sin(lat1_rad) * math.cos(lat2_rad) * math.cos(dlon)
+
+        bearing_rad = math.atan2(x, y)
+
+        # Convert bearing from radians to degrees (0° to 360°)
+        bearing_deg = math.degrees(bearing_rad)
+        bearing_deg = (bearing_deg + 360) % 360  # Normalize to 0-360
+
+        return bearing_deg
     
     @staticmethod
     def is_same(p1, p2):
@@ -99,11 +121,7 @@ class WaypointFollower(Node):
         Returns:
             true if they are close and false otherwise
         """
-        lat1, lon1 = p1
-        lat2, lon2 = p2
-
-        dist = (lat1 - lat2)**2 + (lon1 - lon2)**2
-        return dist < 0.01
+        return WaypointFollower.gps_distance(p1, p2) < 0.1
     
     def swerve_callback(self):
         msg = Float32MultiArray()
@@ -128,11 +146,15 @@ class WaypointFollower(Node):
             return
         
         rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
+
+        ## self.get_logger().info(f"Rover angle: {rover_angle}, compass angle: {self.compass_angle}")
         if abs(rover_angle - self.compass_angle) < 10:
             ## If angles are relatively the same, drive forward
+            ##self.get_logger().info("Driving Forward")
             msg.data = FWD
         else:
             ## Otherwise, spin
+            ## self.get_logger().info("Spinning in place")
             msg.data = R90
         self.swerve_publisher.publish(msg)
 
