@@ -1,14 +1,14 @@
 # Import libraries
 import os
-import zmq
+#import zmq
 import cv2
 import time
 import rclpy
 import numpy as np
 from rclpy.node import Node
 from ultralytics import YOLO
-from std_msgs.msg import String
-
+from sensor_msgs.msg import Image
+import cv_bridge
 # Import custom messages
 from custom_msgs_srvs.msg import Detection
 
@@ -23,24 +23,22 @@ class YOLODetectionPublisher(Node):
         super().__init__('yolo_detection_publisher')
         self.publisher_ = self.create_publisher(Detection, 'detection_results', 10)
 
-        # Set timer to process frames every timer_period seconds
-        timer_period = 0.05
-        self.timer = self.create_timer(timer_period, self.timer_callback)
-        
-        # Initialize ZeroMQ Context and SUB socket for camera video stream
-        context = zmq.Context()
-        self.camera_socket = context.socket(zmq.SUB)
-        
-        # Subscribe to all messages and connect to publisher port
-        self.camera_socket.setsockopt(zmq.SUBSCRIBE, b"")
-        self.camera_socket.connect("tcp://localhost:5555")
+        self.bridge = cv_bridge.CvBridge()
+
+        self.subscription = self.create_subscription(
+            Image,
+            'camera_data_topic',
+            self.timer_callback,
+            10)
+        self.subscription  # prevent unused variable warning
 
         # Load YOLO model
         self.model = YOLO(os.path.join(get_package_share_directory("object_detection_package"), "model.pt"))
+        self.confThresh = 0.6
 
 
-    # Async fuction for YOLO inference
-    async def yolo_inference(self, frame):
+    # fuction for YOLO inference
+    def yolo_inference(self, frame):
         return self.model(frame, verbose=False)
     
     # Crop and resize frames to 640x640 to fit the model
@@ -63,27 +61,15 @@ class YOLODetectionPublisher(Node):
         frame = cv2.resize(frame, (640, 640))
         
         return frame
-
-
-    # Async function for frame processing
-    async def timer_callback(self):
-        # Flush the buffer to ensure most recent frame
-        while True:
-            try:
-                _ = self.camera_socket.recv(flags=zmq.NOBLOCK)
-            except zmq.Again:
-                self.get_logger().warn(f"Frame not captured. Retrying...")
-                break
-                
-        # Decode frame data from camera socket
-        data = np.frombuffer(self.camera_socket.recv(), dtype=np.uint8)
-        frame = cv2.imdecode(data, cv2.IMREAD_COLOR)
-            
+    
+    # function for frame processing
+    def timer_callback(self, msg):
+        frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8') 
         # Crop and resize the frame
         frame = self.crop_and_resize(frame)
         
-        # Perform YOLO inference asynchronously
-        results = await self.yolo_inference(frame)
+        # Perform YOLO inference 
+        results = self.yolo_inference(frame)
 
         best_box = None
         best_conf = 0
@@ -115,28 +101,23 @@ class YOLODetectionPublisher(Node):
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
             label = f"{best_conf:.2f} {dis:.2f}"
             cv2.putText(frame, label, (int(x1), int(y1) - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-            # Publish message
-            msg = Detection()
-            msg.x = int((x1 + x2) / 2)
-            msg.y = int((y1 + y2) / 2)
-            msg.dis = float(dis)
-            self.publisher_.publish(msg)
-            self.get_logger().info(f"Publishing {msg.x}, {msg.y}, {msg.dis}")
+            
+            if best_conf > self.confThresh:
+                # Publish message
+                msg = Detection()
+                msg.x = int((x1 + x2) / 2)
+                msg.y = int((y1 + y2) / 2)
+                msg.dis = float(dis)
+                self.publisher_.publish(msg)
+                self.get_logger().info(f"Publishing {msg.x}, {msg.y}, {msg.dis}, conf: {best_conf:.2f}")
+            else:
+                self.get_logger().info(f'NOT Publishing, conf: {best_conf:.2f}')
+        else:
+            self.get_logger().info('no object found')
 
         # Graphical display
-        cv2.imshow("YOLO Object Detection", frame)
-        cv2.waitKey(1)
-
-
-    # Cleanup
-    def __del__(self):
-        # Release camera access
-        if self.video.isOpened():
-            self.video.release()
-
-        # Terminate graphical display
-        cv2.destroyAllWindows()
+        #cv2.imshow("YOLO Object Detection", frame)
+        #cv2.waitKey(1)
 
 
 def main(args=None):
