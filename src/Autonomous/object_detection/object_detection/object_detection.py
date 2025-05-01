@@ -90,7 +90,7 @@ class ObjectDetectionClass(Node):
                     if self.aruco_distance > 0:
                         self.aruco_found = True
                 if (self.aruco_found):
-                    if self.aruco_distance > 2.5:
+                    if self.aruco_distance > 2:
                         if self.aruco_x > -50: #TODO: make sure middle is -100
                             msg.data = R90
                         elif self.aruco_x < -150:
@@ -113,7 +113,7 @@ class ObjectDetectionClass(Node):
                     if self.object_distance  > 0:
                         self.object_found = True
                 if (self.object_found):
-                    if self.object_distance > 2.5:
+                    if self.object_distance > 2:
                         if self.object_x > 500:
                             msg.data = R90
                         elif self.object_x < -500:
