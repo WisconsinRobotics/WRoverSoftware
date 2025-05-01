@@ -2,3 +2,4 @@ build/
 install/
 log/
 src/relaxed_ik_ros2
+src/.vscode
