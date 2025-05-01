@@ -85,8 +85,8 @@ class IKSubscriber(Node):
         self.msg_wrist.left_position = float(-self.arm_angles[2] + self.absolute_left_EE - self.absolute_angle)
         self.msg_wrist.right_position = float(-self.arm_angles[2] + self.absolute_right_EE - self.absolute_angle)
         
-        self.get_logger().info('Left Position: "%s"' % self.msg_wrist.left_position)
-        self.get_logger().info('Right Position: "%s"' % self.msg_wrist.right_position)
+        #self.get_logger().info('Left Position: "%s"' % self.msg_wrist.left_position)
+        #self.get_logger().info('Right Position: "%s"' % self.msg_wrist.right_position)
 
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
@@ -110,11 +110,11 @@ class IKSubscriber(Node):
 
         #Elbow
         self.arm_angles[1] = -(arm_positions[1]) *(105.0 / (math.pi/2))
-        #self.get_logger().info('I heard: "%s"' % arm_positions[1])
+        #self.get_logger().info('I heard: "%s"' % arm_positions[2])
 
 
         #End Effector up and down
-        self.arm_angles[2] = (arm_positions[2]* (50.0 / (math.pi/2))) + 50 + self.kohler_shift
+        self.arm_angles[2] = (arm_positions[2]* (120.0 / (math.pi/2))) + 50 + self.kohler_shift
     
     def listener_callback_buttons(self, msg):
         buttons = msg.data

@@ -72,7 +72,6 @@ class ArmLogic(Node):
     
     def timer_update_wrist(self):
         #Publishing
-        self.get_logger().info(str(self.absolute_wrist))
         if 1 in self.D_PAD:
             self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
             self.msg_wrist.left_position = float(self.wrist_positions[0])

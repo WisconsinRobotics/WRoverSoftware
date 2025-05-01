@@ -4,11 +4,11 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         #Running falcons with forward Kinematics
-        Node(
-            package='arm_test',
-            executable='arm_test_node',
-            name='arm_test'
-        ),
+        # Node(
+        #     package='arm_test',
+        #     executable='arm_test_node',
+        #     name='arm_test'
+        # ),
 
         #Running NEO's to send to can_comms
         Node(
