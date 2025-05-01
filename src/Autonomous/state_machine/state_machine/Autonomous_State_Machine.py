@@ -99,6 +99,7 @@ class AutonomousStateMachine(StateMachine):
         self.model.get_logger().info('LED Mode: ' + str(self.led_mode))
         self.led_cli = self.model.create_client(LED, 'change_LED')
         self.led_req = LED.Request()
+        self.flashing = True
         
         # self.model.get_logger().info("Updated Picture")
         # imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
@@ -385,14 +386,17 @@ class AutonomousStateMachine(StateMachine):
         if self.led_mode == "real":
             while not self.led_cli.wait_for_service(timeout_sec=1.0):
                 self.model.get_logger().info('service not available, waiting again...')
-
+            self.flashing = not self.flashing
             if color == "RED":
                 self.led_req.red = 255
                 self.led_req.green = 0
                 self.led_req.blue = 0
             elif color == "GREEN":
                 self.led_req.red = 0
-                self.led_req.green = 255
+                if (self.flashing):
+                    self.led_req.green = 255
+                else:
+                    self.led_req.green = 0
                 self.led_req.blue = 0
             elif color == "BLUE":
                 self.led_req.red = 0
