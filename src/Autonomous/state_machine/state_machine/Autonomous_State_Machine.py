@@ -1,7 +1,6 @@
 import rclpy
 from rclpy.node import Node
 from multiprocessing import get_context
-import keyboard 
 from random import sample
 from pyparsing import removeQuotes
 from statemachine import StateMachine, State

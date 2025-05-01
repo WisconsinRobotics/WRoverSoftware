@@ -32,4 +32,8 @@ def generate_launch_description():
             package='object_detection',
             executable='object_detection',
             name='object_detection'),
+        launch_ros.actions.Node(
+            package='wr_imu_compass',
+            executable='compass',
+            name='compass'),
     ])
