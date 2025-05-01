@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify
 from flask import Flask, send_from_directory
-from streamReceiver import receive_stream
 from flask import Response, render_template_string
 from flask_cors import CORS
 from startup import competitionMission

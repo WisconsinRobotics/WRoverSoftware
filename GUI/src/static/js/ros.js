@@ -51,49 +51,6 @@ var reconnectIntervalId = setInterval(function() {
   }
 }, 1000);
 
-
-// var streamListener = new ROSLIB.Topic({
-//   ros : ros,
-//   name : '/video',
-//   messageType : 'sensor_msgs/CompressedImage'
-// });
-
-// streamListener.subscribe(function(message) {
-//   video1.src = 'data:image/jpeg;base64,' + imageData;
-// });
-
-// setInterval(function() {
-//   listener.publish(new ROSLIB.Message({
-//     data : 'path/to/your/jpeg/file.jpg'
-//   }));
-// }, 5000);
-
-// Publishing a Topic
-// ------------------
-
-// var cmdVel = new ROSLIB.Topic({
-//   ros : ros,
-//   name : '/cmd_vel',
-//   messageType : 'geometry_msgs/Twist'
-// });
-
-// var twist = new ROSLIB.Message({
-//   linear : {
-//     x : 0.1,
-//     y : 0.2,
-//     z : 0.3
-//   },
-//   angular : {
-//     x : -0.1,
-//     y : -0.2,
-//     z : -0.3
-//   }
-// });
-// cmdVel.publish(twist);
-
-// Subscribing to a Topic
-// ----------------------
-
 var compassDataListener = new ROSLIB.Topic({
   ros: ros,
   name: '/compass_data_topic',
@@ -101,7 +58,6 @@ var compassDataListener = new ROSLIB.Topic({
 });
 
 compassDataListener.subscribe(function(message) {
-  console.log('Received compass data: ' + message.data);
   compass = message.data;
 });
 
@@ -285,14 +241,6 @@ tempListener.subscribe(function(message) {
     tempBoxes[i].innerHTML = message.data;
   }
 
-  // Update the motorchart with the new temperature data
-  var motorChartInstance = Chart.getChart('motorChart');
-  if (motorChartInstance) {
-    motorChartInstance.data.datasets[0].data.push(message.data);
-    motorChartInstance.update();
-  } else {
-    console.error('Motor chart instance not found');
-  }
 });
 
 setInterval(function() {

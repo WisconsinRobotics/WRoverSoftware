@@ -2,6 +2,7 @@ import asyncio
 import websockets
 import zmq
 import base64
+from app import get_local_ip
 
 
 
@@ -23,8 +24,8 @@ async def receive_stream(port, stop_event, streamPort):
 				print("Error:", e)
 				break
 
-	async with websockets.serve(stream, "127.0.0.1", port):
-		print(f"WebSocket server running on ws://localhost:{port}")
+	async with websockets.serve(stream, get_local_ip(), port):
+		print(f"WebSocket server running on ws://{get_local_ip()}:{port}")
 		await asyncEvent.wait()
 
 	stop_event.wait()
