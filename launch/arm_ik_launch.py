@@ -3,11 +3,11 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
-        #Node(
-        #    package='arm_test',
-        #    executable='ik_test_node',
-        #    name='ik_test_node'
-        #),
+        Node(
+           package='arm_test',
+           executable='ik_test_node',
+           name='ik_test_node'
+        ),
         Node(
             package='arm_test_python',
             executable='arm_test_neo',

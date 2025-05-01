@@ -116,7 +116,7 @@ class IKSubscriber(Node):
 
         #Elbow
         self.arm_angles[1] = -(arm_positions[1]) *(105.0 / (math.pi/2))
-        #self.get_logger().info('I heard: "%s"' % arm_positions[1])
+        self.get_logger().info('I heard: "%s"' % arm_positions[1])
 
 
         #End Effector up and down

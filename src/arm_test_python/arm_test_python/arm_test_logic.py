@@ -6,6 +6,7 @@ from custom_msgs_srvs.msg import GripperPosition
 from std_msgs.msg import Float32MultiArray
 from std_msgs.msg import Int16MultiArray
 import math
+from sensor_msgs.msg import JointState
 
 
 WRIST_SPEED_VALUE = .2 #As we are publishing 100 times per second. It moves 10% of the way per second.
@@ -25,6 +26,18 @@ class ArmLogic(Node):
             'buttons',
             self.listener_callback_buttons,
             10)
+
+        #FOR IK
+        self.subscription_joint_solutions = self.create_subscription(
+            JointState,
+            '/relaxed_ik/joint_angle_solutions',
+            self.listener_callback,
+            10)
+
+        #FOR IK
+        self.arm_position_publisher = self.create_publisher(Float32MultiArray, 'arm_angles', 10)
+        self.kohler_shift = 130
+        self.arm_angles = [0.0, 0.0, 50.0 + self.kohler_shift]
 
         self.arm_publisher_base = self.create_publisher(Float64, 'arm_base', 10)
         self.arm_publisher_wrist_left = self.create_publisher(GripperPosition, 'arm_wrist_left', 10)
@@ -57,11 +70,22 @@ class ArmLogic(Node):
     
     #Put publishers in timer to limit rate of publishing
     def timer_callback(self):
+        msg = Float32MultiArray()
+        msg.data = self.arm_angles
+        #print(msg)
+        self.arm_position_publisher.publish(msg)
         self.arm_publisher_base.publish(self.msg_linear_rail)
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
         self.arm_publisher_gripper.publish(self.msg_gripper)
 
+    def processPositions(self, arm_positions):
+        #Shoulder
+        self.arm_angles[0] = arm_positions[0] *(-105.0 / (math.pi/2))
+
+        #Elbow
+        self.arm_angles[1] = -(arm_positions[1]) *(105.0 / (math.pi/2))
+        #self.get_logger().info('I heard: "%s"' % arm_positions[1])
 
     def get_linear_rail_speed(self, left, right) -> Float64:
         #Reverse if right is positive
@@ -123,6 +147,11 @@ class ArmLogic(Node):
         else:
             return 0
 
+    def listener_callback(self, data):
+        #self.get_logger().info('I heard: "%s"' % msg.data)
+        #print(data.position)
+        self.processPositions(data.position)
+
     def listener_callback_joy(self, msg):
         #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
@@ -135,7 +164,7 @@ class ArmLogic(Node):
 
     def listener_callback_buttons(self, msg):
         buttons = msg.data
-        #self.get_logger().info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
+        self.get_logger().info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         #Expecting D-Pad
         self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
         self.get_logger().info(str(self.D_PAD))
