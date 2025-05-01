@@ -200,7 +200,6 @@ class AutonomousStateMachine(StateMachine):
         """
         Accesses current point
         """
-        self.model.get_logger().info("ENTERED SEARCH FOR TAG OR OBJECT")
         if self.target_type == 0:
             self.GNSS()
         else:
@@ -246,9 +245,9 @@ class AutonomousStateMachine(StateMachine):
 
     def obj_det_feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        #self.model.get_logger().info(
-        #f"Have we found object/tag: {feedback.found_tag}\n"
-        #)
+        # self.model.get_logger().info(
+        # f"Have we found object/tag: {feedback.found_tag}\n"
+        # )
     
     @DriveToTag.enter
     def driveToTag(self):

@@ -24,9 +24,9 @@ CMD_RATE = 10
 
 # Motor command presets
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
-FWD      = [  -1.0,   0.0,  0.0,  0.0]
-R90      = [  0.0,   0.0,  1.0, -1.0]
-R270      = [  0.0,   0.0,  -1.0, 1.0]
+FWD      = [  0.25,   0.0,  0.0,  0.0]
+R90      = [  0.0,   0.0,  0.5, -0.5]
+R270      = [  0.0,   0.0,  -0.5, 0.5]
 FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
 FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
 STOP     = [0.0,   0.0,  0.0,  0.0]
@@ -75,6 +75,10 @@ class ObjectDetectionClass(Node):
         rate = .1 # 1/.1 = 10 times per second
         self.get_logger().info('Executing object detection action')
         while rclpy.ok():
+            
+            self.get_logger().info(f'Distace: {self.aruco_distance}\naruco_x: {self.aruco_x}')
+
+
             if goal_handle.is_cancel_requested:
                 goal_handle.canceled()
                 self.get_logger().info('Goal canceled')
@@ -90,14 +94,19 @@ class ObjectDetectionClass(Node):
                     if self.aruco_distance > 0:
                         self.aruco_found = True
                 if (self.aruco_found):
-                    if self.aruco_distance > 2:
+                    if self.aruco_distance > 2.0:
                         if self.aruco_x > -50: #TODO: make sure middle is -100
-                            msg.data = R90
-                        elif self.aruco_x < -150:
                             msg.data = R270
+                        elif self.aruco_x < -150:
+                            msg.data = R90
                         else:
                             msg.data = FWD
-                    else:
+                    elif self.aruco_distance <= 2.0 and self.aruco_distance > 0:
+                        self.get_logger().info("Aruco_distance" + str(self.aruco_distance))
+                        self.get_logger().info("LESS THAN 2 aruco_distance")
+                        goal_handle.succeed()
+                        self.aruco_found = False
+                        self.aruco_distance = -1
                         msg.data = STOP
                         self.swerve_publisher.publish(msg)
                         result = ObjectDetection.Result()
@@ -121,6 +130,9 @@ class ObjectDetectionClass(Node):
                         else:
                             msg.data = FWD
                     else:
+                        goal_handle.succeed()
+                        self.object_found = False
+                        self.object_distance = -1
                         msg.data = STOP
                         self.swerve_publisher.publish(msg)
                         result = ObjectDetection.Result()

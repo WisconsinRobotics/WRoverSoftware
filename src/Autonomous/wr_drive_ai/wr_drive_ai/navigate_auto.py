@@ -207,8 +207,8 @@ class WaypointFollower(Node):
 
             # Publish command
             self.swerve_publisher.publish(msg)
-            self.get_logger().info('Target GPS: ' + str(self.target_gps))
-            self.get_logger().info('Current GPS: ' + str(self.current_gps))
+            #self.get_logger().info('Target GPS: ' + str(self.target_gps))
+            #self.get_logger().info('Current GPS: ' + str(self.current_gps))
             self.get_logger().info('Distance away: ' + str(WaypointFollower.gps_distance(self.current_gps, self.target_gps)))
             # Check for goal completion
             if WaypointFollower.is_same(self.current_gps, self.target_gps):
