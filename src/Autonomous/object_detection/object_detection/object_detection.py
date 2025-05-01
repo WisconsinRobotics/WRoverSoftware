@@ -29,7 +29,7 @@ R90      = [  0.0,   0.0,  1.0, -1.0]
 R270      = [  0.0,   0.0,  -1.0, 1.0]
 FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
 FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
-STOP     = [  0,0,   0.0,  0.0,  0.0]
+STOP     = [0.0,   0.0,  0.0,  0.0]
 
 class ObjectDetectionClass(Node):
     def __init__(self):
@@ -40,24 +40,23 @@ class ObjectDetectionClass(Node):
             'object_detection',
             self.execute_action)
         
-        self.create_subscription(VisionTarget, 'fix', self.aruco_feedback, 5)
-        self.create_subscription(Detection, 'obstacle_there', self.object_feedback, 5)
+        self.create_subscription(VisionTarget, 'aruco_results', self.aruco_feedback, 5)
+        self.create_subscription(Detection, 'object_there', self.object_feedback, 5)
 
         # Publisher for drive commands
         self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
-
+        self.aruco_found = False
+        self.object_found = False
         
 
     def aruco_feedback(self, msg):
         self.aruco_id = msg.target_id
-        self.aruco_x =  msg.x_offset
-        self.aruco_distance =  msg.distance_estimate
-        self.aruco_found = msg.tag_found
+        self.aruco_x =  msg.x
+        self.aruco_distance =  msg.dis
 
     def object_feedback(self, msg):
         self.object_x = msg.x
         self.object_distance = msg.dis
-        self.object_found = msg.object_found
 
     def execute_action(self, goal_handle):
         self.get_logger().info('Executing navigation goal ...')
@@ -68,15 +67,13 @@ class ObjectDetectionClass(Node):
         self.get_logger().info('INIT VALUES ----------------')
         self.aruco_id = -1
         self.aruco_x =  0
-        self.aruco_distance =  10000
-        self.aruco_found = False
+        self.aruco_distance =  -1
 
         self.object_x = 0
-        self.object_distance = 10000
-        self.object_found = False
+        self.object_distance = -1
 
         rate = .1 # 1/.1 = 10 times per second
-
+        self.get_logger().info('Executing object detection action')
         while rclpy.ok():
             if goal_handle.is_cancel_requested:
                 goal_handle.canceled()
@@ -86,17 +83,24 @@ class ObjectDetectionClass(Node):
                 return result
             
             if self.type == 1: #Aruco tag
+                
                 feedback_msg.found_tag = self.aruco_found
+                
+                if self.aruco_found == False:
+                    if self.aruco_distance > 0:
+                        self.aruco_found = True
                 if (self.aruco_found):
-                    if self.aruco_distance > 1.5:
-                        if self.aruco_x > 500:
+                    if self.aruco_distance > 2.5:
+                        if self.aruco_x > -50: #TODO: make sure middle is -100
                             msg.data = R90
-                        elif self.aruco_x < -500:
+                        elif self.aruco_x < -150:
                             msg.data = R270
                         else:
                             msg.data = FWD
                     else:
                         msg.data = STOP
+                        self.swerve_publisher.publish(msg)
+                        result = ObjectDetection.Result()
                         result.reached_tag = True
                         return result
                 else:
@@ -104,8 +108,12 @@ class ObjectDetectionClass(Node):
 
             else: #Object
                 feedback_msg.found_tag = self.object_found
+                
+                if self.object_found == False:
+                    if self.object_distance  > 0:
+                        self.object_found = True
                 if (self.object_found):
-                    if self.object_distance > 1.5:
+                    if self.object_distance > 2.5:
                         if self.object_x > 500:
                             msg.data = R90
                         elif self.object_x < -500:
@@ -114,6 +122,8 @@ class ObjectDetectionClass(Node):
                             msg.data = FWD
                     else:
                         msg.data = STOP
+                        self.swerve_publisher.publish(msg)
+                        result = ObjectDetection.Result()
                         result.reached_tag = True
                         return result
                 else:

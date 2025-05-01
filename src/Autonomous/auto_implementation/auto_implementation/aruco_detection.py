@@ -189,9 +189,12 @@ class ArucoDetectionPublisher(Node):
             for i, target_id in enumerate(ids):
                 msg = process_corners(target_id[0], corners[i][0])
                 self.publisher_.publish(msg)
-                self.get_logger().info(f"Publishing {msg.target_id}, {msg.x}, {msg.dis}")
+                #self.get_logger().info(f"Publishing {msg.target_id}, {msg.x}, {msg.dis}")
         else:
-            self.get_logger().info(f"No aruco tags detected")
+            msg = VisionTarget()
+            msg.dis = -1.0
+            self.publisher_.publish(msg)
+            #self.get_logger().info(f"No aruco tags detected")
 
         #     # Publish even when no target is found to constantly run the navigation callback
         #     self.publisher_.publish(VisionTarget(0, 0, 0, False))

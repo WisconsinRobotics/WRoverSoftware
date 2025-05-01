@@ -50,9 +50,9 @@ class AutonomousStateMachine(StateMachine):
     lookForTag = Check_Point.to(Search)
     failTag = Search.to(Search)
     retryOp = Search.to(Navigation)
-    DriveToAruco = Search.to(DriveToTag, cond = "isAruco")
-    success = DriveToTag.to(BlinkLights, cond="successCondition")
-    failure = DriveToTag.to(Navigation, cond="!successCondition")
+    DriveToAruco = Search.to(DriveToTag)
+    success = DriveToTag.to(BlinkLights)
+    failure = DriveToTag.to(Navigation)
     keepGoing = BlinkLights.to(UserInput)
     continueMission = UserInput.to(Navigation)
     abortMission = UserInput.to(Stop)
@@ -179,11 +179,11 @@ class AutonomousStateMachine(StateMachine):
 
     def navigate_feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.model.get_logger().info(
-        f"Distance Away: {feedback.distance_away:.2f}\n"
-        f"Current GPS: {list(feedback.current_gps)}\n"
-        f"Target GPS: {list(feedback.target_gps)}\n"
-        )
+        # self.model.get_logger().info(
+        # f"Distance Away: {feedback.distance_away:.2f}\n"
+        # f"Current GPS: {list(feedback.current_gps)}\n"
+        # f"Target GPS: {list(feedback.target_gps)}\n"
+        #)
     
 
     @Navigation.exit
@@ -192,9 +192,7 @@ class AutonomousStateMachine(StateMachine):
         Uses the rover's GPS to get its current point, and heading
         """
         self.model.get_logger().info("-----------EXTING NAVIGATION------------------------------------------")
-        self.target_indx += 1
-        self.target_gps = self.targets[self.target_indx][:2]
-        self.target_type = self.targets[self.target_indx][2]
+
 
     # Checks what kind of point we have reached.
     @Check_Point.enter
@@ -202,7 +200,7 @@ class AutonomousStateMachine(StateMachine):
         """
         Accesses current point
         """
-        
+        self.model.get_logger().info("ENTERED SEARCH FOR TAG OR OBJECT")
         if self.target_type == 0:
             self.GNSS()
         else:
@@ -244,22 +242,25 @@ class AutonomousStateMachine(StateMachine):
             self.DriveToAruco()
         else:
             self.model.get_logger().warn("Object/tag arrival failed!")
-            self.Search()
+            self.lookForTag()
 
     def obj_det_feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.model.get_logger().info(
-        f"Have we found object/tag: {feedback.found_tag}\n"
-        )
+        #self.model.get_logger().info(
+        #f"Have we found object/tag: {feedback.found_tag}\n"
+        #)
     
     @DriveToTag.enter
     def driveToTag(self):
         """All implemented on previous one (no search algorithm has been implemented)"""
+        self.model.get_logger().info("Skipping drive to tag")
+
         self.success()
 
     @BlinkLights.enter
     def blinkLights(self):
         """Makes the lights green or smtg, depending on reqs"""
+        self.model.get_logger().info("Blinking Lights")
         print("Lights are blinking green yay") # replace with actual code to make lights blink
         self.blinkLightColor("GREEN")
         self.keepGoing()
@@ -287,6 +288,10 @@ class AutonomousStateMachine(StateMachine):
     @UserInput.exit
     def resetCommandReceived(self):
         self.command_received = False
+        #Go to next target as well
+        self.target_indx += 1
+        self.target_gps = self.targets[self.target_indx][:2]
+        self.target_type = self.targets[self.target_indx][2]
         
     @BackonPath.enter
     def tryAndRouteToPath(self, roverGPSReading):

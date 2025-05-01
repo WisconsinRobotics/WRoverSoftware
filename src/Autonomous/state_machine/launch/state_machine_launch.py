@@ -36,16 +36,28 @@ def generate_launch_description():
             package='wr_drive_ai',
             executable='navigate_auto',
             name='navigate_auto'),
-        
-        launch_ros.actions.Node(
-            package='object_detection',
-            executable='object_detection',
-            name='object_detection'),
 
         launch_ros.actions.Node(
             package='wr_imu_compass',
             executable='compass',
             name='compass'),
+
+        # Launching nodes to motor
+        launch_ros.actions.Node(
+            package='wr_swerve_control',
+            executable='swerve_control',
+            name='swerve_control'
+        ),
+        launch_ros.actions.Node(
+            package='wr_swerve_motor',
+            executable='swerve_motor',
+            name='swerve_motor'
+        ),
+        launch_ros.actions.Node(
+            package='wr_can_comms',
+            executable='can_comms',
+            name='can_comms'
+        ),
         
         #ublox_gps_node,
         launch.actions.RegisterEventHandler(
@@ -54,6 +66,24 @@ def generate_launch_description():
                 on_exit=[launch.actions.EmitEvent(
                     event=launch.events.Shutdown())],
             )),
+
+        #camera and detection nodes
+        launch_ros.actions.Node(
+            package='wr_autonomous_camera',
+            executable='camera_data',
+            name='camera_data'
+        ),
+        launch_ros.actions.Node(
+            package='auto_implementation',
+            executable='aruco_detection',
+            name='aruco_detection'
+        ),
+        
+        launch_ros.actions.Node(
+            package='object_detection',
+            executable='object_detection',
+            name='object_detection'),
+
     ])
 
 

@@ -5,4 +5,4 @@ led_service:
     led_mode: mock
 state_machine:
   ros__parameters:
-    led_mode: real
+    led_mode: mock

@@ -11,7 +11,7 @@ class CameraPublisher(Node):
     def __init__(self):
         super().__init__('camera_data')
         self.publisher_ = self.create_publisher(Image, 'camera_data_topic', 10)
-        timer_period = 1  # seconds
+        timer_period = .5  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.bridge = cv_bridge.CvBridge()
 
@@ -28,7 +28,7 @@ class CameraPublisher(Node):
         
         msg = self.bridge.cv2_to_imgmsg(img, encoding = 'rgb8')
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing camera data')
+        #self.get_logger().info('Publishing camera data')
 
     def camera_shut_down(self):
         self.cam.release()

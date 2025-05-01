@@ -22,7 +22,7 @@ CMD_RATE = 10
 
 # Motor command presets
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
-FWD      = [  -1.0,   0.0,  0.0,  0.0]
+FWD      = [  1.0,   0.0,  0.0,  0.0]
 R90      = [  0.0,   0.0,  1.0, -1.0]
 R270      = [  0.0,   0.0,  -1.0, 1.0]
 FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
@@ -73,7 +73,7 @@ class WaypointFollower(Node):
         Converts lat/lon into local ENU x,y relative to centre.
         """
         lat, lon = msg.latitude, msg.longitude
-        self.get_logger().info(f"Got lat: {lat}  long: {lon}")
+        #self.get_logger().info(f"Got lat: {lat}  long: {lon}")
         self.current_gps = [lat, lon]
 
     def compass_callback(self, msg: Float64):
@@ -81,8 +81,8 @@ class WaypointFollower(Node):
         Pigeonhole returns data with negative values, need to refactor it
         to be positive and also it poits to north-west relative to the front wheels
         """
-        self.get_logger().info(f"Got angle {msg.data}")
-        angle = (90 - msg.data) % 360 
+        #self.get_logger().info(f"Got angle {msg.data}")
+        angle = ((-msg.data +180) % 360 )
         self.compass_angle = angle
 
     @staticmethod
@@ -140,6 +140,7 @@ class WaypointFollower(Node):
         Returns:
             true if they are close and false otherwise
         """
+        
         return WaypointFollower.gps_distance(p1, p2) < 1
     
     def obstacle_callback(self, msg):
@@ -185,15 +186,20 @@ class WaypointFollower(Node):
             # Compute angles
             rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
             difference_angle = (self.compass_angle - rover_angle) % 360
+            #self.get_logger().info("Rover angle: " + str(rover_angle))
+            #self.get_logger().info("Comapass angle: " + str(self.compass_angle))
+            #self.get_logger().info("Difference angle: " + str(difference_angle))
 
             # Decide movement
             if not self.obstacle:
                 if difference_angle <= 10 or difference_angle >= 350:
                     msg.data = FWD
                 elif 10 < difference_angle < 60:
-                    msg.data = FWD_ROT_270
-                elif 300 < difference_angle < 350:
                     msg.data = FWD_ROT_90
+                elif 300 < difference_angle < 350:
+                    msg.data = FWD_ROT_270
+                elif 180 < difference_angle < 300:
+                    msg.data = R270
                 else:
                     msg.data = R90
             else:
@@ -201,7 +207,9 @@ class WaypointFollower(Node):
 
             # Publish command
             self.swerve_publisher.publish(msg)
-
+            self.get_logger().info('Target GPS: ' + str(self.target_gps))
+            self.get_logger().info('Current GPS: ' + str(self.current_gps))
+            self.get_logger().info('Distance away: ' + str(WaypointFollower.gps_distance(self.current_gps, self.target_gps)))
             # Check for goal completion
             if WaypointFollower.is_same(self.current_gps, self.target_gps):
                 self.get_logger().info('Succeeded goal ...')
