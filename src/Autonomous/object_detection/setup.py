@@ -10,8 +10,17 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name, ['model.pt'])
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+      'setuptools',
+      'rosidl_runtime_py',
+      'ultralytics',
+      'torch',
+      'opencv-python',
+      'zmq',
+      'numpy'
+    ],
     zip_safe=True,
     maintainer='balabalu',
     maintainer_email='nicolasdittmarg1@gmail.com',
@@ -21,7 +30,7 @@ setup(
     entry_points={
         'console_scripts': [
             'object_detection = object_detection.object_detection:main',
-            'aruco_tag_detection = object_detection.aruco_tag_detection:main',
+            'yolo_detection = object_detection.yolo_detection:main',
         ],
     },
 )

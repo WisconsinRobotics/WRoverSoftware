@@ -124,12 +124,12 @@ class ObjectDetectionClass(Node):
                 if (self.object_found):
                     if self.object_distance > 2:
                         if self.object_x > 500:
-                            msg.data = R90
-                        elif self.object_x < -500:
                             msg.data = R270
+                        elif self.object_x < 0:
+                            msg.data = R90
                         else:
                             msg.data = FWD
-                    else:
+                    elif self.aruco_distance <= 2.0 and self.aruco_distance > 0:
                         goal_handle.succeed()
                         self.object_found = False
                         self.object_distance = -1

@@ -28,12 +28,11 @@ class YOLODetectionPublisher(Node):
         self.subscription = self.create_subscription(
             Image,
             'camera_data_topic',
-            self.timer_callback,
+            self.camera_callback,
             10)
         self.subscription  # prevent unused variable warning
-
         # Load YOLO model
-        self.model = YOLO(os.path.join(get_package_share_directory("object_detection_package"), "model.pt"))
+        self.model = YOLO(os.path.join(get_package_share_directory("object_detection"), "model.pt"))
         self.confThresh = 0.6
 
 
@@ -63,7 +62,7 @@ class YOLODetectionPublisher(Node):
         return frame
     
     # function for frame processing
-    def timer_callback(self, msg):
+    def camera_callback(self, msg):
         frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8') 
         # Crop and resize the frame
         frame = self.crop_and_resize(frame)
