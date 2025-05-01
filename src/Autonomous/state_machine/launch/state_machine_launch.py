@@ -1,5 +1,8 @@
 import launch
+from launch.actions import IncludeLaunchDescription
+from launch.substitutions import PathJoinSubstitution
 import launch_ros.actions
+from launch_ros.substitutions import FindPackageShare
 import os
 from ament_index_python.packages import get_package_share_directory
 import ament_index_python.packages
@@ -9,16 +12,17 @@ config_file = os.path.join(
     'config',
     'params.yaml'
 )
-config_directory = os.path.join(
-    ament_index_python.packages.get_package_share_directory('ublox_gps'),
-    'config')
-params = os.path.join(config_directory, 'zed_f9p.yaml')
-ublox_gps_node = launch_ros.actions.Node(package='ublox_gps',
-                                            executable='ublox_gps_node',
-                                            output='both',
-                                            parameters=[params])
+# config_directory = os.path.join(
+#     ament_index_python.packages.get_package_share_directory('ublox_'),
+#     'config')
+# params = os.path.join(config_directory, 'zed_f9p.yaml')
+# ublox_gps_node = launch_ros.actions.Node(package='ublox_gps',
+#                                             executable='ublox_gps_node',
+#                                             output='both',
+#                                             parameters=[params])
 
 def generate_launch_description():
+    launch_dir = PathJoinSubstitution([FindPackageShare('ublox_gps'), 'launch'])
     return launch.LaunchDescription([
         launch_ros.actions.Node(
             package='state_machine',
@@ -58,14 +62,16 @@ def generate_launch_description():
             executable='can_comms',
             name='can_comms'
         ),
-        
-        #ublox_gps_node,
-        launch.actions.RegisterEventHandler(
-            event_handler=launch.event_handlers.OnProcessExit(
-                target_action=ublox_gps_node,
-                on_exit=[launch.actions.EmitEvent(
-                    event=launch.events.Shutdown())],
-            )),
+        IncludeLaunchDescription(
+            PathJoinSubstitution([launch_dir, 'ublox_gps_node_zedf9p-launch.py'])
+        ),
+        # #ublox_gps_node,
+        # launch.actions.RegisterEventHandler(
+        #     event_handler=launch.event_handlers.OnProcessExit(
+        #         target_action=ublox_gps_node,
+        #         on_exit=[launch.actions.EmitEvent(
+        #             event=launch.events.Shutdown())],
+        #     )),
 
         #camera and detection nodes
         launch_ros.actions.Node(

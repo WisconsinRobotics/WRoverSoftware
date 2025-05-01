@@ -25,8 +25,8 @@ CMD_RATE = 10
 # Motor command presets
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
 FWD      = [  0.25,   0.0,  0.0,  0.0]
-R90      = [  0.0,   0.0,  0.5, -0.5]
-R270      = [  0.0,   0.0,  -0.5, 0.5]
+R90      = [  0.0,   0.0,  0.3, -0.3]
+R270      = [  0.0,   0.0,  -0.3, 0.3]
 FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
 FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
 STOP     = [0.0,   0.0,  0.0,  0.0]
@@ -94,16 +94,16 @@ class ObjectDetectionClass(Node):
                     if self.aruco_distance > 0:
                         self.aruco_found = True
                 if (self.aruco_found):
-                    if self.aruco_distance > 2.0:
-                        if self.aruco_x > -50: #TODO: make sure middle is -100
+                    if self.aruco_distance > 3.0:
+                        if self.aruco_x > -0: #TODO: make sure middle is -100
                             msg.data = R270
-                        elif self.aruco_x < -150:
+                        elif self.aruco_x < -200:
                             msg.data = R90
                         else:
                             msg.data = FWD
-                    elif self.aruco_distance <= 2.0 and self.aruco_distance > 0:
+                    elif self.aruco_distance <= 3.0 and self.aruco_distance > 0:
                         self.get_logger().info("Aruco_distance" + str(self.aruco_distance))
-                        self.get_logger().info("LESS THAN 2 aruco_distance")
+                        self.get_logger().info("LESS THAN 3 aruco_distance")
                         goal_handle.succeed()
                         self.aruco_found = False
                         self.aruco_distance = -1

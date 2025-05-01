@@ -25,8 +25,8 @@ CMD_RATE = 10
 FWD      = [  1.0,   0.0,  0.0,  0.0]
 R90      = [  0.0,   0.0,  1.0, -1.0]
 R270      = [  0.0,   0.0,  -1.0, 1.0]
-FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
-FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
+FWD_ROT_90  = [ 0.5,   0.0,  0.0,  -1.0]
+FWD_ROT_270  = [  0.5,   0.0,  0.0,  1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
@@ -82,7 +82,7 @@ class WaypointFollower(Node):
         to be positive and also it poits to north-west relative to the front wheels
         """
         #self.get_logger().info(f"Got angle {msg.data}")
-        angle = ((-msg.data +180) % 360 )
+        angle = ((-msg.data -111) % 360 )
         self.compass_angle = angle
 
     @staticmethod
@@ -141,7 +141,7 @@ class WaypointFollower(Node):
             true if they are close and false otherwise
         """
         
-        return WaypointFollower.gps_distance(p1, p2) < 1
+        return WaypointFollower.gps_distance(p1, p2) < 2
     
     def obstacle_callback(self, msg):
         self.obstacle = msg.data
@@ -188,7 +188,7 @@ class WaypointFollower(Node):
             difference_angle = (self.compass_angle - rover_angle) % 360
             #self.get_logger().info("Rover angle: " + str(rover_angle))
             #self.get_logger().info("Comapass angle: " + str(self.compass_angle))
-            #self.get_logger().info("Difference angle: " + str(difference_angle))
+            self.get_logger().info("Difference angle: " + str(difference_angle))
 
             # Decide movement
             if not self.obstacle:
@@ -204,7 +204,7 @@ class WaypointFollower(Node):
                     msg.data = R90
             else:
                 msg.data = R90 if difference_angle <= 180 else R270
-
+            #self.get_logger().info("Rotating: " + str(msg.data))
             # Publish command
             self.swerve_publisher.publish(msg)
             #self.get_logger().info('Target GPS: ' + str(self.target_gps))
