@@ -70,7 +70,7 @@ To control the arm with forward kinematics, you can:
      
      ```bash
      source install/setup.bash
-     ros2 launch wr_xbox_controller rm_xbox
+     ros2 launch wr_xbox_controller arm_xbox
      ```
 
 
