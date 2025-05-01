@@ -9,37 +9,19 @@ import math
 from sensor_msgs.msg import JointState
 
 
-WRIST_SPEED_VALUE = .2 #As we are publishing 100 times per second. It moves 10% of the way per second.
+WRIST_SPEED_VALUE = .4 #As we are publishing 100 times per second. It moves 10% of the way per second.
 GRIPPER_SPEED_VALUE = .2
 class ArmLogic(Node):
 
     def __init__(self):
-        super().__init__('arm_logic')
-        self.subscription_joy = self.create_subscription(
-            Float32MultiArray,
-            'joy',
-            self.listener_callback_joy,
-            10)
+        super().__init__('arm_logic_wrist')
         
         self.subscription_buttons = self.create_subscription(
             Int16MultiArray,
-            'buttons',
+            'buttons_arm',
             self.listener_callback_buttons,
             10)
 
-        #FOR IK
-        self.subscription_joint_solutions = self.create_subscription(
-            JointState,
-            '/relaxed_ik/joint_angle_solutions',
-            self.listener_callback,
-            10)
-
-        #FOR IK
-        self.arm_position_publisher = self.create_publisher(Float32MultiArray, 'arm_angles', 10)
-        self.kohler_shift = 130
-        self.arm_angles = [0.0, 0.0, 50.0 + self.kohler_shift]
-
-        self.arm_publisher_base = self.create_publisher(Float64, 'arm_base', 10)
         self.arm_publisher_wrist_left = self.create_publisher(GripperPosition, 'arm_wrist_left', 10)
         self.arm_publisher_wrist_right = self.create_publisher(GripperPosition, 'arm_wrist_right', 10)
         self.arm_publisher_gripper = self.create_publisher(Float64, 'arm_gripper', 10)
@@ -54,11 +36,6 @@ class ArmLogic(Node):
         self.D_PAD = [0,0,0,0] #Array to keep track of which buttons are pressed
         self.absolute_wrist = 50 + self.kohler_shift#Start at zero
         self.wrist_positions = [0.0 + self.absolute_wrist ,0.0 + self.absolute_wrist] #[lef,right]
- 
-
-        #Define messages beforehand
-        self.msg_linear_rail = Float64()
-        self.msg_linear_rail.data = 0.0
 
         self.msg_wrist = GripperPosition()
         self.msg_wrist.left_position = 180.0
@@ -70,27 +47,10 @@ class ArmLogic(Node):
     
     #Put publishers in timer to limit rate of publishing
     def timer_callback(self):
-        msg = Float32MultiArray()
-        msg.data = self.arm_angles
-        #print(msg)
-        self.arm_position_publisher.publish(msg)
-        self.arm_publisher_base.publish(self.msg_linear_rail)
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
         self.arm_publisher_gripper.publish(self.msg_gripper)
 
-    def processPositions(self, arm_positions):
-        #Shoulder
-        self.arm_angles[0] = arm_positions[0] *(-105.0 / (math.pi/2))
-
-        #Elbow
-        self.arm_angles[1] = -(arm_positions[1]) *(105.0 / (math.pi/2))
-        #self.get_logger().info('I heard: "%s"' % arm_positions[1])
-
-    def get_linear_rail_speed(self, left, right) -> Float64:
-        #Reverse if right is positive
-        #Converting -1 -> 1 range of triggers to 0->1
-        return ((left+1)/2 - (right+1)/2)
     
     # def set_wrist_speeds(self, up, down, left, right) -> Float32MultiArray:
     #     #Assume left is forward
@@ -112,25 +72,27 @@ class ArmLogic(Node):
     
     def timer_update_wrist(self):
         #Publishing
-        
-        if self.absolute_wrist >= 0 + self.kohler_shift and self.absolute_wrist <= 100 + self.kohler_shift and 1 in self.D_PAD:
-            self.get_logger().info(str(self.absolute_wrist))
+        self.get_logger().info(str(self.absolute_wrist))
+        if 1 in self.D_PAD:
             self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
             self.msg_wrist.left_position = float(self.wrist_positions[0])
             self.msg_wrist.right_position = float(self.wrist_positions[1])
 
 
-    def get_wrist_position(self, up, down, left, right) -> Float32MultiArray:
+    def get_wrist_position(self, up, down, left, right):
         if up == 1:
-            self.wrist_positions[0] += -WRIST_SPEED_VALUE
-            self.wrist_positions[1] += -WRIST_SPEED_VALUE
+            
             if self.absolute_wrist >= 0 + self.kohler_shift + 1:
                 self.absolute_wrist += -WRIST_SPEED_VALUE
+                self.wrist_positions[0] += -WRIST_SPEED_VALUE
+                self.wrist_positions[1] += -WRIST_SPEED_VALUE
+                
         elif down == 1:
-            self.wrist_positions[0] += WRIST_SPEED_VALUE
-            self.wrist_positions[1] += WRIST_SPEED_VALUE
+            
             if self.absolute_wrist <= 100 + self.kohler_shift - 1:
                 self.absolute_wrist += WRIST_SPEED_VALUE
+                self.wrist_positions[0] += WRIST_SPEED_VALUE
+                self.wrist_positions[1] += WRIST_SPEED_VALUE
         elif left == 1:
             self.wrist_positions[0] += WRIST_SPEED_VALUE
             self.wrist_positions[1] += -WRIST_SPEED_VALUE
@@ -147,27 +109,11 @@ class ArmLogic(Node):
         else:
             return 0
 
-    def listener_callback(self, data):
-        #self.get_logger().info('I heard: "%s"' % msg.data)
-        #print(data.position)
-        self.processPositions(data.position)
-
-    def listener_callback_joy(self, msg):
-        #self.get_logger().info('I heard: "%s"' % msg.data)
-        motion = msg.data
-
-        #Expecting (left trigger, rigt trigger)
-        linear_rail_speed = self.get_linear_rail_speed(motion[3], motion[2])
-        
-        #Publishing
-        self.msg_linear_rail.data = linear_rail_speed
-
     def listener_callback_buttons(self, msg):
         buttons = msg.data
-        self.get_logger().info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         #Expecting D-Pad
         self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
-        self.get_logger().info(str(self.D_PAD))
+        #self.get_logger().info(str(self.D_PAD))
         #Expecting A and B buttons
         gripper_speed = self.get_gripper_speed(buttons[4], buttons[5])
         

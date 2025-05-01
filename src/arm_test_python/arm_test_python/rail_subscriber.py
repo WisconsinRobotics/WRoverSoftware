@@ -19,7 +19,7 @@ class RailSubscriber(Node):
 
         self.subscription_joy = self.create_subscription(
             Float32MultiArray,
-            'rail',
+            'joy_arm',
             self.listener_callback_joy,
             10)
 
@@ -37,8 +37,8 @@ class RailSubscriber(Node):
         #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
 
-        #Expecting (left trigger, rigt trigger)
-        linear_rail_speed = self.get_linear_rail_speed(motion[1], motion[0])
+        #Expecting (right sticky y, left stick y, left trigger, rigt trigger)
+        linear_rail_speed = self.get_linear_rail_speed(motion[2], motion[3])
         
         #Publishing
         self.msg_linear_rail.data = linear_rail_speed

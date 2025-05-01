@@ -31,3 +31,58 @@ ros2 run wr_swerve_motor swerve_motor
 ros2 run wr_xbox_controller xbox_controller
 ```
 5. Use the left joystick to move the motor
+
+### Running the arm of the Robot
+
+To execute the movements on the actual robot, follow these steps:
+
+1. **Power On:** Turn on both switches of the robot.
+2. **Connect to the Robot:** SSH into the robot.
+3. **Navigate to the Correct Branch:** Open the `dev/arm_test` branch.
+4. **Build and Start:** Run the following commands:
+   
+   ```bash
+   colcon build
+   ./cannableStart.sh
+   ```
+
+5. **Launch the Robot Code:**
+   - Open a new terminal and run:
+     
+     ```bash
+     source install/setup.bash
+     ```
+   
+   - Navigate to `src/launch`
+   - Execute:
+     
+     ```bash
+     ros2 launch arm_ik_launch.py
+     ```
+
+Now, the robot should start mimicking the RViz model. **Be careful, as the robot's movements can be fast.**
+
+## Important Note
+For the robot to match the IK solver correctly, it needs to be **initialized properly** with the arm at a **90-degree position**.
+
+To control the arm with forward kinematics, you can:
+   - In the basestation, open a new terminal and run:
+     
+     ```bash
+     source install/setup.bash
+     ros2 launch wr_xbox_controller rm_xbox
+     ```
+
+
+   - In the rover, open a new terminal and run:
+     
+     ```bash
+     source install/setup.bash
+     ```
+   
+   - Navigate to `src/launch`
+   - Execute:
+     
+     ```bash
+     ros2 launch arm_falcon_launch.py
+     ```

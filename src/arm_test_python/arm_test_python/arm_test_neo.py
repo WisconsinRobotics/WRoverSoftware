@@ -72,12 +72,12 @@ class SwerveControlSubsrciber(Node):
         #self.get_logger().info('Publishing Angle WRIST_RIGHT: "%s"' % can_msg_angle)
 
     def arm_listener_gripper(self, msg):
-        can_msg_rpm = String()
+        can_msg_rpm =  String()
 
         rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["GRIPPER"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('RPM GRIPPER: "%s"' % can_msg_rpm.data + '\n')
+        #self.get_logger().info('RPM GRIPPER: "%s"' % can_msg_rpm.data + '\n')
 
 def main(args=None):
     rclpy.init(args=args)
