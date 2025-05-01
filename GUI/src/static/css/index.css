@@ -496,3 +496,52 @@ line {
 .control{
     padding-left: 10%;
 }
+
+.compass-container {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border: 8px solid #333;
+    border-radius: 50%;
+    background: white;
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    /* margin-bottom: 20px; */
+  }
+
+  .needle {
+    position: absolute;
+    margin-bottom: 20px;
+    width: 2px;
+    height: 20px;
+    background: red;
+    transform-origin: bottom center;
+    transition: transform 0.5s ease;
+  }
+
+  .compass-label {
+    position: absolute;
+    font-size: 12px;
+    font-weight: bold;
+}
+.compass-label.north {
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.compass-label.south {
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.compass-label.east {
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.compass-label.west {
+    left: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
