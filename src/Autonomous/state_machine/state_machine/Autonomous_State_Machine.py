@@ -87,14 +87,13 @@ class AutonomousStateMachine(StateMachine):
         self.timeElapsed = 0
 
         # need to parametrize once we have the parameters
-        self.pointDict = {"GNSS" : (38.44079858,-110.7782071,1377.88), "Aruco" : (53.1231312, 12.592134123, 1123.94), "object" : (123.123123, 53.24123, 400.41)} #pointDictInput, currently values only put for testing
         self.path = []#pathInput
         
 
     # Define the State actions
     @Start.enter
     def loadPoint(self):
-        self.command_timeout = 15
+        self.command_timeout = 60
         self.model.declare_parameter('led_mode', "mock")
         self.led_mode = self.model.get_parameter('led_mode').get_parameter_value().string_value
         self.model.get_logger().info('LED Mode: ' + str(self.led_mode))
@@ -191,6 +190,7 @@ class AutonomousStateMachine(StateMachine):
         """
         Uses the rover's GPS to get its current point, and heading
         """
+        self.model.get_logger().info("-----------EXTING NAVIGATION------------------------------------------")
         self.target_indx += 1
         self.target_gps = self.targets[self.target_indx][:2]
         self.target_type = self.targets[self.target_indx][2]

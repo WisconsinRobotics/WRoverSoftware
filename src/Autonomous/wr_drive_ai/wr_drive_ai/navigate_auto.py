@@ -73,6 +73,7 @@ class WaypointFollower(Node):
         Converts lat/lon into local ENU x,y relative to centre.
         """
         lat, lon = msg.latitude, msg.longitude
+        self.get_logger().info(f"Got lat: {lat}  long: {lon}")
         self.current_gps = [lat, lon]
 
     def compass_callback(self, msg: Float64):

@@ -16,6 +16,7 @@ class LEDService(Node):
 
         try:
             self.led_mode = self.get_parameter('led_mode').get_parameter_value().string_value
+            self.get_logger().info("LED MODEL " + str(self.led_mode))
             if self.led_mode == "real":
                 self.s = serial.Serial(port, baud, timeout=1)
                 self.get_logger().info("Waiting for Arduino magic word...")

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'auto_implementation'
+package_name = 'wr_autonomous_camera'
 
 setup(
     name=package_name,
@@ -13,18 +13,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='balabalu',
+    maintainer='wiscrobo',
     maintainer_email='nicolasdittmarg1@gmail.com',
     description='TODO: Package description',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'aruco_detection = auto_implementation.aruco_detection:main',
-            'driving_logic = auto_implementation.driving_logic:main',
-            'finding_aruco_tag = auto_implementation.finding_aruco_tag:main',
-            'finding_object = auto_implementation.finding_object:main',
-            'searching_drive = auto_implementation.searching_drive:main',
+            'camera_data = wr_autonomous_camera.camera_data:main'
         ],
     },
 )

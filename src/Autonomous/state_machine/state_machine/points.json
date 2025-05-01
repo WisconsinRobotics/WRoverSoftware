@@ -1,6 +1,6 @@
 {
     "_comment": "Latitude, Longitude, Type [0:GPS_Only, 1:Aruco_Tag, 2:Object]", 
-    "targets": [[0.0, 0.0, 0],
-                [43.07048, -89.40976, 1],
+    "targets": [[2.0, 2.0, 0],
+                [1.0, 1.0, 0],
                 [43.07050, -89.41020, 2]]
 }
