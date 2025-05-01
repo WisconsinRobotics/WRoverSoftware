@@ -8,7 +8,7 @@ from std_msgs.msg import Int16MultiArray
 import math
 from sensor_msgs.msg import JointState
 
-
+#TODO: FIX IK for wrist
 
 GRIPPER_SPEED_VALUE = .25
 TURN_SPEED = 1.5 #TODO set this properly
@@ -51,6 +51,7 @@ class IKSubscriber(Node):
 
         timer_period = 0.05  # seconds
         self.timer_rotation = self.create_timer(timer_period, self.change_rotation)
+
         
         self.kohler_shift = 130
         self.arm_angles = [0.0, 0.0, 50.0 + self.kohler_shift]
@@ -83,7 +84,7 @@ class IKSubscriber(Node):
         motion = msg.data
 
         #Expecting (left trigger, rigt trigger)
-        linear_rail_speed = self.get_linear_rail_speed(motion[1], motion[0])
+        linear_rail_speed = self.get_linear_rail_speed(motion[0], motion[1])
         
         #Publishing
         self.msg_linear_rail.data = linear_rail_speed
@@ -93,7 +94,7 @@ class IKSubscriber(Node):
         msg.data = self.arm_angles
         #print(msg)
         self.arm_position_publisher.publish(msg)
-        print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
+        #print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
         self.msg_wrist.left_position = float(self.arm_angles[2] + self.absolute_left_EE)
         self.msg_wrist.right_position = float(self.arm_angles[2] + self.absolute_right_EE)
         
@@ -102,6 +103,7 @@ class IKSubscriber(Node):
         
         self.arm_publisher_gripper.publish(self.msg_gripper)
         self.arm_publisher_base.publish(self.msg_linear_rail)
+        
 
     def change_rotation(self):
         self.absolute_left_EE += self.add_left_EE
@@ -113,20 +115,19 @@ class IKSubscriber(Node):
         self.arm_angles[0] = arm_positions[0] *(-105.0 / (math.pi/2))
 
         #Elbow
-        self.arm_angles[1] = -(arm_positions[1] - 2*math.pi) *(105.0 / (math.pi/2))
+        self.arm_angles[1] = -(arm_positions[1]) *(105.0 / (math.pi/2))
+        #self.get_logger().info('I heard: "%s"' % arm_positions[1])
+
 
         #End Effector up and down
         self.arm_angles[2] = (arm_positions[2]* (50.0 / (math.pi/2))) + 50 + self.kohler_shift
     
     def listener_callback_buttons(self, msg):
         buttons = msg.data
-                
+        #Expecting D-Pad
+        self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
         #Expecting A and B buttons
         gripper_speed = self.get_gripper_speed(buttons[4], buttons[5])
-
-        #Expecting Left and Right of D_pad
-        self.set_turning_speed(buttons[2], buttons[3])
-
         self.msg_gripper.data = float(gripper_speed)
 
     def set_turning_speed(self, left_turning, right_turning):
@@ -148,6 +149,8 @@ class IKSubscriber(Node):
             return -GRIPPER_SPEED_VALUE
         else:
             return 0
+
+
     def get_linear_rail_speed(self, left, right) -> Float64:
         #Reverse if right is positive
         #Converting -1 -> 1 range of triggers to 0->1

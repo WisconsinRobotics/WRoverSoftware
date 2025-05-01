@@ -135,10 +135,10 @@ class ArmLogic(Node):
 
     def listener_callback_buttons(self, msg):
         buttons = msg.data
-        
+        #self.get_logger().info("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         #Expecting D-Pad
         self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
-        
+        self.get_logger().info(str(self.D_PAD))
         #Expecting A and B buttons
         gripper_speed = self.get_gripper_speed(buttons[4], buttons[5])
         
