@@ -1,20 +1,15 @@
 #!/usr/bin/env python
 
-import rospy
 import cv2 as cv
-import cv2.aruco as aruco_lib
+import rclpy
 import numpy as np
-import finding_aruco_tag
-from Messages.custom_msgs.msg import VisionTarget
+import finding_aruco_tag as aruco_lib
+from rclpy.node import Node
+import cv_bridge
+from sensor_msgs.msg import Image
+from custom_msgs.msg import VisionTarget
 
-## Width of the camera frame, in pixels
 CAMERA_WIDTH = 1280
-## Height of the camera frame, in pixels
-CAMERA_HEIGHT = 720
-## Name of the VisionTarget topic to publish to
-vision_topic = rospy.get_param("~vision_topic")
-
-
 def process_corners(target_id: int, corners: np.ndarray) -> VisionTarget:
     """
     Creates a VisionTarget message based on the detected ArUco tag
@@ -24,11 +19,11 @@ def process_corners(target_id: int, corners: np.ndarray) -> VisionTarget:
     @returns VisionTarget: VisionTarget message defined in msg/VisionTarget.msg
     """
     # Find the middle of the ArUco tag in the frame
-    side_lengths = []
+    #side_lengths = []
     min_x = corners[0][0]
     max_x = corners[0][0]
     for i in range(len(corners)):
-        side_lengths.append(np.linalg.norm(corners[i - 1] - corners[i]))
+        #side_lengths.append(np.linalg.norm(corners[i - 1] - corners[i]))
         min_x = min(min_x, corners[i][0])
         max_x = max(max_x, corners[i][0])
     x_offset = (min_x + max_x - CAMERA_WIDTH) / 2
@@ -36,51 +31,48 @@ def process_corners(target_id: int, corners: np.ndarray) -> VisionTarget:
     # Estimate the distance of the ArUco tag in meters
     distance_estimate = aruco_lib.estimate_distance_m(corners)
 
-    return VisionTarget(target_id, x_offset, distance_estimate, True)
+    msg = VisionTarget()
+    msg.target_id = int(target_id)
+    msg.x = int(x_offset)
+    msg.dis = float(distance_estimate)
 
+    return msg
 
-def main():
-    """
-    @brief Vision processing node main function
+class ArucoDetectionPublisher(Node):
+    def __init__(self):
+        super().__init__('aruco_detection')
+        self.publisher_ = self.create_publisher(VisionTarget, 'aruco_results', 10)
+        self.bridge = cv_bridge.CvBridge()
+        self.subscription = self.create_subscription(
+            Image,
+            'camera_data_topic',
+            self.image_callback,
+            10)
+        self.subscription  # prevent unused variable warning
 
-    This function initializes and runs a node to read camera input and publish ArUco tag data to a topic.
-    """
-    pub = rospy.Publisher(vision_topic, VisionTarget, queue_size=10)
-    rospy.init_node("vision_target_detection")
-
-    rate = rospy.Rate(10)
-
-    # Retrieve video stream from parameter server
-    # If no vision stream is specified, try to use camera directly
-    stream_url = rospy.get_param("~video_stream")
-    if stream_url is not None and stream_url != "":
-        cap = cv.VideoCapture(stream_url)
-    else:
-        cap = cv.VideoCapture(0)
-        cap.set(cv.CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
-        cap.set(cv.CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
-
-    if not cap.isOpened():
-        rospy.logerr("Failed to open camera")
-        exit()
-
-    while not rospy.is_shutdown():
-        # Read frame and publish detected targets
-        ret, frame = cap.read()
-        if not ret:
-            rospy.logerr("Failed to read frame")
+    def image_callback(self, msg):
+        img = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+        (corners, ids, _) = aruco_lib.detect_aruco(img)
+        if ids is not None:
+            for i, target_id in enumerate(ids):
+                msg = process_corners(target_id[0], corners[i][0])
+                self.publisher_.publish(msg)
+                self.get_logger().info(f"Publishing {msg.target_id}, {msg.x}, {msg.dis}")
         else:
-            (corners, ids, _) = aruco_lib.detect_aruco(frame)
-            if ids is not None:
-                for i, target_id in enumerate(ids):
-                    pub.publish(process_corners(target_id[0], corners[i][0]))
-            else:
-                # Publish even when no target is found to constantly run the navigation callback
-                pub.publish(VisionTarget(0, 0, 0, False))
-        rate.sleep()
+            self.get_logger().info(f"No aruco tags detected")
 
-    cap.release()
+        #     # Publish even when no target is found to constantly run the navigation callback
+        #     self.publisher_.publish(VisionTarget(0, 0, 0, False))
 
+
+def main(args=None):
+    rclpy.init(args=args)
+    aruco_detection_publisher = ArucoDetectionPublisher()
+
+    rclpy.spin(aruco_detection_publisher)
+
+    aruco_detection_publisher.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == "__main__":
     main()

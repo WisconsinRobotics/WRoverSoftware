@@ -11,7 +11,10 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+      'setuptools'
+      'opencv-python',
+      'numpy'],
     zip_safe=True,
     maintainer='balabalu',
     maintainer_email='nicolasdittmarg1@gmail.com',
@@ -24,6 +27,7 @@ setup(
             'finding_aruco_tag = auto_implementation.finding_aruco_tag:main',
             'finding_object = auto_implementation.finding_object:main',
             'searching_drive = auto_implementation.searching_drive:main',
+            'aruco_detection = auto_implementation.aruco_detection:main',
         ],
     },
 )
