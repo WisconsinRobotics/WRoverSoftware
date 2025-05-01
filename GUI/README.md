@@ -3,7 +3,7 @@
 @defgroup wr_hci_hud wr_hci_hud
 @brief A package (currently empty) to act as a HUD for drivers
 
-# To start the GUI from ./WR_HCI_HUD
+# To start the GUI
 npm install
 
 start a venv
@@ -13,11 +13,11 @@ pip install -r requirements.txt
 # To start the video streaming and ros server
 docker-compose build
 docker-compose up
-run setup.py to run websockets for streaming videos. Change the address and port if needed.
+run setup.py to run websockets for streaming videos. Change the address and port for incoming stream.
 
-run app.py in wr_hci_hud/src 
+run app.py in src
 
-May have to set port 5000, 9090 inbound to open in firewall for multiple client 
+May have to set port 5000, 9090, and websocket ports inbound to open in firewall for multiple client 
 
 the ros.js file is currently publishing and then subscribing to the ros websocket to simulate actual input
 
