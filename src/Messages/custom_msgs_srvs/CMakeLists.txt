@@ -23,6 +23,7 @@ endif()
 
 set(msg_files
   "msg/Detection.msg"
+  "msg/VisionTarget.msg"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
