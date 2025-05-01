@@ -101,11 +101,11 @@ class AutonomousStateMachine(StateMachine):
         self.led_cli = self.model.create_client(LED, 'change_LED')
         self.led_req = LED.Request()
         
-        self.model.get_logger().info("Updated Picture")
-        imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
-        graph = DotGraphMachine(AutonomousStateMachine)
-        dot = graph()
-        dot.write_png(imgPath)
+        # self.model.get_logger().info("Updated Picture")
+        # imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
+        # graph = DotGraphMachine(AutonomousStateMachine)
+        # dot = graph()
+        # dot.write_png(imgPath)
 
         #Wait for user input 
         self.command_received = False
