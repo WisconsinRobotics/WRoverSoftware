@@ -1,80 +1,81 @@
+#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
-import cv2
-import cv2.ximgproc as ximgproc
-import numpy as np
+from sensor_msgs.msg import Image, PointCloud2
+import message_filters
 from cv_bridge import CvBridge
-from message_filters import ApproximateTimeSynchronizer, Subscriber
+import numpy as np
+import cv2
 
-class WLSFilterNode(Node):
+class PC2ColorMask(Node):
     def __init__(self):
-        super().__init__('wls_filter_node')
+        super().__init__('pc2_color_mask')
         self.bridge = CvBridge()
 
-        # Set up synchronized subscribers for left and right images
-        self.left_sub = Subscriber(self, Image, "/oak/left/image_raw")
-        self.right_sub = Subscriber(self, Image, "/oak/right/image_raw")
-        self.ats = ApproximateTimeSynchronizer([self.left_sub, self.right_sub], queue_size=5, slop=0.1)
-        self.ats.registerCallback(self.stereo_callback)
+        # RGB + PointCloud2 subscriptions
+        rgb_sub = message_filters.Subscriber(self, Image,      '/oak/rgb/image_raw')
+        pc_sub  = message_filters.Subscriber(self, PointCloud2, '/oak/points')
 
-        # Publisher for the filtered disparity image
-        self.pub_filtered = self.create_publisher(Image, "/stereo/filtered_disparity", 10)
+        ts = message_filters.ApproximateTimeSynchronizer(
+            [rgb_sub, pc_sub], queue_size=5, slop=0.05)
+        ts.registerCallback(self.callback)
 
-        # Stereo matcher parameters
-        self.num_disparities = 96  # Must be divisible by 16
-        self.block_size = 15       # Typical values: 15-21
+        self.pub = self.create_publisher(Image, 'highlighted_pc_mask', 2)
+        self.declare_parameter('y_thresh', 0.4)
 
-        # Create left matcher (StereoBM for speed)
-        self.left_matcher = cv2.StereoBM_create(numDisparities=self.num_disparities, blockSize=self.block_size)
-        # Create right matcher using OpenCV's helper function
-        self.right_matcher = ximgproc.createRightMatcher(self.left_matcher)
+        # We'll cache this dtype after the first message arrives
+        self._pc_dtype = None
 
-        # Create the WLS filter using the left matcher
-        self.wls_filter = ximgproc.createDisparityWLSFilter(self.left_matcher)
-        # Tune WLS parameters: lambda controls smoothness, sigma controls edge preservation
-        self.wls_filter.setLambda(2000.0)
-        self.wls_filter.setSigmaColor(1.0)
+    def _make_dtype(self, pc_msg: PointCloud2):
+        # Find the offset of the 'y' field
+        y_field = next(f for f in pc_msg.fields if f.name == 'y')
+        # Create a structured dtype that reads only that float32 at offset y_field.offset
+        return np.dtype({
+            'names':   ['y'],
+            'formats': [np.float32],
+            'offsets': [y_field.offset],
+            'itemsize': pc_msg.point_step
+        })
 
-    def stereo_callback(self, left_msg, right_msg):
-        # Convert incoming ROS Image messages to OpenCV images
-        try:
-            left_image = self.bridge.imgmsg_to_cv2(left_msg, desired_encoding="bgr8")
-            right_image = self.bridge.imgmsg_to_cv2(right_msg, desired_encoding="bgr8")
-        except Exception as e:
-            self.get_logger().error("CV Bridge conversion failed: " + str(e))
-            return
+    def callback(self, rgb_msg: Image, pc_msg: PointCloud2):
+        # 1) Convert the RGB image
+        rgb = self.bridge.imgmsg_to_cv2(rgb_msg, 'bgr8')
 
-        # Convert to grayscale (required for stereo matching)
-        left_gray = cv2.cvtColor(left_image, cv2.COLOR_BGR2GRAY)
-        right_gray = cv2.cvtColor(right_image, cv2.COLOR_BGR2GRAY)
+        H, W = pc_msg.height, pc_msg.width
+        n_pts = H * W
 
-        # Compute disparity maps
-        # StereoBM returns disparity multiplied by 16 (fixed-point representation)
-        left_disp = self.left_matcher.compute(left_gray, right_gray).astype(np.float32) / 16.0
-        right_disp = self.right_matcher.compute(right_gray, left_gray).astype(np.float32) / 16.0
+        # 2) Build/cache our dtype for extracting 'y'
+        if self._pc_dtype is None:
+            self._pc_dtype = self._make_dtype(pc_msg)
 
-        # Apply the WLS filter. The filter uses the left disparity,
-        # the left image (as guidance) and the right disparity.
-        filtered_disp = self.wls_filter.filter(left_disp, left_gray, None, right_disp)
+        # 3) Map the raw data buffer into a 1D array of records
+        arr = np.frombuffer(pc_msg.data, dtype=self._pc_dtype, count=n_pts)
 
-        # (Optional) Normalize disparity for visualization purposes
-        filtered_disp_vis = cv2.normalize(filtered_disp, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX)
-        filtered_disp_vis = np.uint8(filtered_disp_vis)
+        # 4) View the 'y' field as a (H, W) float32 array
+        y = arr['y'].reshape(H, W)
 
-        # Convert the filtered disparity image back to a ROS Image message and publish it
-        out_msg = self.bridge.cv2_to_imgmsg(filtered_disp_vis, encoding="mono8")
-        self.pub_filtered.publish(out_msg)
+        # 5) Build our mask (camera-frame Y positive downward)
+        y_thresh = self.get_parameter('y_thresh').value
+        mask = (y > y_thresh)
+
+        # 6) Highlight masked pixels in blue
+        out = rgb.copy()
+        out[mask] = (255, 0, 0)
+
+        # 7) Publish
+        out_msg = self.bridge.cv2_to_imgmsg(out, 'bgr8')
+        out_msg.header = rgb_msg.header
+        self.pub.publish(out_msg)
 
 def main(args=None):
     rclpy.init(args=args)
-    node = WLSFilterNode()
+    node = PC2ColorMask()
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    node.destroy_node()
-    rclpy.shutdown()
+    finally:
+        node.destroy_node()
+        cv2.destroyAllWindows()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
