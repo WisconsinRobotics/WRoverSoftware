@@ -9,7 +9,7 @@ import math
 from sensor_msgs.msg import JointState
 
 
-WRIST_SPEED_VALUE = .4 #As we are publishing 100 times per second. It moves 10% of the way per second.
+WRIST_SPEED_VALUE = .1 #As we are publishing 100 times per second. It moves 10% of the way per second.
 GRIPPER_SPEED_VALUE = .2
 class ArmLogic(Node):
 
@@ -28,7 +28,7 @@ class ArmLogic(Node):
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        timer_period = 0.01  # seconds
+        timer_period = 0.005  # seconds
         self.timer_wrist = self.create_timer(timer_period, self.timer_update_wrist)
 
         #Define Postion of left and right position of wrist
@@ -79,16 +79,17 @@ class ArmLogic(Node):
 
 
     def get_wrist_position(self, up, down, left, right):
+        self.get_logger().error('Absolute Wrist: "%s"' % self.absolute_wrist)
         if up == 1:
             
-            if self.absolute_wrist >= -30 + self.kohler_shift + 1:
+            if self.absolute_wrist >= -80 + self.kohler_shift + 1:
                 self.absolute_wrist += -WRIST_SPEED_VALUE
                 self.wrist_positions[0] += -WRIST_SPEED_VALUE
                 self.wrist_positions[1] += -WRIST_SPEED_VALUE
                 
         elif down == 1:
             
-            if self.absolute_wrist <= 130 + self.kohler_shift - 1:
+            if self.absolute_wrist <= 180 + self.kohler_shift - 1:
                 self.absolute_wrist += WRIST_SPEED_VALUE
                 self.wrist_positions[0] += WRIST_SPEED_VALUE
                 self.wrist_positions[1] += WRIST_SPEED_VALUE

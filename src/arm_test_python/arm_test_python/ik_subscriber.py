@@ -11,9 +11,9 @@ from sensor_msgs.msg import JointState
 #TODO: FIX IK for wrist
 
 GRIPPER_SPEED_VALUE = .25
-WRIST_SPEED_VALUE = 1.5
-TURN_SPEED = 1.5 #TODO set this properly
-MAX_ANGLE = 50
+WRIST_SPEED_VALUE = .16
+TURN_SPEED = 0.3 #TODO set this properly
+MAX_ANGLE = 140
 
 class IKSubscriber(Node):
 
@@ -43,7 +43,7 @@ class IKSubscriber(Node):
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        timer_period = 0.05  # seconds
+        timer_period = 0.005  # TODO: seconds
         self.timer_rotation = self.create_timer(timer_period, self.change_rotation)
 
         
@@ -90,7 +90,7 @@ class IKSubscriber(Node):
 
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
-        print("Msg Gripper: " + str(self.msg_gripper))
+        #print("Msg Gripper: " + str(self.msg_gripper))
         self.arm_publisher_gripper.publish(self.msg_gripper)
         
 
