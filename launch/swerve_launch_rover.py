@@ -18,11 +18,11 @@ def generate_launch_description():
         #    executable='ik_subscriber',
         #    name='ik_subscriber'
         #),
-        Node(
-            package='arm_test',
-            executable='arm_test_node',
-            name='arm_test'
-        ),
+        #Node(
+        #    package='arm_test',
+        #    executable='arm_test_node',
+        #    name='arm_test'
+        #),
         Node(
             package='wr_can_comms',
             executable='can_comms',

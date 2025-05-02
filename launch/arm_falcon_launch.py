@@ -24,7 +24,7 @@ def generate_launch_description():
             name='rail_subscriber'
         ),
 
-        # # #Logic for wrist
+         # #Logic for wrist
         # Node(
         #     package='arm_test_python',
         #     executable='arm_wrist_logic',
