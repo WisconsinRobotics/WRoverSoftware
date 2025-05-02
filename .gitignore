@@ -4,4 +4,4 @@ log/
 src/draw_state_machine
 behavior_trees
 src/relaxed_ik_ros2/relaxed_ik_core
-launch/__pycache__/
+**/__pycache__/

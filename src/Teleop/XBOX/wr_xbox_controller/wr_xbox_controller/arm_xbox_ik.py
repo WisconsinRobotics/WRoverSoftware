@@ -33,19 +33,19 @@ class XboxPublisher(Node):
     def timer_callback(self):
         
         #self.get_logger().debug("BBBBBBBBBB")
-        if (len(self.joysticks) or True):#TODO:CHANGE THIS IS FOR TESTING
+        if (len(self.joysticks) >CONTROLLER):#TODO:CHANGE THIS IS FOR TESTING
             
             # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
-            # motion = [self.joysticks[0].get_axis(2),-self.joysticks[0].get_axis(1),-self.joysticks[0].get_axis(4)]
-            # print(motion)
-            # # Ignore jitter in sticks
-            # for i in range(3):
-            #     if abs(motion[i]) < self.AXIS_BOUNDARY:
-            #         motion[i] = 0.0
+            motion = [self.joysticks[CONTROLLER].get_axis(2),-self.joysticks[CONTROLLER].get_axis(1),-self.joysticks[CONTROLLER].get_axis(4)]
+            print(motion)
+            # Ignore jitter in sticks
+            for i in range(3):
+                if abs(motion[i]) < self.AXIS_BOUNDARY:
+                    motion[i] = 0.0
     
-            # self.linear[0] = -motion[1]/15000 #Moving UP and DOWN
-            # # No Y movement (linear[1])
-            # self.linear[2] = motion[2] /15000 #Moving side to side
+            self.linear[0] = -motion[1]/15000 #Moving UP and DOWN
+            # No Y movement (linear[1])
+            self.linear[2] = motion[2] /15000 #Moving side to side
             
             #NO angular rotation for simulation
             self.angular[0] = 0.0
@@ -88,13 +88,14 @@ class XboxPublisher(Node):
 
                 msg.ee_vels.append(twist)
                 msg.tolerances.append(tolerance)
+            #self.get_logger().info("Publishing: " + str(self.linear[0]))
             self.ee_vel_goals_pub.publish(msg)        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.JOYHATMOTION:
-                if event.joy ==0:
+                if event.joy ==CONTROLLER:
                     if event.value[1] == 1:  # D-Pad Up
                         self.buttons[0] = 1
                     else:
