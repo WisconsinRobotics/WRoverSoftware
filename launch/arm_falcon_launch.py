@@ -24,12 +24,12 @@ def generate_launch_description():
             name='rail_subscriber'
         ),
 
-        # #Logic for wrist
-        Node(
-            package='arm_test_python',
-            executable='arm_wrist_logic',
-            name='arm_wrist_logic'
-        ),
+        # # #Logic for wrist
+        # Node(
+        #     package='arm_test_python',
+        #     executable='arm_wrist_logic',
+        #     name='arm_wrist_logic'
+        # ),
 
         Node(
             package='wr_can_comms',
