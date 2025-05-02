@@ -81,14 +81,14 @@ class ArmLogic(Node):
     def get_wrist_position(self, up, down, left, right):
         if up == 1:
             
-            if self.absolute_wrist >= 0 + self.kohler_shift + 1:
+            if self.absolute_wrist >= -30 + self.kohler_shift + 1:
                 self.absolute_wrist += -WRIST_SPEED_VALUE
                 self.wrist_positions[0] += -WRIST_SPEED_VALUE
                 self.wrist_positions[1] += -WRIST_SPEED_VALUE
                 
         elif down == 1:
             
-            if self.absolute_wrist <= 100 + self.kohler_shift - 1:
+            if self.absolute_wrist <= 130 + self.kohler_shift - 1:
                 self.absolute_wrist += WRIST_SPEED_VALUE
                 self.wrist_positions[0] += WRIST_SPEED_VALUE
                 self.wrist_positions[1] += WRIST_SPEED_VALUE
