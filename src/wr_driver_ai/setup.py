@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            "drive = wr_driver_ai.driver:main"
+            "drive = wr_driver_ai.driver:main",
+            "control_drive = wr_driver_ai.drive_control:main"
         ],
     },
 )

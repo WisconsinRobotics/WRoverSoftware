@@ -1,10 +1,10 @@
 import json
 import math
+import os
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float32MultiArray, Float64, Bool
 from sensor_msgs.msg import NavSatFix
-from std_msgs.msg import Float64
 from math import atan2, radians, degrees, sin, cos, sqrt
 
 # Threshold to consider a waypoint "reached" (meters)
@@ -16,6 +16,7 @@ CMD_RATE = 10
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
 FWD      = [  1.0,   0.0,  0.0,  0.0]
 R90      = [  0.0,   0.0,  1.0, -1.0]
+L90      = [  0.0,   0.0,  -1.0, 1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
@@ -23,7 +24,8 @@ class WaypointFollower(Node):
         super().__init__('waypoint_follower')
 
         # Read target points
-        with open("/home/wiscrobo/workspace/WRoverSoftware/src/wr_driver_ai/wr_driver_ai/points.json") as f:
+        file_path = os.path.abspath("points.json")
+        with open(file_path) as f:
             js = json.load(f)
         
         self.targets = js["targets"]
@@ -34,18 +36,27 @@ class WaypointFollower(Node):
         self.target_indx = 0
         self.target_gps = self.targets[self.target_indx]
 
-        # Info for angles
+        # Info for angles and obstacle
         self.compass_angle = None
+        self.obstacle_detected = None
 
         # Subscribers
         self.create_subscription(Float64, 'compass_data_topic', self.compass_callback, 5)
         self.create_subscription(NavSatFix, 'fix', self.gps_callback, 5)
+         ## TODO: Change the topic name to the true topic name
+        self.create_subscription(Bool, 'obstacle_avoider', self.obstacle_callback, 5)
 
         # Publisher for drive commands
         self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
 
         # Timer to run callbacks
         self.create_timer(1.0 / CMD_RATE, self.swerve_callback)
+
+    def obstacle_callback(self, msg: Bool):
+        """
+        Just gets the data if we have detected the obstacle in the way
+        """
+        self.obstacle_detected = msg.data
 
     def gps_callback(self, msg: NavSatFix):
         """
@@ -55,7 +66,6 @@ class WaypointFollower(Node):
         lat, lon = msg.latitude, msg.longitude
         self.current_gps = [lat, lon]
         self.get_logger().info(f"Current GPS {self.current_gps}")
-
 
     def compass_callback(self, msg: Float64):
         """
@@ -146,15 +156,11 @@ class WaypointFollower(Node):
             return
         
         rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
-
-        ## self.get_logger().info(f"Rover angle: {rover_angle}, compass angle: {self.compass_angle}")
         if abs(rover_angle - self.compass_angle) < 10:
             ## If angles are relatively the same, drive forward
-            ##self.get_logger().info("Driving Forward")
             msg.data = FWD
         else:
             ## Otherwise, spin
-            ## self.get_logger().info("Spinning in place")
             msg.data = R90
         self.swerve_publisher.publish(msg)
 
