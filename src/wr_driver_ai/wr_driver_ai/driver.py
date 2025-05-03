@@ -5,6 +5,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import NavSatFix
 from std_msgs.msg import Float64
+from std_msgs.msg import Bool
 from math import atan2, radians, degrees, sin, cos, sqrt
 
 # Threshold to consider a waypoint "reached" (meters)
@@ -16,6 +17,8 @@ CMD_RATE = 10
 # [y movement (fwd/back), x movement (left/right), swivel_left, swivel_right]
 FWD      = [  1.0,   0.0,  0.0,  0.0]
 R90      = [  0.0,   0.0,  1.0, -1.0]
+FWD_ROT_90  = [  1.0,   0.0,  0.0,  -1.0]
+FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
@@ -40,6 +43,10 @@ class WaypointFollower(Node):
         # Subscribers
         self.create_subscription(Float64, 'compass_data_topic', self.compass_callback, 5)
         self.create_subscription(NavSatFix, 'fix', self.gps_callback, 5)
+        self.create_subscription(Bool, 'obstacle_there', self.obstacle_callback, 5)
+
+        # Obstacle checker
+        self.obstacle = False;
 
         # Publisher for drive commands
         self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
@@ -121,8 +128,10 @@ class WaypointFollower(Node):
         Returns:
             true if they are close and false otherwise
         """
-        return WaypointFollower.gps_distance(p1, p2) < 0.1
-    
+        return WaypointFollower.gps_distance(p1, p2) < 1
+    def obstacle_callback(self, msg):
+        self.obstacle = msg.data
+
     def swerve_callback(self):
         msg = Float32MultiArray()
         if self.done:
@@ -145,17 +154,29 @@ class WaypointFollower(Node):
                 self.target_gps = self.targets[self.target_indx]
             return
         
+        #rover_angle: 
         rover_angle = WaypointFollower.compute_bearing(self.current_gps, self.target_gps)
+    
+        # This will make an array that goes from 0 to 360. This goes counter clockwise (sorry)
+        difference_angle = (self.compass_angle - rover_angle)%360
 
         ## self.get_logger().info(f"Rover angle: {rover_angle}, compass angle: {self.compass_angle}")
-        if abs(rover_angle - self.compass_angle) < 10:
-            ## If angles are relatively the same, drive forward
-            ##self.get_logger().info("Driving Forward")
-            msg.data = FWD
-        else:
-            ## Otherwise, spin
-            ## self.get_logger().info("Spinning in place")
+        if self.obstacle:
             msg.data = R90
+            if difference_angle <= 10 or difference_angle >= 350:
+                ## If angles are relatively the same, drive forward
+                ##self.get_logger().info("Driving Forward")
+                msg.data = FWD
+            elif difference_angle < 60 and difference_angle > 10:
+                ## If angles are relatively the same, drive forward
+                ##self.get_logger().info("Driving Forward")
+                msg.data = FWD_ROT_270
+            elif difference_angle < 350 and difference_angle > 300:
+                msg.data = FWD_ROT_90
+            else:
+                ## Otherwise, spin
+                ## self.get_logger().info("Spinning in place")
+                msg.data = R90
         self.swerve_publisher.publish(msg)
 
 def main():
