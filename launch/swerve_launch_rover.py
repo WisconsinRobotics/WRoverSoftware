@@ -10,8 +10,8 @@ def generate_launch_description():
         ),
         Node(
             package='arm_test_python',
-            executable='arm_test_neo',
-            name='arm_test_neo'
+            executable='science_neo',
+            name='science_neo'
         ),
         Node(
             package='arm_test_python',

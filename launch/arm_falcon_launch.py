@@ -5,8 +5,8 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='arm_test',
-            executable='arm_test_node',
-            name='arm_test'
+            executable='science_logic',
+            name='science_logic'
         )#,
         #Node(
         #    package='arm_test_python',
