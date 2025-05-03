@@ -24,7 +24,7 @@ FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
-    def create_input_thread(self):
+    def start_input_thread(self):
         thread = threading.Thread(target=self.user_input_loop)
         thread.daemon = True
         thread.start()
@@ -58,6 +58,7 @@ class WaypointFollower(Node):
 
         # Control driving
         self.to_drive = True
+        self.start_input_thread()
 
         # Subscribers
         self.create_subscription(Float64, 'compass_data_topic', self.compass_callback, 5)
