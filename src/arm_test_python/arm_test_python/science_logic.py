@@ -72,7 +72,7 @@ class ArmLogic(Node):
         self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3]] # up, down, left, right
 
         # Insertion controlled by up/down
-        self.msg_insert.data = (buttons[1]-buttons[0])*0.9
+        self.msg_insert.data = (int(buttons[1])-int(buttons[0]))*0.9
 
         # Chute controlled by left/right
         if buttons[3]: # eject

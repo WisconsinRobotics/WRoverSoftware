@@ -11,7 +11,7 @@ class SwerveControlSubsrciber(Node):
         #TODO:CHANGE IDS
         self.vesc_ids = {"CAROUSEL":["79"],
                          "AUGER":["80"],
-                         "INSERTION":["78"]
+                         "INSERT":["78"]
                         }
         self.max_rpm = 6000
         self.limit_rotation = 0
@@ -67,7 +67,7 @@ class SwerveControlSubsrciber(Node):
         self.publisher_.publish(can_msg_duty)
 
 
-def listener_servo(self, msg):
+    def listener_chute(self, msg):
         can_msg_servo = String()
 
         # I cannot find any CAN command for controlling a servo so it will not be implemented

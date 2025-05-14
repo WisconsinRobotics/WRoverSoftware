@@ -25,7 +25,7 @@ setup(
             'ik_subscriber = arm_test_python.ik_subscriber:main',
             'rail_subscriber = arm_test_python.rail_subscriber:main',
             'science_logic = arm_test_python.science_logic:main',
-            'science_logic = arm_test_python.science_neo:main',
+            'science_neo = arm_test_python.science_neo:main',
         ],
     },
 )
