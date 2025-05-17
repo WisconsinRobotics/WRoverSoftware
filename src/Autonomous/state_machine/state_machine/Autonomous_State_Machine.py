@@ -106,7 +106,10 @@ class AutonomousStateMachine(StateMachine):
         self.targets = js["targets"]
 
         self.target_indx = 0
-        self.target_gps = self.targets[self.target_indx]
+        self.target_gps = self.targets[self.target_indx][:2]
+        self.target_type = self.targets[self.target_indx][2]
+        print("TargetGPS:" + str(self.target_gps))
+        print("TargetType:" + str(self.target_type))
         self.entered_nav = False
         self._reachedTargetPoint = False
         self.nav_action_client = ActionClient(self.model, Navigation, 'navigate')
@@ -166,13 +169,13 @@ class AutonomousStateMachine(StateMachine):
     
 
     @Navigation.exit
-    def getCurrPointandHeading(self):
+    def exitNav(self):
         """
         Uses the rover's GPS to get its current point, and heading
         """
-        print("EXITTTTTTTTTTTTTTTEEEEEEEEEEEEEEETTTTTTTTTTTt")
         self.target_indx += 1
-        self.target_gps = self.targets[self.target_indx]
+        self.target_gps = self.targets[self.target_indx][:2]
+        self.target_type = self.targets[self.target_indx][2]
 
     # Checks what kind of point we have reached.
     @Check_Point.enter
@@ -180,13 +183,12 @@ class AutonomousStateMachine(StateMachine):
         """
         Accesses current point
         """
-        print("CHECK POINT")
-        for key, value in self.pointDict.items():
-            # TODO: Implement estimation functionality for comparing equality for the current point +/- 2 metres
-            if value == self.currPoint:
-                self.lastTraversedPoint = key
-                break
-
+        if self.target_type == 0:
+            self.GNSS()
+        elif self.target_type == 1:
+            self.SearchTag()
+        else:
+            self.SearchObject()
 
     @SearchTag.enter
     def startFailTimeAruco(self):
