@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from multiprocessing import get_context
-import keyboard
+import keyboard # type: ignore
 from random import sample
 from pyparsing import removeQuotes
 from statemachine import StateMachine, State
@@ -16,44 +16,12 @@ from rclpy.executors import MultiThreadedExecutor
 import statemachine.exceptions
 from rclpy.action import ActionClient
 from custom_msgs_srvs.action import Navigation
+from custom_msgs_srvs.srv import LED
+
 
 # All print statements are only for debugging the code
 
 class AutonomousStateMachine(StateMachine):
-
-    """
-    This is a class representing an autonomous state machine for the rover. 
-    It consists of 10 states, 19 transitions linked with n(replace later) events.
-    """
-
-    # Initalize the state machine
-    def __init__(self, model):
-        super().__init__(model=model)
-        self.calls = []
-        # self.count_Fails_Tag_Search = 0
-        # self.count_Fails_Obj_Search = 0
-        self.failTagTime = 0
-        self.failTagTotal = 0
-        self.failObjTime = 0
-        self.failObjTotal = 0
-        self.currPoint = None
-        self.heading = None
-        self.flagStuck = False
-        self.lastTraversedPoint = ""
-        self.tagFound = False
-        self.objFound = False
-        self.nextCommand = True
-        self.GPSPrecision = 7
-        self.pathBacktrack = []
-
-        # self.currTime = time.localtime
-        self.timeElapsed = 0
-
-        # need to parametrize once we have the parameters
-        self.pointDict = {"GNSS" : (38.44079858,-110.7782071,1377.88), "Aruco" : (53.1231312, 12.592134123, 1123.94), "object" : (123.123123, 53.24123, 400.41)} #pointDictInput, currently values only put for testing
-        self.path = []#pathInput
-
-
     # Define states
     Start = State(initial=True)
     Navigation = State()
@@ -77,7 +45,7 @@ class AutonomousStateMachine(StateMachine):
     keepBanging = danceOff.to(danceOff, cond="haveTime and isStuck")
     unstuck = danceOff.to(Navigation, cond="haveTime and !isStuck")
     moveOn = danceOff.to(Navigation, cond="!haveTime and isStuck") # Add a instance var here for checking in Navigation
-    GNSS = Check_Point.to(BlinkLights, cond="isGNSS")
+    GNSS = Check_Point.to(BlinkLights)
     lookForTag = Check_Point.to(SearchTag, cond = "checkAruco")
     failTag = SearchTag.to(SearchTag)
     lookForObj = Check_Point.to(SearchObject, cond = "checkObj")
@@ -91,14 +59,59 @@ class AutonomousStateMachine(StateMachine):
     keepGoing = BlinkLights.to(UserInput)
     continueMission = UserInput.to(Navigation)
     abortMission = UserInput.to(Stop)
+    """
+    This is a class representing an autonomous state machine for the rover. 
+    It consists of 10 states, 19 transitions linked with n(replace later) events.
+    """
 
-    # Define the actions
+    # Initalize the state machine
+    def __init__(self, model):
+        super().__init__(model=model)
+        
+        self.calls = []
+        # self.count_Fails_Tag_Search = 0
+        # self.count_Fails_Obj_Search = 0
+        self.failTagTime = 0
+        self.failTagTotal = 0
+        self.failObjTime = 0
+        self.failObjTotal = 0
+        self.currPoint = None
+        self.heading = None
+        self.flagStuck = False
+        self.lastTraversedPoint = ""
+        self.tagFound = False
+        self.objFound = False
+        self.nextCommand = True
+        self.GPSPrecision = 7
+        self.pathBacktrack = []
+        self._success_search = False
+
+        # self.currTime = time.localtime
+        self.timeElapsed = 0
+
+        # need to parametrize once we have the parameters
+        self.pointDict = {"GNSS" : (38.44079858,-110.7782071,1377.88), "Aruco" : (53.1231312, 12.592134123, 1123.94), "object" : (123.123123, 53.24123, 400.41)} #pointDictInput, currently values only put for testing
+        self.path = []#pathInput
+        
+
+
+        
+
+
 
     # Define the State actions
     @Start.enter
     def loadPoint(self):
-        # Read target points
+        self.led_cli = self.model.create_client(LED, 'change_LED')
+        self.led_req = LED.Request()
         
+        self.model.get_logger().info("Updated Picture")
+        imgPath = "/home/wiscrobo/workspace/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
+        graph = DotGraphMachine(AutonomousStateMachine)
+        dot = graph()
+        dot.write_png(imgPath)
+
+        # Read target points 
         file_path = os.path.abspath("src/Autonomous/state_machine/state_machine/points.json")
         with open(file_path) as f:
             js = json.load(f)
@@ -113,7 +126,7 @@ class AutonomousStateMachine(StateMachine):
         self.entered_nav = False
         self._reachedTargetPoint = False
         self.nav_action_client = ActionClient(self.model, Navigation, 'navigate')
-        
+        self.blinkLightColor("RED")
         self.startNav()
 
 
@@ -229,10 +242,15 @@ class AutonomousStateMachine(StateMachine):
     def blinkLights(self):
         """Makes the lights green or smtg, depending on reqs"""
         print("Lights are blinking green yay") # replace with actual code to make lights blink
+        self.blinkLightColor("GREEN")
+
     @BlinkLights.exit
     def revertLights(self):
         """Makes the lights go back"""
         print("Lights are not blinking, sad") # replace with actual code to make lights stop blinking
+        self.blinkLightColor("RED")
+        
+    
     @UserInput.enter
     def awaitNextCommand(self):
         """Press spacebar, if space key pressed, returns true. If backspace pressed returns false, waits till one or the other key is pressed"""
@@ -307,11 +325,8 @@ class AutonomousStateMachine(StateMachine):
             return True
         return False
     
-    def successCondition(self, roverGPSReading):
-        self.currPoint = roverGPSReading
-        if(self.reachedTargetPoint(self) == "True"):
-            return True
-        return False
+    def successCondition(self):
+        return self._success_search 
     
     def reachedTargetPoint(self):
         return self._reachedTargetPoint
@@ -343,16 +358,35 @@ class AutonomousStateMachine(StateMachine):
         if (self.failTagTotal or self.failObjTotal) < 100:
             return True
         return False
+    
+    def blinkLightColor(self,color):
+        while not self.led_cli.wait_for_service(timeout_sec=1.0):
+            self.model.get_logger().info('service not available, waiting again...')
+
+        if color == "RED":
+            self.led_req.red = 255
+            self.led_req.green = 0
+            self.led_req.blue = 0
+        elif color == "GREEN":
+            self.led_req.red = 0
+            self.led_req.green = 255
+            self.led_req.blue = 0
+        elif color == "BLUE":
+            self.led_req.red = 0
+            self.led_req.green = 0
+            self.led_req.blue = 255
+        else:
+            self.led_req.red = 0
+            self.led_req.green = 0
+            self.led_req.blue = 0
+        return self.cli.call_async(self.req)
 
 
 
 def main(args=None):
 
     # # This is not necessary everytime, was only to draw up the machine
-    # imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
-    # graph = DotGraphMachine(AutonomousStateMachine)
-    # dot = graph()
-    # dot.write_png(imgPath)
+    
     #sm = AutonomousStateMachine()
     pass
 if __name__ == "__main__":
