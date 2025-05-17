@@ -166,7 +166,7 @@ class WaypointFollower(Node):
         feedback_msg = Navigation.Feedback()
         msg = Float32MultiArray()
 
-        rate = self.create_rate(1)  # 1 Hz, adjust as needed
+        rate = .1 # 1/.1 = 10 times per second
 
         while rclpy.ok():
             # Safety check: don't drive if not activated
@@ -217,7 +217,7 @@ class WaypointFollower(Node):
                 result = Navigation.Result()
                 result.reach_target = True
                 return result
-            rclpy.spin_once(self, timeout_sec=0.1)
+            rclpy.spin_once(self, timeout_sec=rate)
 
         # If loop exited, return failure
         self.get_logger().warn("Navigation aborted.")

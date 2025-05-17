@@ -94,11 +94,6 @@ class AutonomousStateMachine(StateMachine):
         self.path = []#pathInput
         
 
-
-        
-
-
-
     # Define the State actions
     @Start.enter
     def loadPoint(self):
@@ -243,12 +238,6 @@ class AutonomousStateMachine(StateMachine):
         """Makes the lights green or smtg, depending on reqs"""
         print("Lights are blinking green yay") # replace with actual code to make lights blink
         self.blinkLightColor("GREEN")
-
-    @BlinkLights.exit
-    def revertLights(self):
-        """Makes the lights go back"""
-        print("Lights are not blinking, sad") # replace with actual code to make lights stop blinking
-        self.blinkLightColor("RED")
         
     
     @UserInput.enter
@@ -379,7 +368,7 @@ class AutonomousStateMachine(StateMachine):
             self.led_req.red = 0
             self.led_req.green = 0
             self.led_req.blue = 0
-        return self.cli.call_async(self.req)
+        return self.led_cli.call_async(self.led_req)
 
 
 

@@ -19,7 +19,7 @@ class LEDService(Node):
 
             # Wait until enough bytes are available
             while self.s.in_waiting < 8:
-                self.get_logger().info("THING" + str(self.s.in_waiting))
+                #self.get_logger().info("input bits: " + str(self.s.in_waiting))
                 rclpy.spin_once(self, timeout_sec=0.1)
 
             magic_word = self.s.read(8)
@@ -43,6 +43,9 @@ class LEDService(Node):
         packet = bytearray([request.red, request.green, request.blue, crc])
         self.s.write(packet)
         return response
+    def turn_off_LED(self):
+        packet = bytearray([0, 0, 0, 0])
+        self.s.write(packet)
 
 
 def main():
@@ -52,6 +55,7 @@ def main():
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
+        node.turn_off_LED()
         node.get_logger().info("Shutting down.")
     finally:
         node.destroy_node()
