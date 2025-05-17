@@ -1,0 +1,7 @@
+float64[] points
+---
+bool reach_target
+---
+float64 distance_away
+float64[] target_gps
+float64[] current_gps

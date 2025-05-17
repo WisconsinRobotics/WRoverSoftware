@@ -1,3 +1,5 @@
+import rclpy
+from rclpy.node import Node
 from multiprocessing import get_context
 import keyboard
 from random import sample
@@ -8,8 +10,12 @@ from statemachine.contrib.diagram import DotGraphMachine
 from typing import Dict, List, Optional, Tuple
 import time
 from decimal import Decimal, getcontext
+import os, json
+from rclpy.executors import MultiThreadedExecutor
 
 import statemachine.exceptions
+from rclpy.action import ActionClient
+from custom_msgs_srvs.action import Navigation
 
 # All print statements are only for debugging the code
 
@@ -21,7 +27,8 @@ class AutonomousStateMachine(StateMachine):
     """
 
     # Initalize the state machine
-    def __init__(self):
+    def __init__(self, model):
+        super().__init__(model=model)
         self.calls = []
         # self.count_Fails_Tag_Search = 0
         # self.count_Fails_Obj_Search = 0
@@ -45,7 +52,6 @@ class AutonomousStateMachine(StateMachine):
         # need to parametrize once we have the parameters
         self.pointDict = {"GNSS" : (38.44079858,-110.7782071,1377.88), "Aruco" : (53.1231312, 12.592134123, 1123.94), "object" : (123.123123, 53.24123, 400.41)} #pointDictInput, currently values only put for testing
         self.path = []#pathInput
-        super().__init__()
 
 
     # Define states
@@ -89,51 +95,100 @@ class AutonomousStateMachine(StateMachine):
     # Define the actions
 
     # Define the State actions
+    @Start.enter
+    def loadPoint(self):
+        # Read target points
+        
+        file_path = os.path.abspath("src/Autonomous/state_machine/state_machine/points.json")
+        with open(file_path) as f:
+            js = json.load(f)
+        
+        self.targets = js["targets"]
 
-    # Drives to points, think the loop will be done inside the state, so no 
+        self.target_indx = 0
+        self.target_gps = self.targets[self.target_indx][:2]
+        self.target_type = self.targets[self.target_indx][2]
+        print("TargetGPS:" + str(self.target_gps))
+        print("TargetType:" + str(self.target_type))
+        self.entered_nav = False
+        self._reachedTargetPoint = False
+        self.nav_action_client = ActionClient(self.model, Navigation, 'navigate')
+        
+        self.startNav()
+
+
+    # LOGIC FOR ENTERING NAVIGATION
+        # Createa a callback that calls navigation
     @Navigation.enter
     def driveTrainPath(self):
         """
         This calls the drive function, ideally the drive function will be integrated with the obstacle avoidance
         """
-        # Call drive here, and associated helper functions like obstacle avoidance simultaneously. This will move the rover VVIMP
-        pass
+        print("ENTERED NAVIGATION")
+        if(not self.entered_nav):
+            self.entered_nav = True
+            goal_msg = Navigation.Goal()
+            goal_msg.points = self.target_gps
+
+            self.nav_action_client.wait_for_server()
+
+            self._send_goal_future = self.nav_action_client.send_goal_async(goal_msg, feedback_callback=self.navigate_feedback_callback)
+
+            self._send_goal_future.add_done_callback(self.navigate_goal_response_callback)
+        # Obstacle avoidance and driving behavior assumed to be handled by callbacks or another thread
+        print("driveTrain: Navigation goal sent.")
+
+    def navigate_goal_response_callback(self, future):
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            self.model.get_logger().info('Goal rejected :(')
+            return
+
+        self.model.get_logger().info('Goal accepted :)')
+
+        self._get_result_future = goal_handle.get_result_async()
+        self._get_result_future.add_done_callback(self.navigate_get_result_callback)
     
-    @Navigation.enter
-    def followNextPath(self):
-        """
-        This is the decided for if we abandon trying to reach the point, and move on to the next point
-        """
-        if self.flagStuck == True:
-            # Here, we give up on going to this target point, and move to the next
-            pass #Implement this
-        #Otherwise we do nothing
-        pass
+    def navigate_get_result_callback(self, future):
+        result = future.result().result
+        if result.reach_target:
+            self.model.get_logger().info("Navigation goal succeeded!")
+            self._reachedTargetPoint = True
+            self.reachTarget()
+        else:
+            self.model.get_logger().warn("Navigation goal failed.")
+            self.reachTarget()
+
+    def navigate_feedback_callback(self, feedback_msg):
+        feedback = feedback_msg.feedback
+        self.model.get_logger().info(
+        f"Distance Away: {feedback.distance_away:.2f}\n"
+        f"Current GPS: {list(feedback.current_gps)}\n"
+        f"Target GPS: {list(feedback.target_gps)}\n"
+        )
+    
 
     @Navigation.exit
-    def getCurrPointandHeading(self, roverGPSReading, roverHeading):
+    def exitNav(self):
         """
         Uses the rover's GPS to get its current point, and heading
         """
-
-        self.currPoint = roverGPSReading # Replace with the GPS reading coming from the Rover
-        self.pathBacktrack.append(roverGPSReading)
-        self.heading = roverHeading # Replace with direction angle of rover(don't know what will be) and don't know if needed
-
+        self.target_indx += 1
+        self.target_gps = self.targets[self.target_indx][:2]
+        self.target_type = self.targets[self.target_indx][2]
 
     # Checks what kind of point we have reached.
     @Check_Point.enter
     def checkPointType(self):
         """
-
         Accesses current point
         """
-        for key, value in self.pointDict.items():
-            # TODO: Implement estimation functionality for comparing equality for the current point +/- 2 metres
-            if value == self.currPoint:
-                self.lastTraversedPoint = key
-                break
-
+        if self.target_type == 0:
+            self.GNSS()
+        elif self.target_type == 1:
+            self.SearchTag()
+        else:
+            self.SearchObject()
 
     @SearchTag.enter
     def startFailTimeAruco(self):
@@ -148,7 +203,7 @@ class AutonomousStateMachine(StateMachine):
     def countFailTimeAruco(self):
         timeTakenTag = time.time()-self.failTagTime
         self.failTagTotal += timeTakenTag
-        print(self.failTagTotal)
+        #print(self.failTagTotal)
 
     @SearchObject.enter
     def startFailTimeObj(self):
@@ -163,7 +218,7 @@ class AutonomousStateMachine(StateMachine):
     def countFailTimeObj(self):
         timeTakenObj = time.time() - self.failObjTime
         self.failObjTotal += timeTakenObj
-        print(self.failObjTotal)
+        #print(self.failObjTotal)
     
     @DriveToTag.enter
     def driveToTag(self):
@@ -221,12 +276,6 @@ class AutonomousStateMachine(StateMachine):
         self.timeElapsed = time.localtime - self.timeElapsed # keeps track of seconds
     # Checks if the rover is still moving keeps looping the Navigation state (Gonna take Euclidean from target point and check)
 
-    def reachedTargetPoint(self):
-        # TODO: Implement estimation functionality +/- 2 metres of target point 
-        print(self.currPoint)
-        if(self.currPoint in self.pointDict.values()):
-            return True
-        return False
 
     def roverStuck(self):
         """I feel like this would be better to do as a state machine implementation rather than a condition, 
@@ -264,6 +313,9 @@ class AutonomousStateMachine(StateMachine):
             return True
         return False
     
+    def reachedTargetPoint(self):
+        return self._reachedTargetPoint
+    
     def backtrack(self, roverGPSReading):
         getcontext().prec = self.GPSPrecision #GPS units of precision for recognizing as a different point, can be changed,
         tupCurrPoint = (Decimal(self.currPoint[0]), Decimal(self.currPoint[1]), Decimal(self.currPoint[2]))
@@ -294,65 +346,14 @@ class AutonomousStateMachine(StateMachine):
 
 
 
-def main():
+def main(args=None):
 
-    sm = AutonomousStateMachine()
-
-    #These are input values from the rover GPS               VVIMP READ BELOW DO NOT MISS
-    testsampleRoverGPS1 = (38.44079858,-110.7782071,1377.88) # This needs to be a continuous input stream for the code below to work.
-    testsampleRoverGPS2 = (53.1231312, 12.592134123, 1123.94)
-    testsampleRoverGPS3 = (123.123123, 53.24123, 400.41)
-    testsampleRoverGPS4 = (456.123, 1234.523, 23.256)
-    # Please note that we will only have 1 roverGPS reading which will get updated every single time
-    sampleRoverHeading = 15
-
-    # This is not necessary everytime, was only to draw up the machine
-    imgPath = "C:\\Users\\Aditya\\RoboticsStateMachine\\autonomous_state_machine.png"
-    graph = DotGraphMachine(AutonomousStateMachine)
-    dot = graph()
-    dot.write_png(imgPath)
-
-    sm.send("startNav")
-
-    navFlag = True
-
-    while navFlag:
-        try:
-            sm.send("reachTarget", roverGPSReading=testsampleRoverGPS2, roverHeading = sampleRoverHeading)
-
-            if(sm.lastTraversedPoint == "GNSS"):
-
-                sm.send("GNSS") # Will enter blink lights here
-                sm.send("keepGoing")
-                if(sm.nextCommand == False):
-                    sm.send("abortMission")
-                    navFlag = False
-                else:
-                    sm.send("continueMission")
-                    # Must load in next point, and get rid of this point in traversal -- think it will be done in drive?
-                    """My plan for the whole navigating thing is also, to go to the closest point, then remove that point from dictionary.
-                     We will sort that before entering here, and then go to next closest point which is in dict, remove and so on
-                     on continue mission, we will do the point removal from the dictionary. Access the key of last traversed, 
-                     access the point in that list of tuples, and remove from list, should not be too hard to implement."""
-
-            elif(sm.lastTraversedPoint == "Aruco"):
-                sm.send("lookForTag", roverCanSeeTag = True)
-                if (sm.haveTimeSearch == True):
-                    sm.send("failTag")
-                else:
-                    (sm.send("retryOp"))
-
-
-
-            elif(sm.lastTraversedPoint == "Object"):
-                sm.send("lookforObj")
-
-
-
-            navFlag = False # See what to do here
-        except statemachine.exceptions.TransitionNotAllowed:
-            sm.send("navigate", roverGPSReading=testsampleRoverGPS2, roverHeading = sampleRoverHeading)
-
-    print(sm.current_state)
+    # # This is not necessary everytime, was only to draw up the machine
+    # imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
+    # graph = DotGraphMachine(AutonomousStateMachine)
+    # dot = graph()
+    # dot.write_png(imgPath)
+    #sm = AutonomousStateMachine()
+    pass
 if __name__ == "__main__":
     main()

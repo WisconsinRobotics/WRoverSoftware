@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'state_machine'
+package_name = 'wr_drive_ai'
 
 setup(
     name=package_name,
@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'state_machine = state_machine.auto_sm_node:main'
+            'drive_logic = wr_drive_ai.drive_logic:main',
+            'navigate_auto = wr_drive_ai.navigate_auto:main',
         ],
     },
 )
