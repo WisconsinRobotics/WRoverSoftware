@@ -95,6 +95,7 @@ class AutonomousStateMachine(StateMachine):
     # Define the State actions
     @Start.enter
     def loadPoint(self):
+        self.command_timeout = 15
         self.model.declare_parameter('led_mode', "mock")
         self.led_mode = self.model.get_parameter('led_mode').get_parameter_value().string_value
         self.model.get_logger().info('LED Mode: ' + str(self.led_mode))
@@ -270,17 +271,22 @@ class AutonomousStateMachine(StateMachine):
         Returns True if continuing, False if aborting.
         """
         self.model.get_logger().info("Paste this into another command window to continue: \n ros2 topic pub --once /user_command std_msgs/msg/String \"data: 'continue'\"")
+        self.command_start_time = time.time()
         self.timer = self.model.create_timer(1.0, self.check_command)
 
     def check_command(self):
         if self.command_received:
             self.model.get_logger().info("Command Received: True")
-            self.timer.cancel()  # stop the timer if done
+            self.timer.cancel()
             self.continueMission()
-        else:
-            #self.model.get_logger().info("Waiting for command...")
-            pass
+        elif time.time() - self.command_start_time > self.command_timeout:
+            self.command_received = True
+            self.model.get_logger().info("Timeout reached. Automatically continuing mission.")
 
+    @UserInput.exit
+    def resetCommandReceived(self):
+        self.command_received = False
+        
     @BackonPath.enter
     def tryAndRouteToPath(self, roverGPSReading):
         """This function will try to retrace our steps backwards to get back on the path.
