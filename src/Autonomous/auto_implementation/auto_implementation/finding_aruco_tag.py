@@ -1,19 +1,15 @@
-# def main():
-#     print('Hi from auto_implementation.')
-
-
-# if __name__ == '__main__':
-#     main()
-
 import numpy as np
 import cv2 as cv
+from typing import *
+
+#TODO: add a caliberation thing - maybe
 
 ## Initialize ArUco 4x4 marker dictionary
 ARUCO_DICT = cv.aruco.getPredefinedDictionary(cv.aruco.DICT_4X4_50)
 ## Initialize ArUco detector
 ARUCO_DETECTOR = cv.aruco.ArucoDetector(ARUCO_DICT)
 ## Constant for converting pixels to feet, may need to be tuned
-SIDE_LENGTH_1FT = 675
+SIDE_LENGTH_1FT = 675   
 ## Constant for converting feet to meters
 FT_TO_M = 0.3048
 
