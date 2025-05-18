@@ -27,4 +27,9 @@ def generate_launch_description():
             package='wr_drive_ai',
             executable='navigate_auto',
             name='navigate_auto'),
+        
+        launch_ros.actions.Node(
+            package='object_detection',
+            executable='object_detection',
+            name='object_detection'),
     ])

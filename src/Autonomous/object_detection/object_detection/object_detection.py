@@ -46,6 +46,8 @@ class ObjectDetectionClass(Node):
         # Publisher for drive commands
         self.swerve_publisher = self.create_publisher(Float32MultiArray, 'swerve', 1)
 
+        
+
     def aruco_feedback(self, msg):
         self.aruco_id = msg.target_id
         self.aruco_x =  msg.x_offset
@@ -62,6 +64,16 @@ class ObjectDetectionClass(Node):
         self.type = goal_handle.request.type
         feedback_msg = ObjectDetection.Feedback()
         msg = Float32MultiArray()
+        #Initialize values
+        self.get_logger().info('INIT VALUES ----------------')
+        self.aruco_id = -1
+        self.aruco_x =  0
+        self.aruco_distance =  10000
+        self.aruco_found = False
+
+        self.object_x = 0
+        self.object_distance = 10000
+        self.object_found = False
 
         rate = .1 # 1/.1 = 10 times per second
 

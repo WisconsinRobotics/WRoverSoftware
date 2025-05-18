@@ -48,7 +48,7 @@ class AutonomousStateMachine(StateMachine):
     unstuck = danceOff.to(Navigation, cond="haveTime and !isStuck")
     moveOn = danceOff.to(Navigation, cond="!haveTime and isStuck") # Add a instance var here for checking in Navigation
     GNSS = Check_Point.to(BlinkLights)
-    lookForTag = Check_Point.to(Search, cond = "checkAruco")
+    lookForTag = Check_Point.to(Search)
     failTag = Search.to(Search)
     retryOp = Search.to(Navigation)
     DriveToAruco = Search.to(DriveToTag, cond = "isAruco")
@@ -202,10 +202,11 @@ class AutonomousStateMachine(StateMachine):
         """
         Accesses current point
         """
+        
         if self.target_type == 0:
             self.GNSS()
         else:
-            self.Search()
+            self.lookForTag()
 
     @Search.enter
     def pathFindTag(self):
@@ -221,7 +222,7 @@ class AutonomousStateMachine(StateMachine):
 
         self._send_goal_future.add_done_callback(self.obj_det_goal_response_callback)
         # Obstacle avoidance and driving behavior assumed to be handled by callbacks or another thread
-        self.model.get_logger().info("driveTrain: Navigation goal sent.")
+        self.model.get_logger().info("driveTrain: FindTag goal sent.")
 
     def obj_det_goal_response_callback(self, future):
         self.model.get_logger().info("response from action client object/detection")
