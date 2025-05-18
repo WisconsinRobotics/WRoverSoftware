@@ -20,6 +20,11 @@ def generate_launch_description():
         ),
         Node(
             package='arm_test_python',
+            executable='science_data',
+            name='science_data'
+        ),
+        Node(
+            package='arm_test_python',
             executable='ik_subscriber',
             name='ik_subscriber'
         ),

@@ -26,6 +26,7 @@ setup(
             'rail_subscriber = arm_test_python.rail_subscriber:main',
             'science_logic = arm_test_python.science_logic:main',
             'science_neo = arm_test_python.science_neo:main',
+            'science_data = arm_test_python.science_data:main',
         ],
     },
 )
