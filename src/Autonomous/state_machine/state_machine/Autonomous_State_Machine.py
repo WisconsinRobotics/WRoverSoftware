@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from multiprocessing import get_context
-import keyboard # type: ignore
+import keyboard 
 from random import sample
 from pyparsing import removeQuotes
 from statemachine import StateMachine, State
@@ -16,7 +16,10 @@ from rclpy.executors import MultiThreadedExecutor
 import statemachine.exceptions
 from rclpy.action import ActionClient
 from custom_msgs_srvs.action import Navigation
+from custom_msgs_srvs.action import ObjectDetection
 from custom_msgs_srvs.srv import LED
+import tkinter as tk
+from std_msgs.msg import String
 
 
 # All print statements are only for debugging the code
@@ -26,8 +29,7 @@ class AutonomousStateMachine(StateMachine):
     Start = State(initial=True)
     Navigation = State()
     Check_Point = State()
-    SearchTag = State()
-    SearchObject = State()
+    Search = State()
     DriveToTag = State()
     BlinkLights = State()
     UserInput = State()
@@ -46,14 +48,10 @@ class AutonomousStateMachine(StateMachine):
     unstuck = danceOff.to(Navigation, cond="haveTime and !isStuck")
     moveOn = danceOff.to(Navigation, cond="!haveTime and isStuck") # Add a instance var here for checking in Navigation
     GNSS = Check_Point.to(BlinkLights)
-    lookForTag = Check_Point.to(SearchTag, cond = "checkAruco")
-    failTag = SearchTag.to(SearchTag)
-    lookForObj = Check_Point.to(SearchObject, cond = "checkObj")
-    failObj = SearchObject.to(SearchObject)
-    retryOp = SearchTag.to(Navigation)
-    retryOp2 = SearchObject.to(Navigation)
-    DriveToAruco = SearchTag.to(DriveToTag, cond = "isAruco")
-    DriveToObj = SearchObject.to(DriveToTag, cond="isObj")
+    lookForTag = Check_Point.to(Search, cond = "checkAruco")
+    failTag = Search.to(Search)
+    retryOp = Search.to(Navigation)
+    DriveToAruco = Search.to(DriveToTag, cond = "isAruco")
     success = DriveToTag.to(BlinkLights, cond="successCondition")
     failure = DriveToTag.to(Navigation, cond="!successCondition")
     keepGoing = BlinkLights.to(UserInput)
@@ -97,14 +95,26 @@ class AutonomousStateMachine(StateMachine):
     # Define the State actions
     @Start.enter
     def loadPoint(self):
+        self.model.declare_parameter('led_mode', "mock")
+        self.led_mode = self.model.get_parameter('led_mode').get_parameter_value().string_value
+        self.model.get_logger().info('LED Mode: ' + str(self.led_mode))
         self.led_cli = self.model.create_client(LED, 'change_LED')
         self.led_req = LED.Request()
         
         self.model.get_logger().info("Updated Picture")
-        imgPath = "/home/wiscrobo/workspace/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
+        imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
         graph = DotGraphMachine(AutonomousStateMachine)
         dot = graph()
         dot.write_png(imgPath)
+
+        #Wait for user input 
+        self.command_received = False
+        self.subscription = self.model.create_subscription(
+            String,
+            '/user_command',
+            self.handle_user_command,
+            10
+        )
 
         # Read target points 
         file_path = os.path.abspath("src/Autonomous/state_machine/state_machine/points.json")
@@ -121,6 +131,7 @@ class AutonomousStateMachine(StateMachine):
         self.entered_nav = False
         self._reachedTargetPoint = False
         self.nav_action_client = ActionClient(self.model, Navigation, 'navigate')
+        self.object_detection_action_client = ActionClient(self.model, ObjectDetection, 'object_detection')
         self.blinkLightColor("RED")
         self.startNav()
 
@@ -132,21 +143,19 @@ class AutonomousStateMachine(StateMachine):
         """
         This calls the drive function, ideally the drive function will be integrated with the obstacle avoidance
         """
-        print("ENTERED NAVIGATION")
-        if(not self.entered_nav):
-            self.entered_nav = True
-            goal_msg = Navigation.Goal()
-            goal_msg.points = self.target_gps
+        self.model.get_logger().info("ENTERED NAVIGATION")
+        
+        goal_msg = Navigation.Goal()
+        goal_msg.points = self.target_gps
 
-            self.nav_action_client.wait_for_server()
+        self._send_goal_future = self.nav_action_client.send_goal_async(goal_msg, feedback_callback=self.navigate_feedback_callback)
 
-            self._send_goal_future = self.nav_action_client.send_goal_async(goal_msg, feedback_callback=self.navigate_feedback_callback)
-
-            self._send_goal_future.add_done_callback(self.navigate_goal_response_callback)
+        self._send_goal_future.add_done_callback(self.navigate_goal_response_callback)
         # Obstacle avoidance and driving behavior assumed to be handled by callbacks or another thread
-        print("driveTrain: Navigation goal sent.")
+        self.model.get_logger().info("driveTrain: Navigation goal sent.")
 
     def navigate_goal_response_callback(self, future):
+        self.model.get_logger().info("response from action client")
         goal_handle = future.result()
         if not goal_handle.accepted:
             self.model.get_logger().info('Goal rejected :(')
@@ -165,6 +174,7 @@ class AutonomousStateMachine(StateMachine):
             self.reachTarget()
         else:
             self.model.get_logger().warn("Navigation goal failed.")
+            self._reachedTargetPoint = False
             self.reachTarget()
 
     def navigate_feedback_callback(self, feedback_msg):
@@ -193,66 +203,83 @@ class AutonomousStateMachine(StateMachine):
         """
         if self.target_type == 0:
             self.GNSS()
-        elif self.target_type == 1:
-            self.SearchTag()
         else:
-            self.SearchObject()
+            self.Search()
 
-    @SearchTag.enter
-    def startFailTimeAruco(self):
-        self.failTagTime = time.time()
+    @Search.enter
+    def pathFindTag(self):
+        """
+        This calls the drive function, ideally the drive function will be integrated with the obstacle avoidance
+        """
+        self.model.get_logger().info("ENTERED SEARCH FOR TAG OR OBJECT")
+        
+        goal_msg = ObjectDetection.Goal()
+        goal_msg.type = self.target_type
 
-    @SearchTag.enter
-    def pathFindTag(self, roverCanSeeTag):
-        """Tries to search and see if the Aruco Tag is in the rover's FOV, if it is then we must exit. Essentially a scouting alg"""
-        self.tagFound = roverCanSeeTag # This parameter will not exist in actuality, tag and object detection sync
+        self._send_goal_future = self.object_detection_action_client.send_goal_async(goal_msg, feedback_callback=self.obj_det_feedback_callback)
 
-    @SearchTag.exit
-    def countFailTimeAruco(self):
-        timeTakenTag = time.time()-self.failTagTime
-        self.failTagTotal += timeTakenTag
-        #print(self.failTagTotal)
+        self._send_goal_future.add_done_callback(self.obj_det_goal_response_callback)
+        # Obstacle avoidance and driving behavior assumed to be handled by callbacks or another thread
+        self.model.get_logger().info("driveTrain: Navigation goal sent.")
 
-    @SearchObject.enter
-    def startFailTimeObj(self):
-        self.failObjTime = time.time()
+    def obj_det_goal_response_callback(self, future):
+        self.model.get_logger().info("response from action client object/detection")
+        goal_handle = future.result()
+        if not goal_handle.accepted:
+            self.model.get_logger().info('Goal rejected :(')
+            return
 
-    @SearchObject.enter
-    def pathFindObject(self, roverCanSeeObj):
-        """Tries to search and see if the object is visible by turning camera"""
-        self.objFound = roverCanSeeObj # This parameter will not exist in actuality.
-    
-    @SearchObject.exit
-    def countFailTimeObj(self):
-        timeTakenObj = time.time() - self.failObjTime
-        self.failObjTotal += timeTakenObj
-        #print(self.failObjTotal)
+        self.model.get_logger().info('Goal accepted :)')
+
+        self._get_result_future = goal_handle.get_result_async()
+        self._get_result_future.add_done_callback(self.obj_det_get_result_callback)
+
+    def obj_det_get_result_callback(self, future):
+        result = future.result().result
+        if result.reached_tag:
+            self.model.get_logger().info("Object/tag arrival succeeded!")
+            self._reachedTargetPoint = True
+            self.DriveToAruco()
+        else:
+            self.model.get_logger().warn("Object/tag arrival failed!")
+            self.Search()
+
+    def obj_det_feedback_callback(self, feedback_msg):
+        feedback = feedback_msg.feedback
+        self.model.get_logger().info(
+        f"Have we found object/tag: {feedback.found_tag}\n"
+        )
     
     @DriveToTag.enter
     def driveToTag(self):
-        """Will Call the drive algorithm"""
-        pass
+        """All implemented on previous one (no search algorithm has been implemented)"""
+        self.success()
 
     @BlinkLights.enter
     def blinkLights(self):
         """Makes the lights green or smtg, depending on reqs"""
         print("Lights are blinking green yay") # replace with actual code to make lights blink
         self.blinkLightColor("GREEN")
+        self.keepGoing()
         
     
     @UserInput.enter
     def awaitNextCommand(self):
-        """Press spacebar, if space key pressed, returns true. If backspace pressed returns false, waits till one or the other key is pressed"""
-        print("Press SPACE to continue mission and BACKSPACE to abort") # This is not for debugging, do not remove
-        awaitFlag = True
-        while awaitFlag:
-            key = keyboard.read_key()
-            if key == 'space':
-                self.nextCommand = True
-                awaitFlag = False
-            if key == 'backspace':
-                self.nextCommand = False
-                awaitFlag = False
+        """
+        Waits for user to press SPACE to continue the mission or BACKSPACE to abort.
+        Returns True if continuing, False if aborting.
+        """
+        self.model.get_logger().info("Paste this into another command window to continue: \n ros2 topic pub --once /user_command std_msgs/msg/String \"data: 'continue'\"")
+        self.timer = self.model.create_timer(1.0, self.check_command)
+
+    def check_command(self):
+        if self.command_received:
+            self.model.get_logger().info("Command Received: True")
+            self.timer.cancel()  # stop the timer if done
+            self.continueMission()
+        else:
+            #self.model.get_logger().info("Waiting for command...")
+            pass
 
     @BackonPath.enter
     def tryAndRouteToPath(self, roverGPSReading):
@@ -349,28 +376,43 @@ class AutonomousStateMachine(StateMachine):
         return False
     
     def blinkLightColor(self,color):
-        while not self.led_cli.wait_for_service(timeout_sec=1.0):
-            self.model.get_logger().info('service not available, waiting again...')
+        if self.led_mode == "real":
+            while not self.led_cli.wait_for_service(timeout_sec=1.0):
+                self.model.get_logger().info('service not available, waiting again...')
 
-        if color == "RED":
-            self.led_req.red = 255
-            self.led_req.green = 0
-            self.led_req.blue = 0
-        elif color == "GREEN":
-            self.led_req.red = 0
-            self.led_req.green = 255
-            self.led_req.blue = 0
-        elif color == "BLUE":
-            self.led_req.red = 0
-            self.led_req.green = 0
-            self.led_req.blue = 255
+            if color == "RED":
+                self.led_req.red = 255
+                self.led_req.green = 0
+                self.led_req.blue = 0
+            elif color == "GREEN":
+                self.led_req.red = 0
+                self.led_req.green = 255
+                self.led_req.blue = 0
+            elif color == "BLUE":
+                self.led_req.red = 0
+                self.led_req.green = 0
+                self.led_req.blue = 255
+            else:
+                self.led_req.red = 0
+                self.led_req.green = 0
+                self.led_req.blue = 0
+            return self.led_cli.call_async(self.led_req)
         else:
-            self.led_req.red = 0
-            self.led_req.green = 0
-            self.led_req.blue = 0
-        return self.led_cli.call_async(self.led_req)
+            if color == "RED":
+                self.model.get_logger().info('Blinked LED Red')
 
+            elif color == "GREEN":
+                self.model.get_logger().info('Blinked LED Green')
 
+            elif color == "BLUE":
+                self.model.get_logger().info('Blinked LED Blue')
+            else:
+                self.model.get_logger().info('Turned off LED')
+    
+    def handle_user_command(self, msg):
+        if msg.data == "continue":
+            self.command_received = True
+            self.model.get_logger().info("Set command received to true")
 
 def main(args=None):
 

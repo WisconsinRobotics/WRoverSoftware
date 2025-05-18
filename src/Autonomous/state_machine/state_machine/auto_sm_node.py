@@ -1,6 +1,8 @@
 import rclpy
 from rclpy.node import Node
 from state_machine.Autonomous_State_Machine import AutonomousStateMachine
+from rclpy.executors import MultiThreadedExecutor
+
 
 class AutonomousNode(Node):
     def __init__(self):
@@ -13,17 +15,11 @@ class AutonomousNode(Node):
         # self.timer = self.create_timer(2.0, self.run_state_machine)
         
 def main(args=None):
-    rclpy.init(args=args)
+    rclpy.init()
     node = AutonomousNode()
-
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        
-        node.get_logger().info("Shutting down.")
-
-    node.destroy_node()
-    rclpy.shutdown()
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
+    executor.spin()
 
 
 if __name__ == '__main__':

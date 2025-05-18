@@ -1,0 +1,4 @@
+int64 target_id
+int64 x_offset
+float64 distance_estimate
+bool tag_found

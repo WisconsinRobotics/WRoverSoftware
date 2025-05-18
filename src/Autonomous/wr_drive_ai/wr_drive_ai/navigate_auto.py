@@ -11,6 +11,7 @@ from std_msgs.msg import Bool
 from math import atan2, radians, degrees, sin, cos, sqrt
 from rclpy.action import ActionServer
 from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
 
 from custom_msgs_srvs.action import Navigation
 
@@ -29,23 +30,6 @@ FWD_ROT_270  = [  1.0,   0.0,  0.0,  1.0]
 STOP     = [  0,0,   0.0,  0.0,  0.0]
 
 class WaypointFollower(Node):
-    def start_input_thread(self):
-        thread = threading.Thread(target=self.user_input_loop)
-        thread.daemon = True
-        thread.start()
-
-    def user_input_loop(self):
-        print("STARTING INPUT THREAD")
-        while rclpy.ok():
-            print("AAAAAAAA")
-            if not self.to_drive:
-                user_input = input("To start autonomous driving, type START: ").strip()
-                if user_input.upper() == "START":
-                    self.to_drive = True
-                    print("Autonomous driving started.")
-                    return
-
-
     def __init__(self):
         super().__init__('waypoint_follower')
         self._action_server = ActionServer(
@@ -169,12 +153,19 @@ class WaypointFollower(Node):
         rate = .1 # 1/.1 = 10 times per second
 
         while rclpy.ok():
-            # Safety check: don't drive if not activated
-            if not self.to_drive:
-                self.get_logger().info("Autonomous driving paused.")
-                msg.data = STOP
-                self.swerve_publisher.publish(msg)
-                continue
+            if goal_handle.is_cancel_requested:
+                goal_handle.canceled()
+                self.get_logger().info('Goal canceled')
+                result = Navigation.Result()
+                result.reach_target = False
+                return result
+            
+            # # Safety check: don't drive if not activated
+            # if not self.to_drive:
+            #     self.get_logger().info("Autonomous driving paused.")
+            #     msg.data = STOP
+            #     self.swerve_publisher.publish(msg)
+            #     continue
 
             # Ensure sensor data is valid
 
@@ -183,7 +174,7 @@ class WaypointFollower(Node):
             #     rate.sleep()
             #     continue
             
-            self.get_logger().info(f"Current GPS {self.current_gps}")
+            #self.get_logger().info(f"Current GPS {self.current_gps}")
             # Feedback to action server
             feedback_msg.distance_away = self.gps_distance(self.current_gps, self.target_gps)
             feedback_msg.target_gps = self.target_gps
@@ -217,19 +208,14 @@ class WaypointFollower(Node):
                 result = Navigation.Result()
                 result.reach_target = True
                 return result
-            rclpy.spin_once(self, timeout_sec=rate)
-
-        # If loop exited, return failure
-        self.get_logger().warn("Navigation aborted.")
-        result = Navigation.Result()
-        result.reach_target = False
-        return result
+ 
 
 def main():
     rclpy.init()
     node = WaypointFollower()
-    rclpy.spin(node)
-    rclpy.shutdown()
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
+    executor.spin()
 
 if __name__ == '__main__':
     main()
