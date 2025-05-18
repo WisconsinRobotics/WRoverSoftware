@@ -72,6 +72,7 @@ class YOLODetectionPublisher(Node):
             try:
                 _ = self.camera_socket.recv(flags=zmq.NOBLOCK)
             except zmq.Again:
+                self.get_logger().warn(f"Frame not captured. Retrying...")
                 break
                 
         # Decode frame data from camera socket

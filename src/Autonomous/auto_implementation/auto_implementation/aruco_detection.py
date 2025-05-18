@@ -2,6 +2,7 @@
 
 import rospy
 import cv2 as cv
+import cv2.aruco as aruco_lib
 import numpy as np
 import finding_aruco_tag
 from Messages.custom_msgs.msg import VisionTarget
