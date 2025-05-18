@@ -18,16 +18,8 @@ def generate_launch_description():
             executable='drive_controller',
             name='drive_controller'
         ),
-        Node(
-            package='wr_xbox_controller',
-            executable='arm_xbox_ik',
-            name='arm_xbox_ik'
-        ),
-        Node(
-            package='wr_xbox_controller',
-            executable='rail_gripper_controller',
-            name='rail_gripper_controller'
-        )#,
+
+        #,
        # Node(
        #     package='wr_depth_camera',
        #     executable='display',

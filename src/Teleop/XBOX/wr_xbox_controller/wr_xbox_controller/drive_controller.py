@@ -3,10 +3,11 @@ from rclpy.node import Node
 import pygame
 from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Int16MultiArray
 
 # NOTE: This might cause problems if called multiple times
 pygame.init()
-
+CONTROLLER = 0
 
 class XboxPublisher(Node):
 
@@ -18,6 +19,8 @@ class XboxPublisher(Node):
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
         self.AXIS_BOUNDARY = 0.1
+        self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
+        self.buttons=[0,0,0,0,0,0,0,0] #Up, Down, Left, Right, A, B, Left Bumper, Right Bumper
     
     def timer_callback(self):
         # No button capability, but doesn't sound like we need it. 
@@ -42,6 +45,59 @@ class XboxPublisher(Node):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.JOYBUTTONDOWN:
+                if event.joy == CONTROLLER:
+                    if event.button == 0:  # A button
+                        self.buttons[4] = 1
+                    elif event.button == 1:  # B button
+                        self.buttons[5] = 1
+                    elif event.button == 4:  # Left bumper button
+                        self.buttons[6] = 1
+                    elif event.button == 5:  # Roght bumper button
+                        self.buttons[7] = 1
+                    elif event.button == 2: # X Button
+                        self.get_logger().info("Pressed ARM controller (ARM)")
+
+            elif event.type == pygame.JOYBUTTONUP:
+                if event.joy == CONTROLLER:
+                    if event.button == 0:  # A button
+                        self.buttons[4] = 0
+                    elif event.button == 1:  # B button
+                        self.buttons[5] = 0
+                    elif event.button == 4:  # Left bumper button
+                        self.buttons[6] = 0
+                    elif event.button == 5:  # Roght bumper button
+                        self.buttons[7] = 0
+            if event.type == pygame.JOYHATMOTION:
+                if event.joy == CONTROLLER:
+                    if event.value[1] == 1:  # D-Pad Up
+                        self.buttons[0] = 1
+                    else:
+                        self.buttons[0] = 0
+                    if event.value[1] == -1:  # D-Pad Down
+                        self.buttons[1] = 1
+                    else:
+                        self.buttons[1] = 0  # Reset to False
+                    if event.value[0] == -1:  # D-Pad Left
+                        self.buttons[2] = 1
+                    else:
+                        self.buttons[2] = 0
+                    if event.value[0] == 1:  # D-Pad Right
+                        self.buttons[3] = 1
+                    else:
+                        self.buttons[3] = 0  # Reset to False
+                    
+            #print(self.buttons)
+            buttons_command = Int16MultiArray()
+            buttons_command.data = self.buttons  
+            #print(buttons_command)
+            self.buttons_publisher_.publish(buttons_command)    
+                  
+    
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.QUIT:
+                running = False
             
             if event.type == pygame.JOYBUTTONDOWN:
                 if event.joy == 0: #First controller
@@ -53,7 +109,8 @@ class XboxPublisher(Node):
                 # This event will be generated when the program starts for every
                 # joystick, filling up the list without needing to create them manually.
                 self.joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-                #print(f"{len(self.joysticks)} Joysticks connected")
+                print(f"{len(self.joysticks)} Joysticks connected")
+                #print(f"Joystick {event.instance_id} connected")
                 #print(f"There are {self.joysticks[0].get_numaxes()} axes")
                 #print(self.joysticks)
 

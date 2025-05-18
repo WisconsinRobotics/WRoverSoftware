@@ -58,7 +58,7 @@ class SwerveControlSubsrciber(Node):
             can_msg_angle.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
             self.publisher_.publish(can_msg_angle)
-            #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
+            self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
