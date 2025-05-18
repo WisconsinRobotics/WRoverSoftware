@@ -21,7 +21,7 @@ SIDE_LENGTH_1FT = 675
 ## Constant for converting feet to meters
 FT_TO_M = 0.3048
 
-CAMERA_WIDTH = 1280
+CAMERA_WIDTH = 1920
 def process_corners(target_id: int, corners: np.ndarray) -> VisionTarget:
     """
     Creates a VisionTarget message based on the detected ArUco tag
