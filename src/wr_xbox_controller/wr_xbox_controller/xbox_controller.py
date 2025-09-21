@@ -14,14 +14,14 @@ class XboxPublisher(Node):
 
     def __init__(self):
         super().__init__('arm_xbox_publisher')
-        self.arm_publisher = self.create_publisher(Float32MultiArray, 'joy', 10)
+        self.arm_publisher = self.create_publisher(Float32MultiArray, 'joy_arm', 10)
         # NOTE: This might need to be tuned
         timer_period = .01  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
         self.AXIS_BOUNDARY = 0.1
 
-        self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons', 2)
+        self.buttons_publisher_ = self.create_publisher(Int16MultiArray, 'buttons_arm', 2)
         self.buttons=[0,0,0,0,0,0] #Up, Down, Left, Right, A, B
 
     def timer_callback(self):
@@ -30,7 +30,6 @@ class XboxPublisher(Node):
         #print(self.joysticks[0])
         if len(self.joysticks) > CONTROLLER:
             #TODO: Check inputs for armself.joysticks[1].joy 
-            # Index 0 is left stick x-axis, 1 is left stick y-axis, 3 is right stick x-axis, 2 is right stick y-axis
             motion = [self.joysticks[CONTROLLER].get_axis(4), #Right stick y-axis (hopefully)
                         -self.joysticks[CONTROLLER].get_axis(1), #Left stick y-axis
                         self.joysticks[CONTROLLER].get_axis(2), #Left trigger

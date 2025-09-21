@@ -56,8 +56,8 @@ def generate_launch_description():
         Node(
             package='wr_xbox_controller',
             namespace='',
-            executable='arm_rail_xbox',
-            name='arm_rail_xbox',
+            executable='xbox_controller',
+            name='xbox_controller',
         ),
         Node(
             package='wr_xbox_controller',

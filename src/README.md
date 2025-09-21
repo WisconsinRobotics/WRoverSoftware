@@ -31,3 +31,11 @@ ros2 run wr_swerve_motor swerve_motor
 ros2 run wr_xbox_controller xbox_controller
 ```
 5. Use the left joystick to move the motor
+
+### RUNNING ARM FORWARK KINEMATICS
+To control the arm with forward kinematics, you can:
+     
+     ```bash
+     source install/setup.bash
+     ros2 launch wr_xbox_controller arm_xbox
+     ```
