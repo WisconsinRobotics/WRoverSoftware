@@ -7,117 +7,63 @@ import numpy as np
 import cv2
 import message_filters
 
+
 class SectorDepthClassifier(Node):
     def __init__(self):
         super().__init__('sector_depth_classifier')
         self.bridge = CvBridge()
 
-        # Parameters
-        self.declare_parameter('crop_frac',     0.15)     # fraction to crop top
-        self.declare_parameter('y_thresh',      0.4)      # ground removal (m)
-        self.declare_parameter('near_th',       3.5)      # ≤ near_th → “near”
-        self.declare_parameter('mid_th',        6.0)      # ≥ mid_th → “far”
-        self.declare_parameter('near_override', 0.10)
-        self.declare_parameter('num_sectors',   128)
-
         # Subscribers
-        depth_sub = message_filters.Subscriber(self, Image,      '/oak/stereo/image_raw')
-        pc_sub    = message_filters.Subscriber(self, PointCloud2, '/oak/points')
-        ts = message_filters.ApproximateTimeSynchronizer(
-            [depth_sub, pc_sub], queue_size=5, slop=0.05)
-        ts.registerCallback(self.cb)
+        self.subscription = self.create_subscription(
+            Image,  # Message type
+            '/oak/stereo/image_raw',  # Topic name
+            self.cb,
+            10)  # QoS profile depth
+        self.subscription
 
         # Publisher for the overlay
         self.pub = self.create_publisher(Image, 'object_avoidance/overlay', 1)
 
-        # Cache dtype for Y-channel extraction
-        self._pc_dtype = None
-
-    def _make_pc_dtype(self, pc_msg: PointCloud2):
-        y_field = next(f for f in pc_msg.fields if f.name == 'y')
-        return np.dtype({
-            'names':   ['y'],
-            'formats': [np.float32],
-            'offsets': [y_field.offset],
-            'itemsize': pc_msg.point_step
-        })
-
     def cb(self, depth_msg: Image, pc_msg: PointCloud2):
         # Decode and crop depth image
         raw_full = self.bridge.imgmsg_to_cv2(depth_msg, '16UC1')
+        
         depth_full = raw_full.astype(np.float32) / 1000.0
+        mask = (depth_full == 0)
+        depth_full[mask] = np.float32(100)
+        depth_threshold = 2
+        print(depth_full.shape)
+        focal_length = np.float32(563.33333)
 
-        H_full, W = depth_full.shape
-        y0 = int(self.get_parameter('crop_frac').value * H_full)
-        raw = raw_full[y0:, :]
-        depth_m = depth_full[y0:, :]
+        degrees = np.array([i for i in range(-49, 50, 3)])
+        pixel_location = np.tan(np.radians(degrees)) * focal_length + np.float32(648.040894)
+        
+        """
+        depth_full = (depth_full).astype(np.uint8)
+        
+        for i in pixel_location:
+            start_point, end_point = (round(i), 0), (round(i), 719)
+            color = (255, 0, 0)
+            thickness = 1
+            cv2.line(depth_full, start_point, end_point, color, thickness)
 
-        # Extract Y channel from point cloud and crop
-        if self._pc_dtype is None:
-            self._pc_dtype = self._make_pc_dtype(pc_msg)
-        arr = np.frombuffer(pc_msg.data, dtype=self._pc_dtype, count=H_full * W)
-        y_full = arr['y'].reshape(H_full, W)
-        y = y_full[y0:, :]
+            # Publish overlay
+        """
+        min_list = []
+        for x in range(0, 1079):
+            min = depth_full[0][x]
+            for y in range(1, 719):
+                if depth_full[y][x] < min:
+                    min = depth_full[y][x]
+            min_list.append(min)
+        
+        print(min_list)
 
-        # Remove ground (Y > threshold)
-        y_thresh = self.get_parameter('y_thresh').value
-        mask_ground = (y > y_thresh)
-        depth_m[mask_ground] = np.nan
-        depth_m[depth_m <= 0] = np.nan
-
-        # Sector classification
-        near_th = self.get_parameter('near_th').value
-        mid_th  = self.get_parameter('mid_th').value
-        nr_ov   = self.get_parameter('near_override').value
-        num_sec = self.get_parameter('num_sectors').value
-        H, _ = depth_m.shape
-        sect_w = W // num_sec
-
-        results = []
-        near_mask = (depth_m < near_th)
-        mid_mask  = (depth_m >= near_th) & (depth_m < mid_th)
-        far_mask  = (depth_m >= mid_th)
-        for i in range(num_sec):
-            x0 = i * sect_w
-            x1 = W if i == num_sec-1 else (i+1) * sect_w
-            tot = H * (x1 - x0)
-            nf = np.count_nonzero(near_mask[:, x0:x1]) / tot
-            mf = np.count_nonzero(mid_mask [:, x0:x1]) / tot
-            ff = np.count_nonzero(far_mask [:, x0:x1]) / tot
-            if nf > nr_ov * (nf+mf+ff):
-                cls = 'near'
-            elif mf * 1.2 > ff:
-                cls = 'mid'
-            elif (nf+mf) > ff:
-                cls = 'near' if nf>mf else 'mid'
-            else:
-                cls = 'far'
-            results.append((i, nf, mf, ff, cls))
-
-        # Log details
-        self.get_logger().info('Sector | near | mid | far | cls')
-        for (i, nf, mf, ff, cls) in results:
-            self.get_logger().info(f'{i:>3d}    | {nf:.2f} | {mf:.2f} | {ff:.2f} | {cls}')
-
-        # Build uniform colored overlay bands
-        raw8 = cv2.normalize(raw, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-        base = cv2.cvtColor(raw8, cv2.COLOR_GRAY2BGR)
-        band_overlay = np.zeros_like(base)
-        colors = {'near': (0, 0, 255), 'mid': (0, 255, 255), 'far': (0, 255, 0)}
-        for i, _,_,_, cls in results:
-            x0 = i * sect_w
-            x1 = W if i == num_sec-1 else (i+1) * sect_w
-            band_overlay[:, x0:x1] = colors[cls]
-
-        # Blend overlay with base image
-        alpha = 0.3
-        overlay = cv2.addWeighted(band_overlay, alpha, base, 1-alpha, 0)
-
-        # Publish overlay
-        out_msg = self.bridge.cv2_to_imgmsg(overlay, 'bgr8')
+        """
+        out_msg = self.bridge.cv2_to_imgmsg(depth_full)
         out_msg.header = depth_msg.header
         self.pub.publish(out_msg)
-
+        """
 
 def main(args=None):
     rclpy.init(args=args)
@@ -127,6 +73,7 @@ def main(args=None):
     finally:
         node.destroy_node()
         rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image, PointCloud2
+from sensor_msgs.msg import Image, PointCloud2, CameraInfo
 import message_filters
 from cv_bridge import CvBridge
 import numpy as np
@@ -13,11 +13,8 @@ class PC2ColorMask(Node):
         self.bridge = CvBridge()
 
         # RGB + PointCloud2 subscriptions
-        rgb_sub = message_filters.Subscriber(self, Image,      '/oak/rgb/image_raw')
-        pc_sub  = message_filters.Subscriber(self, PointCloud2, '/oak/points')
-
-        ts = message_filters.ApproximateTimeSynchronizer(
-            [rgb_sub, pc_sub], queue_size=5, slop=0.05)
+        rgb_sub = message_filters.Subscriber(self, CameraInfo, '/oak/stereo/camera_info')
+        
         ts.registerCallback(self.callback)
 
         self.pub = self.create_publisher(Image, 'highlighted_pc_mask', 2)
@@ -37,32 +34,8 @@ class PC2ColorMask(Node):
             'itemsize': pc_msg.point_step
         })
 
-    def callback(self, rgb_msg: Image, pc_msg: PointCloud2):
-        # 1) Convert the RGB image
-        rgb = self.bridge.imgmsg_to_cv2(rgb_msg, 'bgr8')
-
-        H, W = pc_msg.height, pc_msg.width
-        n_pts = H * W
-
-        # 2) Build/cache our dtype for extracting 'y'
-        if self._pc_dtype is None:
-            self._pc_dtype = self._make_dtype(pc_msg)
-
-        # 3) Map the raw data buffer into a 1D array of records
-        arr = np.frombuffer(pc_msg.data, dtype=self._pc_dtype, count=n_pts)
-
-        # 4) View the 'y' field as a (H, W) float32 array
-        y = arr['y'].reshape(H, W)
-
-        # 5) Build our mask (camera-frame Y positive downward)
-        y_thresh = self.get_parameter('y_thresh').value
-        mask = (y > y_thresh)
-
-        # 6) Highlight masked pixels in blue
-        out = rgb.copy()
-        out[mask] = (255, 0, 0)
-
-        # 7) Publish
+    def callback(self, rgb_msg: CameraInfo, pc_msg: PointCloud2):
+        print(rgb_msg+"\n\n\n")
         out_msg = self.bridge.cv2_to_imgmsg(out, 'bgr8')
         out_msg.header = rgb_msg.header
         self.pub.publish(out_msg)
