@@ -6,7 +6,17 @@ Install DepthAI library using the command: sudo apt install ros-[distro]-depthai
 First connect to OAK-D W with the following command: ros2 launch depthai_ros_driver camera.launch.py
 then build and run the package.
 
-Subscribe to the "object_avoidance/info" topic for an integer[128] array with three values:
-0 - close
-1 - mid
-2 - far
+checklist for progress:
+
+Phase 1: basic prototype(vfh algorithm)
+- pixel location to angle ✔️
+- find min value of sectors ✔️
+- Gap detection
+- rudementary ground removal without plane detection (no ransac)
+
+Phase 2: 
+- better ground detection using ransac
+- cost function / danger function for concave rock problem
+- terrain classifications
+
+and lots and lots of testing :>
