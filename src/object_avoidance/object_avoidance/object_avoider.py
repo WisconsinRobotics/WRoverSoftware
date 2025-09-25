@@ -63,6 +63,42 @@ class SectorDepthClassifier(Node):
             min_list.append(min)
         print(min_list)
 
+        # if 0 its no object
+        # if 1 its no object
+        # 0 followed by 1 means end of object
+        # 1 followed by 0 means start of object
+        # nothing followed by 0 means start of object
+        # 0 followed by nothing means end of object
+        gaps = []
+        gap = ()
+        prev_x = None
+        for i in range(0, len(gap_list)):
+            x = gap_list[i]
+        
+            if i == 0:  # nothing followed by 0 means start of object
+                if x == 0:
+                    gap = gap + (i,)
+                prev_x = x
+                continue
+        
+            if prev_x == 0 and x == 1:  # 0 followed by 1 means end of object
+                gap = gap + (i,)
+                prev_x = x
+                gaps.append(gap)
+                gap = ()
+                continue
+        
+            if prev_x == 1 and x == 0:  # 1 followed by 0 means start of object
+                gap = gap + (i - 1,)
+                prev_x = x
+                continue
+        
+            if i == len(gap_list) - 1 and x == 0:  # 0 followed by nothing means end of object
+                gap = gap + (i,)
+                gaps.append(gap)
+                gap = ()
+                continue
+            
         """
         out_msg = self.bridge.cv2_to_imgmsg(depth_full)
         out_msg.header = depth_msg.header
