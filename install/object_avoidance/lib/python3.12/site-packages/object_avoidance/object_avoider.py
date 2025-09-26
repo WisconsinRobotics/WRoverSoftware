@@ -9,6 +9,11 @@ import message_filters
 
 
 class SectorDepthClassifier(Node):
+
+    PIXEL_OFFSET = np.float32(648.040894)
+    FOCAL_LENGTH = np.float32(563.33333)
+    GAP_THRESHOLD = 2 # The minimum distance between two obstacles such that the rover can fit.
+
     def __init__(self):
         super().__init__('sector_depth_classifier')
         self.bridge = CvBridge()
@@ -26,18 +31,23 @@ class SectorDepthClassifier(Node):
 
     def cb(self, depth_msg: Image, pc_msg: PointCloud2):
         # Decode and crop depth image
+
+
+
+
         raw_full = self.bridge.imgmsg_to_cv2(depth_msg, '16UC1')
         
         depth_full = raw_full.astype(np.float32) / 1000.0
         mask = (depth_full == 0)
-        depth_full[mask] = np.float32(100)
+        depth_full[mask] = np.nan
         depth_threshold = 2
         print(depth_full.shape)
-        focal_length = np.float32(563.33333)
 
         degrees = np.array([i for i in range(-49, 50, 3)])
-        pixel_location = np.tan(np.radians(degrees)) * focal_length + np.float32(648.040894)
+        pixel_location = np.tan(np.radians(degrees)) * self.FOCAL_LENGTH + self.PIXEL_OFFSET
         
+        
+
         """
         depth_full = (depth_full).astype(np.uint8)
         
@@ -52,14 +62,14 @@ class SectorDepthClassifier(Node):
         min_list = []
         gap_list = []
         for x in range(0, 1079):
-            min = depth_full[0][x]
-            for y in range(1, 719):
+            min = 1000
+            for y in range(0, 719):
                 if depth_full[y][x] < min:
                     min = depth_full[y][x]
-            if min <= 2:
-                gap_list.append(0)
-            else:
+            if min <= depth_threshold:
                 gap_list.append(1)
+            else:
+                gap_list.append(0)
             min_list.append(min)
         print(min_list)
 
@@ -71,34 +81,50 @@ class SectorDepthClassifier(Node):
         # 0 followed by nothing means end of object
         gaps = []
         gap = ()
-        prev_x = None
-        for i in range(0, len(gap_list)):
-            x = gap_list[i]
+        prev_value = None
+        for index, value in enumerate(gap_list):
         
-            if i == 0:  # nothing followed by 0 means start of object
-                if x == 0:
-                    gap = gap + (i,)
-                prev_x = x
+            if index == 0:  # nothing followed by 0 means start of object
+                if value == 0:
+                    gap = gap + (index,)
+                prev_value = value
                 continue
         
-            if prev_x == 0 and x == 1:  # 0 followed by 1 means end of object
-                gap = gap + (i,)
-                prev_x = x
+            if prev_value == 0 and value == 1:  # 0 followed by 1 means end of object
+                gap = gap + (index,)
+                prev_value = value
                 gaps.append(gap)
                 gap = ()
                 continue
         
-            if prev_x == 1 and x == 0:  # 1 followed by 0 means start of object
-                gap = gap + (i - 1,)
-                prev_x = x
+            if prev_value == 1 and value == 0:  # 1 followed by 0 means start of object
+                gap = gap + (index - 1,)
+                prev_value = value
                 continue
         
-            if i == len(gap_list) - 1 and x == 0:  # 0 followed by nothing means end of object
-                gap = gap + (i,)
+            if index == len(gap_list) - 1 and value == 0:  # 0 followed by nothing means end of object
+                gap = gap + (index,)
                 gaps.append(gap)
                 gap = ()
                 continue
+    
+        distance_monitor_list = []
+        for gap in gaps:
+            ux1 = gap[0]
+            ux2 = gap[1]
             
+            d1 = min_list[ux1]
+            d2 = min_list[ux2]
+
+            # Calculating the theta for each gap
+            theta = np.arctan((ux2 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH) - np.arctan((ux1 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH) 
+            gap_distance = np.sqrt(d1**2 + d2**2 - (2*d1*d2*np.cos(theta)))
+            distance_monitor_list.append(gap_distance)
+
+        print("theta: ", (theta*180)/3.14)
+        print("list of gaps :",gaps)
+        print("list of distance between gaps :", distance_monitor_list, "\n\n")
+
         """
         out_msg = self.bridge.cv2_to_imgmsg(depth_full)
         out_msg.header = depth_msg.header
