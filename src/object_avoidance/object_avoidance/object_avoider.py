@@ -31,17 +31,13 @@ class SectorDepthClassifier(Node):
 
     def cb(self, depth_msg: Image, pc_msg: PointCloud2):
         # Decode and crop depth image
-
-
-
-
         raw_full = self.bridge.imgmsg_to_cv2(depth_msg, '16UC1')
         
         depth_full = raw_full.astype(np.float32) / 1000.0
         mask = (depth_full == 0)
         depth_full[mask] = np.nan
         depth_threshold = 2
-        print(depth_full.shape)
+        H,W = depth_full.shape
 
         degrees = np.array([i for i in range(-49, 50, 3)])
         pixel_location = np.tan(np.radians(degrees)) * self.FOCAL_LENGTH + self.PIXEL_OFFSET
@@ -61,9 +57,9 @@ class SectorDepthClassifier(Node):
         """
         min_list = []
         gap_list = []
-        for x in range(0, 1079):
+        for x in range(0, W):
             min = 1000
-            for y in range(0, 719):
+            for y in range(0, H):
                 if depth_full[y][x] < min:
                     min = depth_full[y][x]
             if min <= depth_threshold:
@@ -107,29 +103,49 @@ class SectorDepthClassifier(Node):
                 gaps.append(gap)
                 gap = ()
                 continue
-    
+        
+        thetas = []
         distance_monitor_list = []
         for gap in gaps:
             ux1 = gap[0]
             ux2 = gap[1]
             
-            d1 = min_list[ux1]
-            d2 = min_list[ux2]
+            theta1 = np.arctan((ux1 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH) 
+            theta2 = np.arctan((ux2 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH)
 
+            d1 = np.cos(theta1)/min_list[ux1]
+            d2 = np.cos(theta2)/min_list[ux2]
+            
             # Calculating the theta for each gap
-            theta = np.arctan((ux2 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH) - np.arctan((ux1 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH) 
+            
+            theta = theta2 - theta1
+            thetas.append(theta)
             gap_distance = np.sqrt(d1**2 + d2**2 - (2*d1*d2*np.cos(theta)))
             distance_monitor_list.append(gap_distance)
 
-        print("theta: ", (theta*180)/3.14)
+        print("theta: ", (np.array(thetas)*180)/3.14)
         print("list of gaps :",gaps)
         print("list of distance between gaps :", distance_monitor_list, "\n\n")
+        
+        depth_full = cv2.normalize(depth_full, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+        depth_full = cv2.cvtColor(depth_full, cv2.COLOR_GRAY2BGR)
 
-        """
-        out_msg = self.bridge.cv2_to_imgmsg(depth_full)
-        out_msg.header = depth_msg.header
-        self.pub.publish(out_msg)
-        """
+        # raw8 = cv2.normalize(depth_full, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+        # base = cv2.cvtColor(raw8, cv2.COLOR_GRAY2BGR)
+                
+        for gap in gaps:
+            start_point, end_point = (gap[0], 0), (gap[1], 719)
+            color = (0, 255, 0)
+            depth_full = cv2.rectangle(depth_full, start_point, end_point, color, -1)
+
+            # Publish overlay
+
+        cv2.imshow("obstacle avoidance", depth_full)
+        cv2.waitKey(0)
+        # out_msg = self.bridge.cv2_to_imgmsg(depth_full, 'bgr8')
+        # out_msg.header = depth_msg.header
+        # self.pub.publish(out_msg)
+        
 
 def main(args=None):
     rclpy.init(args=args)
