@@ -10,7 +10,8 @@ import message_filters
 
 class SectorDepthClassifier(Node):
 
-    PIXEL_OFFSET = np.float32(648.040894)
+    X_PIXEL_OFFSET = np.float32(648.040894)
+    Y_PIXEL_OFFSET = np.float32(360)
     FOCAL_LENGTH = np.float32(563.33333)
     GAP_THRESHOLD = 2 # The minimum distance between two obstacles such that the rover can fit.
 
@@ -29,19 +30,30 @@ class SectorDepthClassifier(Node):
         # Publisher for the overlay
         self.pub = self.create_publisher(Image, 'object_avoidance/overlay', 1)
 
-    def cb(self, depth_msg: Image, pc_msg: PointCloud2):
+    def cb(self, depth_msg: Image):
         # Decode and crop depth image
         raw_full = self.bridge.imgmsg_to_cv2(depth_msg, '16UC1')
         
         depth_full = raw_full.astype(np.float32) / 1000.0
-        mask = (depth_full == 0)
-        depth_full[mask] = np.nan
+        mask = (depth_full == 0) | (depth_full == np.nan)
+        depth_full[mask] = np.float32(10)
         depth_threshold = 2
-        H,W = depth_full.shape
+        H,W = depth_full.shape        
 
-        degrees = np.array([i for i in range(-49, 50, 3)])
-        pixel_location = np.tan(np.radians(degrees)) * self.FOCAL_LENGTH + self.PIXEL_OFFSET
+        # visualize = cv2.normalize(depth_full, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
+        # visualize = cv2.cvtColor(visualize, cv2.COLOR_GRAY2BGR)
+
+
+        # mask = (-1 * depth_full[y][x] * (y - self.Y_PIXEL_OFFSET)/(self.FOCAL_LENGTH) < 0.5)
+        # depth_full[mask] = np.float32(199)
         
+        # For masking the floor values
+        for y in range(0,H):
+            for x in range(0, W):
+                height = -1 * depth_full[y][x] * (y - self.Y_PIXEL_OFFSET)/(self.FOCAL_LENGTH)
+
+                if height < -0.5:
+                    depth_full[y][x] = np.float32(10)
         
 
         """
@@ -55,8 +67,9 @@ class SectorDepthClassifier(Node):
 
             # Publish overlay
         """
-        min_list = []
-        gap_list = []
+        
+        min_list = [] # list of all min values of each vertical sector. values are in m
+        gap_list = [] # list gap tuples
         for x in range(0, W):
             min = 1000
             for y in range(0, H):
@@ -110,8 +123,8 @@ class SectorDepthClassifier(Node):
             ux1 = gap[0]
             ux2 = gap[1]
             
-            theta1 = np.arctan((ux1 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH) 
-            theta2 = np.arctan((ux2 - self.PIXEL_OFFSET)/self.FOCAL_LENGTH)
+            theta1 = np.arctan((ux1 - self.X_PIXEL_OFFSET)/self.FOCAL_LENGTH) 
+            theta2 = np.arctan((ux2 - self.X_PIXEL_OFFSET)/self.FOCAL_LENGTH)
 
             d1 = np.cos(theta1)/min_list[ux1]
             d2 = np.cos(theta2)/min_list[ux2]
@@ -141,7 +154,8 @@ class SectorDepthClassifier(Node):
             # Publish overlay
 
         cv2.imshow("obstacle avoidance", depth_full)
-        cv2.waitKey(0)
+        cv2.waitKey(1)
+        
         # out_msg = self.bridge.cv2_to_imgmsg(depth_full, 'bgr8')
         # out_msg.header = depth_msg.header
         # self.pub.publish(out_msg)
