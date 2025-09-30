@@ -48,6 +48,10 @@ class SectorDepthClassifier(Node):
         # depth_full[mask] = np.float32(199)
         
         # For masking the floor values
+
+        # distance = depth_full[y][x]
+        # y is the Uy
+        # 
         for y in range(0,H):
             for x in range(0, W):
                 height = -1 * depth_full[y][x] * (y - self.Y_PIXEL_OFFSET)/(self.FOCAL_LENGTH)
@@ -126,8 +130,8 @@ class SectorDepthClassifier(Node):
             theta1 = np.arctan((ux1 - self.X_PIXEL_OFFSET)/self.FOCAL_LENGTH) 
             theta2 = np.arctan((ux2 - self.X_PIXEL_OFFSET)/self.FOCAL_LENGTH)
 
-            d1 = np.cos(theta1)/min_list[ux1]
-            d2 = np.cos(theta2)/min_list[ux2]
+            d1 = min_list[ux1]/np.cos(theta1)
+            d2 = min_list[ux2]/np.cos(theta2)
             
             # Calculating the theta for each gap
             

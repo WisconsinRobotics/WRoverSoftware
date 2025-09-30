@@ -29,7 +29,7 @@ Makefile
 Thumbs.db
 
 # Python venvs
-venv/
+*env*/
 .env/
 
 # ROS2 launch logs
