@@ -1,3 +1,0 @@
-[console_scripts]
-object_avoider = object_avoidance.object_avoider:main
-wls_test = object_avoidance.wls_test:main
