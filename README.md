@@ -11,8 +11,9 @@ checklist for progress:
 Phase 1: basic prototype(vfh algorithm)
 - pixel location to angle ✔️
 - find min value of sectors ✔️
-- Gap detection
-- rudementary ground removal without plane detection (no ransac)
+- Gap detection ✔️
+- rudementary ground removal without plane detection (no ransac) ✔️
+- choosing paths and moving to gnss location
 
 Phase 2: 
 - better ground detection using ransac
