@@ -7,6 +7,9 @@ import numpy as np
 import cv2
 import message_filters
 import time
+# import depthai as dai
+
+
 
 class SectorDepthClassifier(Node):
 
