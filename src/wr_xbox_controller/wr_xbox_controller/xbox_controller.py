@@ -8,7 +8,7 @@ from std_msgs.msg import Int16MultiArray
 # NOTE: This might cause problems if called multiple times
 pygame.init()
 
-CONTROLLER = 0
+ID = 1
 
 class XboxPublisher(Node):
 
@@ -28,12 +28,12 @@ class XboxPublisher(Node):
         #We have button capability, yippee. 
         #print(len(self.joysticks))
         #print(self.joysticks[0])
-        if len(self.joysticks) > CONTROLLER:
+        if len(self.joysticks) > ID:
             #TODO: Check inputs for armself.joysticks[1].joy 
-            motion = [self.joysticks[CONTROLLER].get_axis(4), #Right stick y-axis (hopefully)
-                        -self.joysticks[CONTROLLER].get_axis(1), #Left stick y-axis
-                        self.joysticks[CONTROLLER].get_axis(2), #Left trigger
-                        self.joysticks[CONTROLLER].get_axis(5)] #Right trigger
+            motion = [self.joysticks[ID].get_axis(4), #Right stick y-axis (hopefully)
+                        -self.joysticks[ID].get_axis(1), #Left stick y-axis
+                        self.joysticks[ID].get_axis(2), #Left trigger
+                        self.joysticks[ID].get_axis(5)] #Right trigger
             # Ignore jitter in sticks
             for i in range(3):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
@@ -49,7 +49,7 @@ class XboxPublisher(Node):
                 running = False
            
             if event.type == pygame.JOYHATMOTION:
-                if event.joy == CONTROLLER:
+                if event.joy == ID:
                     if event.value[1] == 1:  # D-Pad Up
                         self.buttons[0] = 1
                     else:
@@ -67,16 +67,16 @@ class XboxPublisher(Node):
                     else:
                         self.buttons[3] = 0  # Reset to False
             elif event.type == pygame.JOYBUTTONDOWN:
-                if event.joy == CONTROLLER:
+                if event.joy == ID:
                     if event.button == 0:  # A button
                         self.buttons[4] = 1
                     elif event.button == 1:  # B button
                         self.buttons[5] = 1
                     elif event.button == 2: # X Button
-                        self.get_logger().info("Pressed arm controller (ARM)")
+                        self.get_logger().info("Pressed arm ID (ARM)")
 
             elif event.type == pygame.JOYBUTTONUP:
-                if event.joy == CONTROLLER:
+                if event.joy == ID:
                     if event.button == 0:  # A button
                         self.buttons[4] = 0
                     elif event.button == 1:  # B button
