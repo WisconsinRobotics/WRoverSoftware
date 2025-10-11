@@ -48,7 +48,7 @@ class SwerveControlSubsrciber(Node):
     def arm_listener_base(self, msg):
         can_msg_rpm = String()
 
-        rpm = msg.data * self.max_rpm * 1.5
+        rpm = msg.data * self.max_rpm * 2.5
         can_msg_rpm.data = self.vesc_ids["BASE"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
         #self.get_logger().info('RPM BASE: "%s"' % can_msg_rpm.data + '\n')
@@ -72,7 +72,7 @@ class SwerveControlSubsrciber(Node):
         #self.get_logger().info('Publishing Angle WRIST_RIGHT: "%s"' % can_msg_angle)
 
     def arm_listener_gripper(self, msg):
-        can_msg_rpm = String()
+        can_msg_rpm =  String()
 
         rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["GRIPPER"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"

@@ -19,7 +19,7 @@ class RailSubscriber(Node):
 
         self.subscription_joy = self.create_subscription(
             Float32MultiArray,
-            'rail',
+            'joy_arm',
             self.listener_callback_joy,
             10)
 
@@ -37,8 +37,8 @@ class RailSubscriber(Node):
         #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
 
-        #Expecting (left trigger, rigt trigger)
-        linear_rail_speed = self.get_linear_rail_speed(motion[1], motion[0])
+        #Expecting (right sticky y, left stick y, right trigger, left trigger)
+        linear_rail_speed = self.get_linear_rail_speed(motion[3], motion[2])
         
         #Publishing
         self.msg_linear_rail.data = linear_rail_speed
@@ -49,7 +49,7 @@ class RailSubscriber(Node):
     def get_linear_rail_speed(self, left, right) -> Float64:
         #Reverse if right is positive
         #Converting -1 -> 1 range of triggers to 0->1
-        return ((left+1)/2 - (right+1)/2)
+        return ((left+1.0)/2.0 - (right+1.0)/2.0)
 
 def main(args=None):
     rclpy.init(args=args)

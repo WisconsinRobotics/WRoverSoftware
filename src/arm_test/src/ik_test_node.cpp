@@ -59,7 +59,7 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm_shoulder = cfg_shoulder.MotionMagic;
-        mm_shoulder.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(30).value(); // 5 (mechanism) rotations per second cruise
+        mm_shoulder.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(60).value(); // 5 (mechanism) rotations per second cruise
         mm_shoulder.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(500).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
         mm_shoulder.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
@@ -95,7 +95,7 @@ public:
         
         /* Configure Motion Magic */
         configs::MotionMagicConfigs &mm_elbow = cfg_elbow.MotionMagic;
-        mm_elbow.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(30).value(); // 5 (mechanism) rotations per second cruise
+        mm_elbow.MotionMagicCruiseVelocity = units::angular_velocity::turns_per_second_t(60).value(); // 5 (mechanism) rotations per second cruise
         mm_elbow.MotionMagicAcceleration = units::angular_acceleration::turns_per_second_squared_t(500).value(); // Take approximately 0.5 seconds to reach max vel
         // Take approximately 0.1 seconds to reach max accel 
         mm_elbow.MotionMagicJerk = units::angular_jerk::turns_per_second_cubed_t(100).value();
@@ -167,8 +167,8 @@ private:
         }else{
             elbowMotor.SetControl(elbowOut.WithPosition(elbow_position * 1_tr).WithSlot(1).WithOverrideBrakeDurNeutral(true));
         }
-        std::cout << "Shoulder: " << shoulderOut.ToString() << std::endl;
-        std::cout << "Pos Elbow: " << elbowOut.ToString() << std::endl;
+        std::cout << "Shoulder: " << shoulder_position << std::endl;
+        std::cout << "Pos Elbow: " << elbow_position << std::endl;
 
 
     }
@@ -183,7 +183,7 @@ private:
 
         // Store values as class members for periodic updates
         elbow_position = static_cast<double>(msg.data[1]); 
-        
+         
         shoulder_position = static_cast<double>(msg.data[0]); 
         
         //std::cout << "Received joystick input - Shoulder: " << shoulder_speed
