@@ -1,4 +1,0 @@
-geometry_msgs/Pose[] ee_poses
-geometry_msgs/Twist[] tolerances
----
-float64[] joint_state
