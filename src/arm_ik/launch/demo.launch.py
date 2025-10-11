@@ -53,12 +53,14 @@ def generate_launch_description():
             output='screen',
             parameters=[{'setting_file_path': setting_file_path}]
         ),
+        #Controller to run motors in robot
         Node(
             package='wr_xbox_controller',
             namespace='',
             executable='xbox_controller',
             name='xbox_controller',
         ),
+        #Controller to run ik simulation
         Node(
             package='wr_xbox_controller',
             namespace='',

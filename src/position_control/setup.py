@@ -21,7 +21,6 @@ setup(
     maintainer_email='devansh.the.photofreak@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'send_position = position_control.send_position:main',

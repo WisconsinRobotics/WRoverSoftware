@@ -11,8 +11,8 @@ cd src/relaxed_ik_ros2/relaxed_ik_core
 cargo build
 cd ../../..
 
-source /opt/ros/jazzy/setup.bash
-colcon build --symlink-install
+source /opt/ros/humble/setup.bash
+colcon build
 . install/setup.bash
 ```
 ## Running
