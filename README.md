@@ -39,7 +39,7 @@ cd src/relaxed_ik_ros2/relaxed_ik_core
 cargo build
 cd ../../..
 source /opt/ros/humble/setup.bash
-colcon build
+colcon build --symlink-install
 . install/setup.bash
 ros2 launch arm_ik demo.launch.py
 ```
