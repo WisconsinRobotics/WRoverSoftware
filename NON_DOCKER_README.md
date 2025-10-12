@@ -16,9 +16,9 @@ sudo apt-get install -y \
     curl\
     python3-pip\
     wget\
-    ros-jazzy-joint-state-publisher \
-    ros-jazzy-joint-state-publisher-gui \
-    ros-jazzy-xacro\
+    ros-humble-joint-state-publisher \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-xacro\
     python3-pykdl\
     python3-pygame
 ```

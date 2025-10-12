@@ -36,7 +36,7 @@ def main(args=None):
     node.create_subscription(EEPoseGoals, '/relaxed_ik/ee_pose_goals', eePoseGoals_cb, 3)
 
     angles_pub = node.create_publisher(JointAngles, '/relaxed_ik/joint_angle_solutions', 3)
-    node.get_logger().debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    #node.get_logger().debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
     rclpy.spin_once(node)
 
