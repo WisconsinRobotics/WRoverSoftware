@@ -73,11 +73,6 @@ colcon build
 
 Enter the **same password** when prompted.
 
----
-
-Let me know if you want a title at the top, numbered steps, or environment notes!
-
-
 
 ---
 
