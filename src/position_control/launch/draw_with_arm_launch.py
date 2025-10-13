@@ -53,16 +53,22 @@ def generate_launch_description():
             output='screen',
             parameters=[{'setting_file_path': setting_file_path}]
         ),
-         Node(
-             package='position_control',
-             namespace='',
-             executable='send_drawing',
-             name='send_drawing',
-         ),
+        #  Node(
+        #      package='position_control',
+        #      namespace='',
+        #      executable='send_drawing',
+        #      name='send_drawing',
+        #  ),
         Node(
             package='position_control',
             namespace='',
             executable='run_arm',
             name='run_arm',
         ),
+        Node(
+             package='position_control',
+             namespace='',
+             executable='make_drawing',
+             name='make_drawing',
+         ),
     ])

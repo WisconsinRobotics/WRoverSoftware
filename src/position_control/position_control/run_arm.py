@@ -35,17 +35,18 @@ class RunArm(Node):
 
         # Publishers    
         self.pose_publisher = self.create_publisher(EEPoseGoals, '/relaxed_ik/ee_pose_goals', 1)
-        self.rail_publisher = self.create_publisher(Float32MultiArray, 'rail', 1)
+        self.rail_publisher = self.create_publisher(Float32MultiArray, 'joy_arm', 1)
 
         self.rail_out_msg = Float32MultiArray()
-        self.rail_out_msg.data = [1.0,-1.0,0.0]
+        self.rail_out_msg.data = [0.0,0.0,1.0,-1.0]
         self.rail_in_msg = Float32MultiArray()
-        self.rail_in_msg.data = [-1.0,1.0,0.0]
+        self.rail_in_msg.data = [0.0,0.0,-1.0,1.0]
         self.rail_stop = Float32MultiArray()
-        self.rail_stop.data = [0.0,0.0,0.0]
+        self.rail_stop.data = [0.0,0.0,-1.0,-1.0]
 
         # Timer to publish periodically
         self.publisher_timer = self.create_timer(0.01, self.publish_messages)
+        self.started = False
 
         self.x = 0.0
         self.y = 0.0
@@ -103,7 +104,9 @@ class RunArm(Node):
 
     def process_line_feedback(self):
         """Handle feedback for each liarm_anglesne point."""
+        
         if self.point_index < 1 and self.robot_drawing:
+            self.started = True
             self.rail_publisher.publish(self.rail_out_msg)
             self.counter = self.counter + 1
             if self.counter > 20:
@@ -175,35 +178,37 @@ class RunArm(Node):
 
     def publish_messages(self):
         msg = EEPoseGoals()
-        # Create Pose
-        #self.counter = self.counter - .001
-        pose = Pose()
-        pose.position.x = float(-1.0) + self.x / 2000
-        pose.position.y = 0.0
-        pose.position.z = float(0.35) - self.y / 2000
+        if self.started:
+            # Create Pose
+            #self.counter = self.counter - .001
+            pose = Pose()
+            pose.position.x = float(-0.9) + self.x / (2600)
+            pose.position.y = 0.0
+            pose.position.z = float(0.34) - self.y / (2600)
 
-        #self.get_logger().info(f'Processing line: x: {pose.position.x}, y: {pose.position.z}')
+            self.get_logger().info(f'Processing line: x: {self.x}, y: {self.y}')
 
 
-        # Keep the orientation fixed (90-degree rotation around X-axis)
-        pose.orientation.x = 0.0
-        pose.orientation.y = math.sqrt(.5)# Equivalent to math.pow(2, (1/2)/2)
-        pose.orientation.z = 0.0
-        pose.orientation.w = math.sqrt(.5)  # Equivalent to math.pow(2, (1/2)/2)
+            # Keep the orientation fixed (90-degree rotation around X-axis)
+            pose.orientation.x = 0.0
+            pose.orientation.y = math.sqrt(.5)# Equivalent to math.pow(2, (1/2)/2)
+            pose.orientation.z = 0.0
+            pose.orientation.w = math.sqrt(.5)  # Equivalent to math.pow(2, (1/2)/2)
 
-        # Create Twist
-        twist = Twist()
-        twist.linear.x = 0.0
-        twist.linear.y = 0.0
-        twist.linear.z = 0.0
-        twist.angular.x = 0.0
-        twist.angular.y = 0.0
-        twist.angular.z = 0.0
+            # Create Twist
+            twist = Twist()
+            twist.linear.x = 0.0
+            twist.linear.y = 0.0
+            twist.linear.z = 0.0
+            twist.angular.x = 0.0
+            twist.angular.y = 0.0
+            twist.angular.z = 0.0
 
-        msg.ee_poses.append(pose)
-        msg.tolerances.append(twist)
-        # Publish messages
-        self.pose_publisher.publish(msg)
+            msg.ee_poses.append(pose)
+            msg.tolerances.append(twist)
+            # Publish messages
+        
+            self.pose_publisher.publish(msg)
 
 def main(args=None):
     rclpy.init()

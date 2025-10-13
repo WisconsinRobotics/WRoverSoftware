@@ -9,7 +9,7 @@ To run the IK solver, open a new terminal and execute:
 
 ```bash
 source install/setup.py
-ros2 launch arm_ik demo.launch.py 
+ros2 launch position_control draw_with_arm_launch.py 
 ```
 
 This will open two windows:
@@ -22,7 +22,7 @@ To execute the movements on the actual robot, follow these steps:
 
 1. **Power On:** Turn on both switches of the robot.
 2. **Connect to the Robot:** SSH into the robot.
-3. **Navigate to the Correct Branch:** Open the `dev/arm_test` branch.
+3. **Navigate to the Correct Branch:** Open the `dev/roverStation` branch.
 4. **Build and Start:** Run the following commands:
    
    ```bash
@@ -48,3 +48,17 @@ Now, the robot should start mimicking the RViz model. **Be careful, as the robot
 
 ## Important Note
 For the robot to match the IK solver correctly, it needs to be **initialized properly** with the arm at a **90-degree position**.
+
+## Running Forward Kinematics
+
+In dev/ik_drawing, run this code
+```bash
+source install/setup.py
+ros2 launch wr_xbox_controller run_forward_kinematics_launch.py 
+```
+
+In dev/roverStation, run this code
+```bash
+source install/setup.py
+ros2 launch wr_xbox_controller run_forward_kinematics_launch.py 
+```
