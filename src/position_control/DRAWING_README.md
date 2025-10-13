@@ -60,5 +60,6 @@ ros2 launch wr_xbox_controller run_forward_kinematics_launch.py
 In dev/roverStation, run this code
 ```bash
 source install/setup.py
-ros2 launch wr_xbox_controller run_forward_kinematics_launch.py 
+cd launch
+ros2 launch wr_xbox_controller arm_falcon_launch.py
 ```
