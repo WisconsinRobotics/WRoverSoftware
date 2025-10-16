@@ -60,12 +60,12 @@ def generate_launch_description():
             name='run_arm',
         ),
         #Runs with SVG
-        Node(
-             package='position_control',
-             namespace='',
-             executable='send_drawing',
-             name='send_drawing',
-         ),
+        # Node(
+        #      package='position_control',
+        #      namespace='',
+        #      executable='send_drawing',
+        #      name='send_drawing',
+        #  ),
          #Runs with drawing in computer
         Node(
              package='position_control',
