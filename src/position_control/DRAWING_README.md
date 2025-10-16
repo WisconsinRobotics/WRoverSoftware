@@ -10,7 +10,6 @@ To run the IK solver, open a new terminal and execute:
 ```bash
 source install/setup.py
 ros2 launch position_control draw_with_arm_launch.py 
-ros2 launch position_control draw_with_arm_launch.py 
 ```
 
 This will open two windows:
@@ -58,30 +57,10 @@ source install/setup.py
 ros2 launch wr_xbox_controller run_forward_kinematics_launch.py 
 ```
 
-In dev/roverStation, run this code
+In dev/roverStation (inside the rover), run this code
 ```bash
+cd /home/wiscrobo/workspace/WRoverSoftware
 source install/setup.py
 cd launch
 ros2 launch wr_xbox_controller arm_falcon_launch.py
 ```
-
-Password: i#3Er0b0
-
-##Running Forward kinematics
-- Open a new terminal and run:
-     
-     ```bash
-     source install/setup.bash
-     ros2 launch wr_xbox_controller run_forward_kinematics_launch.py
-     ```
-
-
- In robot (having ssh)
- - Open a new terminal and run:
-     
-     ```bash
-     cd /home/wiscrobo/workspace/WRoverSoftware
-     source install/setup.bash
-     cd launch
-     ros2 launch arm_falcon_launch.py
-     ```
