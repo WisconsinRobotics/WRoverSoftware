@@ -8,6 +8,7 @@ First, follow the instructions for setting up the `relaxed_ik_ros2` code: [RELAZ
 To run the IK solver, open a new terminal and execute:
 
 ```bash
+cd /home/wiscrobo/workspace/IK_Solver/WRoverSoftware
 source install/setup.py
 ros2 launch position_control draw_with_arm_launch.py 
 ```
