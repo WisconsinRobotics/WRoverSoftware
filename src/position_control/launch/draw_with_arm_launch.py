@@ -56,8 +56,8 @@ def generate_launch_description():
          Node(
              package='position_control',
              namespace='',
-             executable='send_drawing',
-             name='send_drawing',
+             executable='make_drawing',
+             name='make_drawing',
          ),
         Node(
             package='position_control',

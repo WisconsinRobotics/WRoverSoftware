@@ -12,7 +12,7 @@ cargo build
 cd ../../..
 
 source /opt/ros/humble/setup.bash
-colcon build
+colcon build --symlink-install
 . install/setup.bash
 ```
 ## Running

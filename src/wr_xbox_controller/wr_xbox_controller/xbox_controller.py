@@ -8,7 +8,7 @@ from std_msgs.msg import Int16MultiArray
 # NOTE: This might cause problems if called multiple times
 pygame.init()
 
-ID = 1
+ID = 0
 
 class XboxPublisher(Node):
 

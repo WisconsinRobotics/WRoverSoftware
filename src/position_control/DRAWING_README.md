@@ -9,7 +9,7 @@ To run the IK solver, open a new terminal and execute:
 
 ```bash
 source install/setup.py
-ros2 launch arm_ik demo.launch.py 
+ros2 launch position_control draw_with_arm_launch.py 
 ```
 
 This will open two windows:
@@ -48,3 +48,24 @@ Now, the robot should start mimicking the RViz model. **Be careful, as the robot
 
 ## Important Note
 For the robot to match the IK solver correctly, it needs to be **initialized properly** with the arm at a **90-degree position**.
+
+Password: i#3Er0b0
+
+##Running Forward kinematics
+- Open a new terminal and run:
+     
+     ```bash
+     source install/setup.bash
+     ros2 launch wr_xbox_controller run_forward_kinematics_launch.py
+     ```
+
+
+ In robot (having ssh)
+ - Open a new terminal and run:
+     
+     ```bash
+     cd /home/wiscrobo/workspace/WRoverSoftware
+     source install/setup.bash
+     cd launch
+     ros2 launch arm_falcon_launch.py
+     ```
