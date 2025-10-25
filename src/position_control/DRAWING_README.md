@@ -6,12 +6,14 @@ First, follow the instructions for setting up the `relaxed_ik_ros2` code: [RELAZ
 ## Running the IK Solver
 
 To run the IK solver, open a new terminal and execute:
+MAKE SURE ROBOT ARM HAS BEEN ZEROED!!!!!!!!!!!!!!!!!!!!!!!!
 
 ```bash
 cd /home/wiscrobo/workspace/IK_Solver/WRoverSoftware
-source install/setup.py
+source install/setup.bash
 ros2 launch position_control draw_with_arm_launch.py 
 ```
+
 
 This will open two windows:
 1. **RViz Window** – Displays the arm model.
@@ -26,9 +28,10 @@ To execute the movements on the actual robot, follow these steps:
 3. **Navigate to the Correct Branch:** Open the `dev/roverStation` branch.
 4. **Build and Start:** Run the following commands:
    
+   RUN THESE IN THE ROVER!!!!!!!!!!!!!
    ```bash
-   colcon build
-   ./cannableStart.sh
+   cd /home/wiscrobo/workspace/WRoverSoftware
+   ./canableStart.sh 
    ```
 
 5. **Launch the Robot Code:**
@@ -36,12 +39,7 @@ To execute the movements on the actual robot, follow these steps:
      
      ```bash
      source install/setup.bash
-     ```
-   
-   - Navigate to `src/launch`
-   - Execute:
-     
-     ```bash
+     cd launch
      ros2 launch arm_ik_launch.py
      ```
 
@@ -54,14 +52,25 @@ For the robot to match the IK solver correctly, it needs to be **initialized pro
 
 In dev/ik_drawing, run this code
 ```bash
-source install/setup.py
+source install/setup.bash
 ros2 launch wr_xbox_controller run_forward_kinematics_launch.py 
 ```
 
 In dev/roverStation (inside the rover), run this code
 ```bash
 cd /home/wiscrobo/workspace/WRoverSoftware
-source install/setup.py
+./canableStart.sh
+source install/setup.bash
 cd launch
-ros2 launch wr_xbox_controller arm_falcon_launch.py
+ros2 launch arm_falcon_launch.py
 ```
+## Connecting to the rover
+ubuntu is rover
+wiscrobo is basestation
+run:
+```bash
+ssh wiscrobo@192.168.1.134
+```
+password: i#3Er0b0
+
+
