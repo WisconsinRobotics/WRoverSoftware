@@ -22,18 +22,23 @@ link_directories(/usr/lib/phoenix6)
 # --- Add executables ---
 add_executable(ik_test_node src/ik_test_node.cpp)
 add_executable(arm_test_node src/arm_test_node.cpp)
+add_executable(arm_test_shoulder src/arm_test_shoulder.cpp)
 #add_executable(arm_orchestra_node src/arm_orchestra_node.cpp)
 
 # --- ROS 2 dependencies ---
 ament_target_dependencies(ik_test_node rclcpp std_msgs)
 ament_target_dependencies(arm_test_node rclcpp std_msgs)
 #ament_target_dependencies(arm_orchestra_node rclcpp std_msgs)
+ament_target_dependencies(arm_test_shoulder rclcpp std_msgs)
 
 # --- Include directories ---
 target_include_directories(ik_test_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_include_directories(arm_test_node PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_include_directories(arm_test_shoulder PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 #target_include_directories(arm_orchestra_node PUBLIC
@@ -43,6 +48,7 @@ target_include_directories(arm_test_node PUBLIC
 # --- Compiler features ---
 target_compile_features(ik_test_node PUBLIC c_std_99 cxx_std_17)
 target_compile_features(arm_test_node PUBLIC c_std_99 cxx_std_17)
+target_compile_features(arm_test_shoulder PUBLIC c_std_99 cxx_std_17)
 #target_compile_features(arm_orchestra_node PUBLIC c_std_99 cxx_std_17)
 
 # --- Link libraries (fixed) ---
@@ -60,10 +66,20 @@ target_link_libraries(arm_test_node
     ${SDL2_LIBRARIES}
 )
 
+
+target_link_libraries(arm_test_shoulder
+    CTRE_Phoenix6
+    CTRE_PhoenixTools
+    Threads::Threads
+    ${SDL2_LIBRARIES}
+)
+
+
+
 #target_link_libraries(arm_orchestra_node CTRE_Phoenix6 Threads::Threads ${SDL2_LIBRARIES})
 
 # --- Install ---
-install(TARGETS ik_test_node arm_test_node #arm_orchestra_node
+install(TARGETS ik_test_node arm_test_node arm_test_shoulder #arm_orchestra_node
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
