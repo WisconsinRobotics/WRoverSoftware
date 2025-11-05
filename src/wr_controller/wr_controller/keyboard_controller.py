@@ -52,6 +52,7 @@ class KeyboardTeleop(Node):
 
                 # Reset motion each loop unless key held
                 self.motion = [0.0, 0.0, 0.0, 0.0]
+                self.buttons = 
 
                 if key == 'w':
                     self.motion[0] = SPEED
@@ -63,6 +64,10 @@ class KeyboardTeleop(Node):
                     self.motion[1] = -SPEED
                 elif key == 'x':
                     self.get_logger().info("Pressed arm ID (ARM)")
+                elif key = 'z':
+                    self.buttons[0] = SPEED
+                elif key = 'x':
+                    self.buttons[1] = SPEED
                 elif key == '\x03':  # Ctrl-C
                     self.running = False
                     break

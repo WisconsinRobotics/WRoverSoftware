@@ -3,10 +3,16 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
+        #Node(
+        #    package='arm_test',
+        #    executable='arm_test_node',
+        #    name='arm_test'
+        #),
+        
         Node(
-            package='arm_test',
-            executable='arm_test_node',
-            name='arm_test'
+            package='arm_test_python',
+            executable='arm_test_logic',
+            name='arm_test_logic'
         ),
         Node(
             package='arm_test_python',
