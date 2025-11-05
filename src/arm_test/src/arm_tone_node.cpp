@@ -1,7 +1,7 @@
 #include "ctre/phoenix6/TalonFX.hpp"
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/float32_multi_array.hpp"
+#include "std_msgs/msg/float32.hpp"
 #include <functional> // Include this for std::bind4
 #include "ctre/phoenix6/unmanaged/Unmanaged.hpp" // for FeedEnable
 #include <ctre/phoenix6/controls/MusicTone.hpp> // for music! I'm opting not to use orchestra because i don't want to deal with chirp files
@@ -14,30 +14,44 @@ class MinimalSubscriber : public rclcpp::Node
 public:
     MinimalSubscriber()
         : Node("arm_tone"),
-          elbowMotor(1, "can0"),
-          shoulderMotor(0, "can0"),
-          shoulderOut(0),
-          elbowOut(0),
+          elbowMotor(5, "can0"),
+	  elbowOut(elbowOut.WithAudioFrequency(units::frequency::hertz_t(static_cast<double>(0.0)))),
+    	  tone_heard(0.0)
     {
-        subscription_ = this->create_subscription<std_msgs::msg::Int16>(
+	   
+        timer_shoulder = this->create_wall_timer(
+            10ms, std::bind(&MinimalSubscriber::timer_callback, this)); // Reduced delay for smoother control
+	    
+        elbowOut.WithUpdateFreqHz(units::frequency::hertz_t(static_cast<double>(20.0))),
+        subscription_ = this->create_subscription<std_msgs::msg::Float32>(
             "tone_freq", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
         
         // skip all the boring configuration stuff, surely it isn't important
     }
 
 private:
-    void topic_callback(const std_msgs::msg::Int16 msg)
+    void topic_callback(const std_msgs::msg::Float32 msg)
     {
-        // play the tone on a motor
-        elbowMotor.SetControl(elbowOut.WithAudioFrequency(msg))
+	std::cout << "Tone heard: " << msg.data << std::endl;
+    	tone_heard = msg.data;
     }
 
-    rclcpp::Subscription<std_msgs::msg::Int16>::SharedPtr subscription_;
+    void timer_callback()
+    {
+        ctre::phoenix::unmanaged::FeedEnable(10);
+        auto freq = units::frequency::hertz_t(static_cast<double>(tone_heard));
+    	elbowMotor.SetControl(elbowOut.WithAudioFrequency(freq));
 
+	//std::cout << "Vel: " << elbowMotor.GetVelocity() << std::endl;
+        //std::cout << "Pos: " << elbowMotor.GetPosition() << std::endl;
+
+    }
+
+    rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr subscription_;
+    rclcpp::TimerBase::SharedPtr timer_shoulder;
     hardware::TalonFX elbowMotor;
-    hardware::TalonFX shoulderMotor;
-    controls::MusicTone shoulderOut;
     controls::MusicTone elbowOut;
+    double tone_heard;
 };
 
 int main(int argc, char *argv[])

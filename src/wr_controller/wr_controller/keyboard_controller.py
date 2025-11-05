@@ -29,7 +29,7 @@ class KeyboardTeleop(Node):
         # Timer publishes at fixed rate (for motion updates)
         self.timer = self.create_timer(0.1, self.timer_callback)
 
-        self.get_logger().info("Keyboard teleop started — hold W/S/Q to move, Ctrl-C to quit.")
+        self.get_logger().info("Keyboard teleop started — hold W/S/Q/A to move, Ctrl-C to quit.")
 
     def get_key(self):
         """Non-blocking key reader (returns '' if no key pressed)."""

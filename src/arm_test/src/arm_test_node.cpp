@@ -22,7 +22,7 @@ public:
           elbow_speed(0)
     {
         subscription_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
-            "swerve", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
+            "joy_arm", 10, std::bind(&MinimalSubscriber::topic_callback, this, std::placeholders::_1));
         
         ctre::phoenix::unmanaged::SetTransmitEnable(true);
         // fx_cfg is the default config with inverted output

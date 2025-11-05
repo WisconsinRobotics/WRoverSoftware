@@ -96,7 +96,7 @@ private:
         // Store values as class members for periodic updates
         elbow_speed = static_cast<double>(msg.data[0]* 20_tps); // Go for plus/minus 1 rotations per second
         
-        std::cout << "Received joystick input - Shoulder: " << elbow_speed;
+        //std::cout << "Received joystick input - Shoulder: " << elbow_speed;
                   //<< ", Elbow: " << elbow_speed << '\n';
     }
 
