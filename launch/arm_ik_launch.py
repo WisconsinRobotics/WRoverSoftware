@@ -22,11 +22,11 @@ def generate_launch_description():
         ),
 
         #RUN GRIPPER W/OUT IK
-        # Node(
-        #     package='arm_test_python',
-        #     executable='arm_test_logic',
-        #     name='arm_test_logic'
-        # ),
+        #Node(
+        #    package='arm_test_python',
+        #    executable='arm_test_logic',
+        #    name='arm_test_logic'
+        #),
 
 
         #Logic for rail
