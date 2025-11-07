@@ -25,6 +25,8 @@ setup(
             'ik_subscriber = arm_test_python.ik_subscriber:main',
             'rail_subscriber = arm_test_python.rail_subscriber:main',
             'arm_tone_pub = arm_test_python.arm_tone_pub:main',
+            'arm_test_logic_vel = arm_test_python.arm_test_logic_vel:main',
+            'arm_test_neo_vel = arm_test_python.arm_test_neo_vel:main',
         ],
     },
 )
