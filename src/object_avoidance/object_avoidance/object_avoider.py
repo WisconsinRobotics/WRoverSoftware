@@ -1,137 +1,83 @@
-#!/usr/bin/env python3
+import depthai as dai
+import cv2
+import numpy as np
+import time
+import math
+
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image, PointCloud2
-from cv_bridge import CvBridge
-import numpy as np
-import cv2
-import message_filters
-import time
-# import depthai as dai
+from sensor_msgs.msg import NavSatFix
+from std_msgs.msg import Float32MultiArray
+
+class SwervePublisher(Node):
+    def __init__(self):
+        super().__init__("swerve_publisher")
+
+        self.pub = self.create_publisher(Float32MultiArray, "swerve", 10)
+
+    def send(self, swrv):
+        msg = Float32MultiArray()
+        msg.data = swrv
+        self.pub.publish(msg)
+
+class GPSNode(Node):
+    def __init__(self):
+        super().__init__("gps_listener")
+
+        self.latest_gps = (0,0)  # (lat, lon)
+
+        self.create_subscription(
+            NavSatFix,
+            "fix",          
+            self.gps_callback,
+            10
+        )
+
+    def gps_callback(self, msg):
+        self.latest_gps = (msg.latitude, msg.longitude)
+        
 
 
 
-class SectorDepthClassifier(Node):
+class SectorDepthClassifier():
 
-    X_PIXEL_OFFSET = np.float32(648.040894)
+    X_PIXEL_OFFSET = np.float32(640)  #(648.040894)
     Y_PIXEL_OFFSET = np.float32(360)
     FOCAL_LENGTH = np.float32(563.33333)
-    GAP_THRESHOLD = 2 # The minimum distance between two obstacles such that the rover can fit.
+    GAP_THRESHOLD = np.float32(1) # The minimum distance between two obstacles such that the rover can fit.
+    DEPTH_THRESH = np.float32(2)
 
-    def __init__(self):
-        super().__init__('sector_depth_classifier')
-        self.bridge = CvBridge()
-
-        # Subscribers
-        self.subscription = self.create_subscription(
-            Image,  # Message type
-            '/oak/stereo/image_raw',  # Topic name
-            self.cb,
-            10)  # QoS profile depth
-        self.subscription
-
-        # Publisher for the overlay
-        self.pub = self.create_publisher(Image, 'object_avoidance/overlay', 1)
-
-    def cb(self, depth_msg: Image):
+    ## CHANGED: Added 'compass_angle' as an argument
+    def cb(self, depth_full, compass_angle, rover_gps):
         start_time = time.time()
         # Decode and crop depth image
-        raw_full = self.bridge.imgmsg_to_cv2(depth_msg, '16UC1')
-        
-        depth_full = raw_full.astype(np.float32) / 1000.0
+      
         mask = (depth_full == 0) | (depth_full == np.nan)
         depth_full[mask] = np.float32(10)
-        depth_threshold = 2
         H,W = depth_full.shape        
-
-        # visualize = cv2.normalize(depth_full, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-        # visualize = cv2.cvtColor(visualize, cv2.COLOR_GRAY2BGR)
-
-
-        # mask = (-1 * depth_full[y][x] * (y - self.Y_PIXEL_OFFSET)/(self.FOCAL_LENGTH) < 0.5)
-        # depth_full[mask] = np.float32(199)
         
-        # For masking the floor values
+        start_col = 22
+        end_col = W - 30
 
-        # distance = depth_full[y][x]
-        # y is the Uy
-        # 
-        # for y in range(0,H):
-        #     for x in range(0, W):
-        #         height = -1 * depth_full[y][x] * (y - self.Y_PIXEL_OFFSET)/(self.FOCAL_LENGTH)
+        # Perform the crop using NumPy slicing:
+        # [All Rows, Start Column : End Column]
+        depth_full = depth_full[:, start_col:end_col]
+        
 
-        #         if height < -0.5:
-        #             depth_full[y][x] = np.float32(10)
-        
-        rows = (np.arange(depth_full.shape[0], dtype=np.float32) - self.Y_PIXEL_OFFSET) / self.FOCAL_LENGTH
-        mask = -1*depth_full * rows[:, None] < -0.5
-        depth_full[mask] = np.float32(10)
+        rows = (self.Y_PIXEL_OFFSET - np.arange(depth_full.shape[0], dtype=np.float32)) / self.FOCAL_LENGTH
+        # maybe constant optimize? ^^^
+        ground_mask = depth_full * rows[:, None] < -1
+        depth_full[ground_mask] = np.float32(10)
 
-        """
-        depth_full = (depth_full).astype(np.uint8)
-        
-        for i in pixel_location:
-            start_point, end_point = (round(i), 0), (round(i), 719)
-            color = (255, 0, 0)
-            thickness = 1
-            cv2.line(depth_full, start_point, end_point, color, thickness)
-
-            # Publish overlay
-        """
-        
-        # min_list = [] 
-        # gap_list = [] 
-        # for x in range(0, W):
-        #     min = 1000
-        #     for y in range(0, H):
-        #         if depth_full[y][x] < min:
-        #             min = depth_full[y][x]
-        #     if min <= depth_threshold:
-        #         gap_list.append(1)
-        #     else:
-        #         gap_list.append(0)
-        #     min_list.append(min)
-        # print(min_list)
-        
         # list of all min values of each vertical sector. values are in m
-        min_list = np.min(depth_full, axis = 0)
-        # list of where objects are
-        gap_list = (min_list <= depth_threshold).astype(int)
+        min_list = np.percentile(depth_full, 8, axis=0)
+        
+        # newmask = (depth_full == np.nan)
+        # depth_full[newmask] = np.float32(10)
 
-        # if 0 its no object
-        # if 1 its no object
-        # 0 followed by 1 means end of object
-        # 1 followed by 0 means start of object
-        # nothing followed by 0 means start of object
-        # 0 followed by nothing means end of object
-        # gaps = [] # list gap tuples
-        # gap = ()
-        # prev_value = None
-        # for index, value in enumerate(gap_list):
-        
-        #     if index == 0:  # nothing followed by 0 means start of object
-        #         if value == 0:
-        #             gap = gap + (index,)
-        #         prev_value = value
-        #         continue
-        
-        #     if prev_value == 0 and value == 1:  # 0 followed by 1 means end of object
-        #         gap = gap + (index,)
-        #         prev_value = value
-        #         gaps.append(gap)
-        #         gap = ()
-        #         continue
-        
-        #     if prev_value == 1 and value == 0:  # 1 followed by 0 means start of object
-        #         gap = gap + (index - 1,)
-        #         prev_value = value
-        #         continue
-        
-        #     if index == len(gap_list) - 1 and value == 0:  # 0 followed by nothing means end of object
-        #         gap = gap + (index,)
-        #         gaps.append(gap)
-        #         gap = ()
-        #         continue
+        # list of where objects are
+        gap_list = (min_list <= self.DEPTH_THRESH).astype(int)
+
         
         d = np.diff(gap_list)
 
@@ -166,44 +112,247 @@ class SectorDepthClassifier(Node):
             thetas.append(theta)
             gap_distance = np.sqrt(d1**2 + d2**2 - (2*d1*d2*np.cos(theta)))
             distance_monitor_list.append(gap_distance)
-
-        print("theta: ", (np.array(thetas)*180)/3.14)
-        print("list of gaps :",gaps)
-        print("list of distance between gaps :", distance_monitor_list, "\n\n")
         
+        formatted_list = [round(float(x), 2) for x in min_list]
+        print(formatted_list)
+        print("angles====================\n", (np.array(thetas)*180)/3.14) # These are the angles of each gap.
+        print("list of gaps =====================\n",gaps)        
+        print("list of distance between gaps =================================\n", distance_monitor_list, "\n\n\n")
+        
+        valid_gaps = []
+        for i,d in enumerate(distance_monitor_list):
+            if d >= self.GAP_THRESHOLD and (gaps[i][1] - gaps[i][0]) >= 90:
+                valid_gaps.append(gaps[i])
+                                                                                                                                                                                            
+        # Check for the angles
+        try:
+            gap_to_move_to = valid_gaps[0]
+        except IndexError:
+            print("no valid gaps u have crashed!!!!!! :)")
+            return [0.0, 0.0, 0.0, 0.0]
+            gap_to_move_to = (0,0)
+
+        """
+        ... (Your commented-out math block) ...
+        """
+
+        ## --- START: IMU Target Angle Implementation ---
+        ## CHANGED: This block now uses the live 'compass_angle'
+        
+        # compass_angle: angle from North to heading in the clockwise direction (0-360)
+        # This is now passed into the function.
+        
+        # ** You must update these with your live GPS data **
+        #rover_gps = (43.072647846958304, -89.41222468107071) 
+        target_gps = (43.073112267126625, -89.4128130034407) 
+
+        # compute_bearing: angle from North to target in the clockwise direction
+        bearing_to_target = self.compute_bearing(rover_gps , target_gps)
+        
+        # Calculate the relative angle the rover needs to turn to
+        target_angle_deg = (360 - (compass_angle - bearing_to_target)) % 360
+        if target_angle_deg > 180:
+            target_angle_deg = target_angle_deg - 360  
+        # target_angle_deg is currently -ve for right of camera and +ve for left of camera
+        print("target angle = ", -1 * target_angle_deg)
+        # Convert target angle from degrees to radians for comparison with arctan result
+        target_angle = -1 * math.radians(target_angle_deg) # flip signs
+        
+        # Optional: Uncomment to debug your angles
+        # print(f"Heading: {compass_angle:.1f} | Bearing: {bearing_to_target:.1f} | Target Angle: {target_angle_deg:.1f}")
+        
+        ## --- END: IMU Target Angle Implementation ---
+
+
+        ## --- START: Best Gap Logic Correction ---
+        ## CHANGED: Fixed the logic for finding the best gap
+        
+        # Initialize 'best_theta' based on the *first* valid gap
+        try:
+            start_init, end_init = gap_to_move_to
+            median_init = start_init + (end_init - start_init) // 2
+            best_theta = np.arctan((median_init - self.X_PIXEL_OFFSET) / self.FOCAL_LENGTH)
+        except (ValueError, IndexError): # Catches (0,0) if no valid gaps
+            best_theta = 0.0 # Default to 0 (straight ahead)
+
+        # Now, loop through all gaps and find the one closest to our target_angle
+        for start, end in valid_gaps:
+                median = start + (end - start) // 2 
+                theta = np.arctan((median - self.X_PIXEL_OFFSET)/self.FOCAL_LENGTH)
+                
+                # Check if this gap's angle (theta) is closer to our target_angle
+                if abs(target_angle - theta) < abs(target_angle - best_theta):
+                    gap_to_move_to = (start, end)
+                    best_theta = theta # Update the 'best' angle
+        ## --- END: Best Gap Logic Correction ---
+            
+
         depth_full = cv2.normalize(depth_full, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
         depth_full = cv2.cvtColor(depth_full, cv2.COLOR_GRAY2BGR)
 
-        # raw8 = cv2.normalize(depth_full, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-        # base = cv2.cvtColor(raw8, cv2.COLOR_GRAY2BGR)
-                
-        for gap in gaps:
+        depth_full[ground_mask] = (255, 0, 0)
+
+        for gap in valid_gaps:
             start_point, end_point = (gap[0], 0), (gap[1], 719)
             color = (0, 255, 0)
             depth_full = cv2.rectangle(depth_full, start_point, end_point, color, -1)
 
             # Publish overlay
 
+        start_point, end_point = (gap_to_move_to[0], 0), (gap_to_move_to[1], 719)
+        color = (0, 255, 255)
+        depth_full = cv2.rectangle(depth_full, start_point, end_point, color, -1)
+
         cv2.imshow("obstacle avoidance", depth_full)
         cv2.waitKey(1)
         
         end_time = time.time() - start_time
-        print(end_time)
-        # out_msg = self.bridge.cv2_to_imgmsg(depth_full, 'bgr8')
-        # out_msg.header = depth_msg.header
-        # self.pub.publish(out_msg)
+
+        if abs(best_theta) < 2:             # almost straight within 2 degrees of straight
+            y = 1.0
+            x = 0.0
+        else :                  # gap is right or left
+            y = 1*math.cos(best_theta)
+            x = 1*math.sin(best_theta)
+
+        return [y, x, 0.0, 0.0]
+
+    @staticmethod
+    def compute_bearing(p1, p2):
+        """
+        Computes the angle between two gps coordinates in degrees
+
+        Args:
+            p1 - first gps coordinate
+            p2 - second gps coordinate
+        Returns:
+            angle with respect to north that points into the direction
+        """
+        lat1, lon1 = p1
+        lat2, lon2 = p2
+        
+        # Convert degrees to radians
+        lat1_rad = math.radians(lat1)
+        lon1_rad = math.radians(lon1)
+        lat2_rad = math.radians(lat2)
+        lon2_rad = math.radians(lon2)
+
+        # Calculate differences in coordinates
+        dlon = lon2_rad - lon1_rad
+
+        # Calculate bearing using atan2
+        x = math.sin(dlon) * math.cos(lat2_rad)
+        y = math.cos(lat1_rad) * math.sin(lat2_rad) - math.sin(lat1_rad) * math.cos(lat2_rad) * math.cos(dlon)
+
+        bearing_rad = math.atan2(x, y)
+
+        # Convert bearing from radians to degrees (0° to 360°)
+        bearing_deg = math.degrees(bearing_rad)
+        bearing_deg = (bearing_deg + 360) % 360  # Normalize to 0-360
+
+        return bearing_deg
+
+
+def quaternion_to_yaw(rv_x, rv_y, rv_z, rv_w):
+    """
+    Converts a quaternion (Rotation Vector: x, y, z, w) to the yaw angle (in radians).
+    
+    Args:
+        rv_x, rv_y, rv_z: Quaternion vector components (i, j, k from DepthAI).
+        rv_w: Quaternion scalar component (real from DepthAI).
+        
+    Returns:
+        float: Yaw angle in degrees (0 to 360).
+    """
+    
+    # Using the standard math formula for yaw (rotation around the Z-axis)
+    siny_cosp = 2 * (rv_w * rv_z + rv_x * rv_y)
+    cosy_cosp = 1 - 2 * (rv_y * rv_y + rv_z * rv_z)
+    
+    yaw_rad = math.atan2(siny_cosp, cosy_cosp)
+    
+    # Convert from radians to degrees
+    yaw_deg = math.degrees(yaw_rad)
+    
+    # Normalize the angle from [-180, 180] to [0, 360]
+    heading_360 = (yaw_deg + 360) % 360
+    
+    return heading_360
+
+
+
+
+with dai.Pipeline() as pipeline:
+    monoLeft = pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_B)
+    monoRight = pipeline.create(dai.node.Camera).build(dai.CameraBoardSocket.CAM_C)
+    stereo = pipeline.create(dai.node.StereoDepth)
+
+    stereo.setDefaultProfilePreset(dai.node.StereoDepth.PresetMode.ROBOTICS)
+    stereo.setDepthAlign(dai.CameraBoardSocket.CAM_A)
+    stereo.setOutputSize(1280, 720)
+
+    config = stereo.initialConfig
+
+    # Median filter to remove the salt n pepper type pixels
+    config.postProcessing.median = dai.MedianFilter.KERNEL_5x5
+    config.postProcessing.thresholdFilter.maxRange = 8000 # 8.0m
+
+    config.setConfidenceThreshold(30)
+
+
+
+    monoLeftOut = monoLeft.requestOutput((1280, 720))
+    monoRightOut = monoRight.requestOutput((1280, 720))
+
+    monoLeftOut.link(stereo.left)
+    monoRightOut.link(stereo.right)
+
+    rightOut = monoRightOut.createOutputQueue()
+    stereoOut = stereo.depth.createOutputQueue()
+    
+    imu = pipeline.create(dai.node.IMU)
+    imu.enableIMUSensor(dai.IMUSensor.ROTATION_VECTOR, 100) # 100 Hz
+    imu.setBatchReportThreshold(1)
+    imu.setMaxBatchReports(10)
+    imuQueue = imu.out.createOutputQueue(maxSize=10, blocking=False)
+
+    obj = SectorDepthClassifier()
+
+    rclpy.init()
+    gps_node = GPSNode()
+    swerve_node = SwervePublisher()
+
+    pipeline.start()
+    while pipeline.isRunning():
+        rclpy.spin_once(gps_node, timeout_sec=0.0)
+        rclpy.spin_once(swerve_node, timeout_sec=0.0)
+        imuData = imuQueue.tryGet() # Non-blocking get
+        current_heading = 0.0
+        if imuData:
+            imuPacket = imuData.packets[-1]
+            rv = imuPacket.rotationVector
+            current_heading = quaternion_to_yaw(rv.i, rv.j, rv.k, rv.real)
+            print("current heeading = ", current_heading)
+        ## --- Depth Data Processing ---
+        stereoFrame = stereoOut.get()
+
+        assert stereoFrame.validateTransformations()
+        
+        # Get frame and convert to meters
+        depth = stereoFrame.getCvFrame().astype(np.float32) / 1000.0
+        
+        
+        # Call the processing function, now passing the heading
+        swerve_cmd = obj.cb(depth, current_heading, gps_node.latest_gps)
+
+        swerve_node.send(swerve_cmd)
+
+        if cv2.waitKey(1) == ord('q'):
+            break
         
 
-def main(args=None):
-    rclpy.init(args=args)
-    node = SectorDepthClassifier()
-    try:
-        rclpy.spin(node)
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
+    pipeline.stop()
 
 
-if __name__ == '__main__':
-    main()
-
+cv2.destroyAllWindows()
+## --- END: Pipeline and Device Loop ---
