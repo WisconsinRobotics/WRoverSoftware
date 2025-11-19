@@ -28,12 +28,12 @@ def generate_launch_description():
             package='wr_can_comms',
             executable='can_comms',
             name='can_comms'
+        ),
+        #Control with xbox
+        Node(
+           package='wr_controller',
+           executable='xbox_controller',
+           name='xbox_controller'
         )
-        #Control with keyboard
-        # Node(
-        #    package='wr_controller',
-       #     executable='keyboard_controller',
-        #    name='keyboard_controller'
-        #)
 
     ])

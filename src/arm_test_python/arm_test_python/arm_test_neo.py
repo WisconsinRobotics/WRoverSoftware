@@ -77,7 +77,7 @@ class SwerveControlSubsrciber(Node):
         rpm = msg.data * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["GRIPPER"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('CAN_PACKET_SET_RPM: "%s"' % can_msg_rpm.data + '\n')
+        #self.get_logger().info('CAN_PACKET_SET_RPM: "%s"' % can_msg_rpm.data + '\n')
 
 def main(args=None):
     rclpy.init(args=args)

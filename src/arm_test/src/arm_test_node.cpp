@@ -96,7 +96,7 @@ private:
 
     void topic_callback(const std_msgs::msg::Float32MultiArray &msg)
     {
-        if (msg.data.size() < 3)
+        if (msg.data.size() < 2)
         {
             RCLCPP_WARN(this->get_logger(), "Received data is too short!");
             return;

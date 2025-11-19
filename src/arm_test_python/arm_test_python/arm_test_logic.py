@@ -90,7 +90,7 @@ class ArmLogic(Node):
         #Publishing
         
         if self.absolute_wrist >= 0 + self.kohler_shift and self.absolute_wrist <= 100 + self.kohler_shift and 1 in self.D_PAD:
-            self.get_logger().info(str(self.absolute_wrist))
+            #self.get_logger().info(str(self.absolute_wrist))
             self.get_wrist_position(self.D_PAD[0],self.D_PAD[1],self.D_PAD[2],self.D_PAD[3])
             self.msg_wrist.left_position = float(self.wrist_positions[0])
             self.msg_wrist.right_position = float(self.wrist_positions[1])
@@ -100,13 +100,13 @@ class ArmLogic(Node):
         if up == 1:
             self.wrist_positions[0] += -WRIST_SPEED_VALUE
             self.wrist_positions[1] += -WRIST_SPEED_VALUE
-            if self.absolute_wrist >= 0 + self.kohler_shift + 1:
-                self.absolute_wrist += -WRIST_SPEED_VALUE
+            #if self.absolute_wrist >= 0 + self.kohler_shift + 1:
+            #    self.absolute_wrist += -WRIST_SPEED_VALUE #COMMENTED OUT LIMITS, can zero from bottom
         elif down == 1:
             self.wrist_positions[0] += WRIST_SPEED_VALUE
             self.wrist_positions[1] += WRIST_SPEED_VALUE
-            if self.absolute_wrist <= 100 + self.kohler_shift - 1:
-                self.absolute_wrist += WRIST_SPEED_VALUE
+            #if self.absolute_wrist <= 100 + self.kohler_shift - 1:
+            #    self.absolute_wrist += WRIST_SPEED_VALUE
         elif left == 1:
             self.wrist_positions[0] += WRIST_SPEED_VALUE
             self.wrist_positions[1] += -WRIST_SPEED_VALUE
