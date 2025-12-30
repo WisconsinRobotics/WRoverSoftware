@@ -8,23 +8,15 @@ from std_msgs.msg import Int16MultiArray
 import math
 from sensor_msgs.msg import JointState
 
-#TODO: FIX IK for wrist
 
 GRIPPER_SPEED_VALUE = .25
-WRIST_SPEED_VALUE = .16
-TURN_SPEED = 0.3 #TODO set this properly
-MAX_ANGLE = 140
+WRIST_SPEED_VALUE = .1
+TURN_SPEED = .5 #TODO set this properly
 
 class IKSubscriber(Node):
 
     def __init__(self):
         super().__init__('arm_logic')
-        self.subscription_joint_solutions = self.create_subscription(
-            JointState,
-            '/relaxed_ik/joint_angle_solutions',
-            self.listener_callback,
-            10)
-        
 
         self.subscription_buttons = self.create_subscription(
             Int16MultiArray,
@@ -40,10 +32,10 @@ class IKSubscriber(Node):
         self.arm_publisher_gripper = self.create_publisher(Float64, 'arm_gripper', 10)
 
         
-        timer_period = 0.05  # seconds
+        timer_period = (1/100)/5  #18*5 times per seconds, make 5 times sure that publishing the right value
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        timer_period = 0.005  # TODO: seconds
+        timer_period = (1/100)  # 18 times per second
         self.timer_rotation = self.create_timer(timer_period, self.change_rotation)
 
         
@@ -69,28 +61,24 @@ class IKSubscriber(Node):
         self.absolute_angle = 0.0
 
 
-    def listener_callback(self, data):
-        #self.get_logger().info('I heard: "%s"' % msg.data)
-        #print(data.position)
-        self.processPositions(data.position)
-    
 
         
     def timer_callback(self):
-        msg = Float32MultiArray()
-        msg.data = self.arm_angles
+        #msg = Float32MultiArray()
+        #msg.data = self.arm_angles
         #print(msg)
-        self.arm_position_publisher.publish(msg)
-        #print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
-        self.msg_wrist.left_position = float(-self.arm_angles[2] + self.absolute_left_EE - self.absolute_angle)
-        self.msg_wrist.right_position = float(-self.arm_angles[2] + self.absolute_right_EE - self.absolute_angle)
+        #self.arm_position_publisher.publish(msg)
+                #Only used for debugging
         
-        #Wrist Simple
-        #self.msg_wrist.left_position = float(self.absolute_left_EE - self.absolute_angle + 50+ self.kohler_shift)
-        #self.msg_wrist.right_position = float(self.absolute_right_EE - self.absolute_angle + 50+self.kohler_shift)
 
-        #self.get_logger().info('Left Position: "%s"' % self.msg_wrist.left_position)
-        #self.get_logger().info('Right Position: "%s"' % self.msg_wrist.right_position)
+        #print("Left Position: " + str(float(self.arm_angles[2] + self.absolute_left_EE)))
+        
+        #Wrist Simple - Start at 180 which will be zero
+        self.msg_wrist.left_position = float(self.absolute_left_EE - self.absolute_angle + 50+ self.kohler_shift)
+        self.msg_wrist.right_position = float(self.absolute_right_EE - self.absolute_angle + 50+self.kohler_shift)
+
+        self.get_logger().info('Left Position: "%s"' % self.msg_wrist.left_position)
+        self.get_logger().info('Right Position: "%s"' % self.msg_wrist.right_position)
 
         self.arm_publisher_wrist_left.publish(self.msg_wrist)
         self.arm_publisher_wrist_right.publish(self.msg_wrist)
@@ -102,24 +90,13 @@ class IKSubscriber(Node):
         self.absolute_left_EE += self.add_left_EE
         self.absolute_right_EE += self.add_right_EE
         #Making sure it doesn't go past limit but also that it can go back
-        if self.absolute_angle <= MAX_ANGLE and self.angle_change == WRIST_SPEED_VALUE:
-            self.absolute_angle += self.angle_change
-        if self.absolute_angle >= -MAX_ANGLE and self.angle_change == -WRIST_SPEED_VALUE:
-            self.absolute_angle += self.angle_change
+        #No max angle in simple drive
+        #if self.absolute_angle <= MAX_ANGLE and self.angle_change == WRIST_SPEED_VALUE:
+        self.absolute_angle += self.angle_change
+        #if self.absolute_angle >= -MAX_ANGLE and self.angle_change == -WRIST_SPEED_VALUE:
+        self.absolute_angle += self.angle_change
 
 
-    def processPositions(self, arm_positions):
-        #Shoulder
-        self.arm_angles[0] = arm_positions[0] *(-105.0 / (math.pi/2))
-
-        #Elbow
-        self.arm_angles[1] = -(arm_positions[1]) *(105.0 / (math.pi/2))
-        #self.get_logger().info('I heard: "%s"' % arm_positions[2])
-
-
-        #End Effector up and down
-        self.arm_angles[2] = (arm_positions[2]* (120.0 / (math.pi/2))) + 50 + self.kohler_shift
-    
     def listener_callback_buttons(self, msg):
         buttons = msg.data
         #Expecting D-Pad
@@ -149,15 +126,9 @@ class IKSubscriber(Node):
 
     def update_angle(self, up, down):
         if up == 1:
-            if self.absolute_angle <= MAX_ANGLE:
-                self.angle_change = WRIST_SPEED_VALUE
-            else:
-                self.angle_change = 0.0
+            self.angle_change = WRIST_SPEED_VALUE
         elif down == 1:
-            if self.absolute_angle >= -MAX_ANGLE:  
-                self.angle_change = -WRIST_SPEED_VALUE
-            else:
-                self.angle_change = 0.0
+            self.angle_change = -WRIST_SPEED_VALUE
         else:
             self.angle_change = 0.0
 
@@ -168,7 +139,7 @@ class IKSubscriber(Node):
         elif b == 1:
             return -GRIPPER_SPEED_VALUE
         else:
-            return 0
+            return 0.0
 
 
 def main(args=None):

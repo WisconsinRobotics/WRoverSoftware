@@ -24,7 +24,8 @@ setup(
             'arm_test_neo = arm_test_python.arm_test_neo:main',
             'ik_subscriber = arm_test_python.ik_subscriber:main',
             'rail_subscriber = arm_test_python.rail_subscriber:main',
-            'arm_neo_only_base = arm_test_python.arm_neo_only_base:main'
+            'arm_neo_only_base = arm_test_python.arm_neo_only_base:main',
+            'arm_test_logic = arm_test_python.arm_test_logic:main',
         ],
     },
 )

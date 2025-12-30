@@ -34,7 +34,7 @@ class RailSubscriber(Node):
 
     
     def listener_callback_joy(self, msg):
-        self.get_logger().info('I heard: "%s"' % msg.data)
+        #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
 
         #Expecting (right sticky y, left stick y, right trigger, left trigger)
