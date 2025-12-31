@@ -32,11 +32,14 @@ class XboxPublisher(Node):
         #print(len(self.joysticks))
         #print(self.joysticks[0])
         if len(self.joysticks) > 0:
-            # Index 0 is left stick x-axis, 1 is left stick y-axis, 2 is right stick x-axis
-            self.motion = [self.joysticks[CONTROLLER].get_axis(1),
-                        -self.joysticks[CONTROLLER].get_axis(3),
-                        self.joysticks[CONTROLLER].get_axis(2),
-                        self.joysticks[CONTROLLER].get_axis(5) ]
+            # Currently set up for bluetooth, might change later
+            self.motion = [-self.joysticks[CONTROLLER].get_axis(1), #Left stick up and down
+                        -self.joysticks[CONTROLLER].get_axis(3),  #Right stick up and down
+                        self.joysticks[CONTROLLER].get_axis(4), #Right Trigger
+                        self.joysticks[CONTROLLER].get_axis(5) ]# Left Trigger 
+            for i in range(4):
+                if abs(self.motion[i]) < self.AXIS_BOUNDARY:
+                    self.motion[i] = 0.0
         self.motion_command.data = self.motion
         self.arm_publisher.publish(self.motion_command)
         for event in pygame.event.get():

@@ -8,7 +8,7 @@ from std_msgs.msg import Int16MultiArray
 import math
 
 
-WRIST_SPEED_VALUE = .2 #As we are publishing 100 times per second. It moves 10% of the way per second.
+WRIST_SPEED_VALUE = .6
 GRIPPER_SPEED_VALUE = .5
 class ArmLogic(Node):
 
@@ -95,17 +95,17 @@ class ArmLogic(Node):
 
     def set_wrist_speeds(self, up, down, left, right) -> Float32MultiArray:
         if up == 1:
-            self.msg_wrist_right.data = -1.0
-            self.msg_wrist_left.data = -1.0
+            self.msg_wrist_right.data = WRIST_SPEED_VALUE
+            self.msg_wrist_left.data = WRIST_SPEED_VALUE
         elif down == 1:
-            self.msg_wrist_right.data = 1.0
-            self.msg_wrist_left.data = 1.0 
+            self.msg_wrist_right.data = -WRIST_SPEED_VALUE
+            self.msg_wrist_left.data = -WRIST_SPEED_VALUE
         elif left == 1:
-            self.msg_wrist_right.data = -1.0
-            self.msg_wrist_left.data = 1.0 
+            self.msg_wrist_right.data = -WRIST_SPEED_VALUE
+            self.msg_wrist_left.data = WRIST_SPEED_VALUE 
         elif right == 1:
-            self.msg_wrist_right.data = 1.0
-            self.msg_wrist_left.data = -1.0
+            self.msg_wrist_right.data = WRIST_SPEED_VALUE
+            self.msg_wrist_left.data = -WRIST_SPEED_VALUE
         else:
             self.msg_wrist_right.data = 0.0
             self.msg_wrist_left.data = 0.0 

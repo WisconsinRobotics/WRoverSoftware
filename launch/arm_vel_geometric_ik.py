@@ -5,8 +5,8 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='arm_test',
-            executable='arm_test_node',
-            name='arm_test'
+            executable='ik_test_node',
+            name='ik_test_node'
         ),
         
         Node(
@@ -18,6 +18,11 @@ def generate_launch_description():
             package='arm_test_python',
             executable='arm_test_neo_vel',
             name='arm_test_neo_vel'
+        ),
+        Node(
+            package='arm_test_python',
+            executable='arm_test_geometric_ik',
+            name='arm_test_geometric_ik'
         ),
         #Node(
         #    package='arm_test_python',
