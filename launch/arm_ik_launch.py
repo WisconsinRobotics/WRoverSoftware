@@ -15,18 +15,18 @@ def generate_launch_description():
         ),
 
         #RUN GRIPPER WITH IK
-        Node(
-            package='arm_test_python',
-            executable='ik_subscriber',
-            name='ik_subscriber'
-        ),
-
-        #RUN GRIPPER W/OUT IK
         #Node(
         #    package='arm_test_python',
-        #    executable='arm_test_logic',
-        #    name='arm_test_logic'
+        #    executable='ik_subscriber',
+        #    name='ik_subscriber'
         #),
+
+        #RUN GRIPPER W/OUT IK
+        Node(
+            package='arm_test_python',
+            executable='arm_test_logic',
+            name='arm_test_logic'
+        ),
 
 
         #Logic for rail
