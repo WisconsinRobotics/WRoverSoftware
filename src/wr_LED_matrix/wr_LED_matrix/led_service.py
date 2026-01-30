@@ -1,4 +1,5 @@
 from custom_msgs_srvs.srv import LED
+from std_msgs.msg import Float32MultiArray
 
 import rclpy
 from rclpy.node import Node
@@ -43,7 +44,7 @@ class LEDService(Node):
     def change_LED(self, request, response):
         self.get_logger().info(f'Received color: R={request.red}, G={request.green}, B={request.blue}')
         if self.led_mode == "real":
-            crc = request.red ^ request.green ^ request.blue
+            crc = reques[0] ^ rreques[1] ^ reques[2]
             packet = bytearray([request.red, request.green, request.blue, crc])
             self.s.write(packet)
         return response

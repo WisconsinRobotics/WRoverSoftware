@@ -17,5 +17,10 @@ def generate_launch_description():
             package='wr_can_comms',
             executable='can_comms',
             name='can_comms'
+        ),
+        Node(
+            package='wr_LED_matrix',
+            executable='led_service',
+            name='led_service'
         )
     ])
