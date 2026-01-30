@@ -1,0 +1,8 @@
+led_service:
+  ros__parameters:
+    #real: have LED plugged in
+    #mock: don't have LED plugged in, for testing
+    led_mode: mock
+state_machine:
+  ros__parameters:
+    led_mode: mock
