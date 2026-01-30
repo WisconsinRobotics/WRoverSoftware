@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'wr_swerve_motor'
+package_name = 'wr_science_control'
 
 setup(
     name=package_name,
@@ -13,13 +13,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='root',
-    maintainer_email='root@todo.todo',
-    description='Listens for controller input and sends angles and speeds for each swerve module on their own individual topics',
+    maintainer='wiscrobo',
+    maintainer_email='devansh.the.photofreak@gmail.com',
+    description='TODO: Package description',
     license='Apache-2.0',
+    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'swerve_motor = wr_swerve_motor.swerve_motor:main',
+            'science_control = wr_science_control.science_control:main',
         ],
     },
 )

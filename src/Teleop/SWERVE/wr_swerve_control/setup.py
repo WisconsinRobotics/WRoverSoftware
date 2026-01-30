@@ -19,7 +19,9 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
-            'swerve_control = wr_swerve_control.swerve_control:main'
+            'swerve_control = wr_swerve_control.swerve_control:main',
+            'tank_control = wr_swerve_control.tank_control:main',
+            'tank_swerve = wr_swerve_control.tank_swerve:main',
         ],
     },
 )

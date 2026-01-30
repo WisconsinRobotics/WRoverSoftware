@@ -23,9 +23,11 @@ setup(
     license='Apache-2.0',
     entry_points={
         'console_scripts': [
+            'science_controller = wr_xbox_controller.science_controller:main',
             'drive_controller = wr_xbox_controller.drive_controller:main',
             'rail_gripper_controller = wr_xbox_controller.rail_gripper_controller:main',
             'arm_xbox_ik = wr_xbox_controller.drive_arm_test:main',
+            'drive_tank_controller = wr_xbox_controller.drive_tank_controller:main',
         ],
     },
 )

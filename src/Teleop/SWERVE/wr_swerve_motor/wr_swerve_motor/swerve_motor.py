@@ -68,12 +68,34 @@ class SwerveSubscriber(Node):
         self.swerve_publisher_BL = self.create_publisher(Float32MultiArray, 'swerve_BL', 10)
         self.swerve_publisher_BR = self.create_publisher(Float32MultiArray, 'swerve_BR', 10)
 
+
+        self.msg_FL = Float32MultiArray()
+        self.msg_FL.data = [0.0,0.0]
+
+        self.msg_FR = Float32MultiArray()
+        self.msg_FR.data = [0.0,0.0]
+
+        self.msg_BL = Float32MultiArray()
+        self.msg_BL.data = [0.0,0.0]
+
+        self.msg_BR = Float32MultiArray()
+        self.msg_BR.data = [0.0,0.0]
+
+        self.publisher_timer = self.create_timer(.05, self.publish_messages)
+    
         self.subscription  # prevent unused variable warning
 
+    def publish_messages(self):
+        self.swerve_publisher_FL.publish(self.msg_FL)
+        self.swerve_publisher_FR.publish(self.msg_FR)
+        self.swerve_publisher_BL.publish(self.msg_BL)
+        self.swerve_publisher_BR.publish(self.msg_BR)
+
     def listener_callback(self, msg):
-        #self.get_logger().info('I heard: "%s"' % msg.data)
+        
         motion = msg.data
         wheel_vectors = get_wheel_vectors([motion[1],motion[0]],[motion[2], motion[3]])
+        #self.get_logger().info('Wheel Vectors: "%s"' % wheel_vectors)
         wheel_speeds  = get_wheel_speeds(wheel_vectors)
         wheel_angles  = get_wheel_angles(wheel_vectors)
         for i in range (0, 4):
@@ -91,21 +113,15 @@ class SwerveSubscriber(Node):
         if (len(wheel_speeds) == 4 and len(wheel_angles) == 4 and
            (wheel_speeds[0] != 0 and wheel_speeds[1] != 0 and
             wheel_speeds[2] != 0 and wheel_speeds[3] != 0)):
-            msg_FL = Float32MultiArray()
-            msg_FL.data = [wheel_speeds[0],wheel_angles[0]]
-            self.swerve_publisher_FL.publish(msg_FL)
-
-            msg_FR = Float32MultiArray()
-            msg_FR.data = [wheel_speeds[1],wheel_angles[1]]
-            self.swerve_publisher_FR.publish(msg_FR)
-
-            msg_BL = Float32MultiArray()
-            msg_BL.data = [wheel_speeds[2],wheel_angles[2]]
-            self.swerve_publisher_BL.publish(msg_BL)
-
-            msg_BR = Float32MultiArray()
-            msg_BR.data = [wheel_speeds[3],wheel_angles[3]]
-            self.swerve_publisher_BR.publish(msg_BR)
+            self.msg_FL.data = [wheel_speeds[0],wheel_angles[0]]
+            self.msg_FR.data = [wheel_speeds[1],wheel_angles[1]]
+            self.msg_BL.data = [wheel_speeds[2],wheel_angles[2]]  
+            self.msg_BR.data = [wheel_speeds[3],wheel_angles[3]]
+        else:
+            self.msg_FL.data = [0.0,wheel_angles[0]]
+            self.msg_FR.data = [0.0,wheel_angles[1]]
+            self.msg_BL.data = [0.0,wheel_angles[2]]
+            self.msg_BR.data = [0.0,wheel_angles[3]]
 
             #can_msg_angle = String()
             #can_msg_angle.data = f"74 CAN_PACKET_SET_POS {wheel_speeds[0]} int"

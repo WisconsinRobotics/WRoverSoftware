@@ -11,8 +11,8 @@ pygame.init()
 class XboxPublisher(Node):
 
     def __init__(self):
-        super().__init__('xbox_publisher')
-        self.swerve_publisher_ = self.create_publisher(Float32MultiArray, 'swerve', 10)
+        super().__init__('xbox_publisher_science')
+        self.science_xbox_publisher_ = self.create_publisher(Float32MultiArray, 'science_xbox', 10)
         # NOTE: This might need to be tuned
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -22,7 +22,7 @@ class XboxPublisher(Node):
     def timer_callback(self):
         # No button capability, but doesn't sound like we need it. 
         if len(self.joysticks) > 0:
-            # Index 0 is left stick x-axis, 1 is right stick x-axis, 2 is right stick x-axis
+            # Index 0 is left stick x-axis, 1 is left stick y-axis, 2 is right stick x-axis
             motion = [-self.joysticks[0].get_axis(1),
                         self.joysticks[0].get_axis(3),
                         self.joysticks[0].get_axis(2),
@@ -32,11 +32,11 @@ class XboxPublisher(Node):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
 
-            #self.get_logger().info("Pressed: " + str(motion))
+            #print(motion)
             # Publish to topic swerve
-            swerve_command = Float32MultiArray()
-            swerve_command.data = motion
-            self.swerve_publisher_.publish(swerve_command)
+            science_command = Float32MultiArray()
+            science_command.data = motion
+            self.science_xbox_publisher_.publish(science_command)
 
 
         for event in pygame.event.get():
@@ -46,7 +46,7 @@ class XboxPublisher(Node):
             if event.type == pygame.JOYBUTTONDOWN:
                 if event.joy == 0: #First controller
                     if event.button == 2: # X Button
-                        self.get_logger().info("Pressed first controller (DRIVE)")
+                        self.get_logger().info("Pressed controller (SCIENCE)")
 
             # Handle hotplugging
             if event.type == pygame.JOYDEVICEADDED:
@@ -58,10 +58,10 @@ class XboxPublisher(Node):
                 #print(self.joysticks)
 
             if event.type == pygame.JOYDEVICEREMOVED:
-                swerve_command = Float32MultiArray()
+                science_command = Float32MultiArray()
                 motion = [0.0,0.0,-1.0,-1.0]
-                swerve_command.data = motion
-                self.swerve_publisher_.publish(swerve_command)
+                science_command.data = motion
+                self.science_xbox_publisher_.publish(science_command)
                 self.joysticks = {}
                 print(f"Joystick {event.instance_id} disconnected")
 
@@ -74,9 +74,9 @@ class XboxPublisher(Node):
             #            motion[i] = 0.0
             #    print(motion)
             #    # Publish to topic swerve
-            #    swerve_command = Float32MultiArray()
-            #    swerve_command.data = motion
-            #    self.swerve_publisher_.publish(swerve_command)
+            #    science_command = Float32MultiArray()
+            #    science_command.data = motion
+            #    self.science_xbox_publisher_.publish(science_command)
 
 def main(args=None):
     rclpy.init(args=args)
@@ -90,7 +90,6 @@ def main(args=None):
     # when the garbage collector destroys the node object)
     xbox_publisher.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()
