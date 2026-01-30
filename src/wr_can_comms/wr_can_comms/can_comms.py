@@ -42,13 +42,13 @@ class CANSubscriber(Node):
 
             # Split single CAN message
             can_msg = line.split(' ')
+            self.get_logger().info(f"Process line '{line}")
+            if len(can_msg) == 4:
+                # self.get_logger().error(f"Malformed CAN message: {line}")
+                # continue
 
-            if len(can_msg) < 4:
-                self.get_logger().error(f"Malformed CAN message: {line}")
-                continue
-
-            try:
-                #self.get_logger().info(f"Process line '{line}")
+        #try:
+                
                 vesc_id = int(can_msg[0])
                 command = can_msg[1]
                 value_type = can_msg[3]
@@ -73,8 +73,8 @@ class CANSubscriber(Node):
                 # Send message
                 send_msg(compiled_msg=compiled_msg)
 
-            except Exception as e:
-                self.get_logger().error(f"Failed to process line '{line}': {e}")
+            # except Exception as e:
+            #     self.get_logger().error(f"Failed to process line '{line}': {e}")
 
     def carousel_publish(self, car_pid_msg: Float32):
         self.pid_publisher.publish(car_pid_msg)
