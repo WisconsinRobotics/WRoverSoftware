@@ -1,9 +1,10 @@
-from custom_msgs_srvs.srv import LED
+
 from std_msgs.msg import Float32MultiArray
 
 import rclpy
 from rclpy.node import Node
 import serial
+
 
 
 class LEDService(Node):
@@ -35,19 +36,25 @@ class LEDService(Node):
                     exit(1)
 
                 self.get_logger().info("Magic word OK. Serial ready. Starting ROS service.")
-            self.srv = self.create_service(LED, 'change_LED', self.change_LED)
+            self.srv = self.create_subscription(
+            Float32MultiArray,
+            'led',
+            self.change_LED,
+            10)
 
         except serial.SerialException as e:
             self.get_logger().error(f"Could not open serial port: {e}")
             exit(1)
 
-    def change_LED(self, request, response):
-        self.get_logger().info(f'Received color: R={request.red}, G={request.green}, B={request.blue}')
+    def change_LED(self, msg):
+        self.get_logger().info(f'Received color: R={msg.data[0]}, G={msg.data[1]}, B={msg.data[2]}')
+        self.s.reset_input_buffer()
         if self.led_mode == "real":
-            crc = reques[0] ^ rreques[1] ^ reques[2]
-            packet = bytearray([request.red, request.green, request.blue, crc])
+            crc = int(msg.data[0]) ^ int(msg.data[1]) ^ int(msg.data[2])
+            packet = bytearray([int(msg.data[0]), int(msg.data[1]), int(msg.data[2]), crc])
             self.s.write(packet)
-        return response
+        self.get_logger().info("SENT DATA: " + str(msg))
+        
     def turn_off_LED(self):
         packet = bytearray([0, 0, 0, 0])
         self.s.write(packet)
