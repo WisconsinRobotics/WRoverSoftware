@@ -16,47 +16,65 @@ class CANSubscriber(Node):
             self.listener_callback,
             10)
 
-        self.pid_publisher = self.create_publisher(
-            Float32,
-            'carousel_pid',
-            10)
+        # self.pid_publisher = self.create_publisher(
+        #     Float32,
+        #     'carousel_pid',
+        #     10)
         
         # Publishers for canbus data
         # NOTE: This may need to be tuned
-        max_queue = 10
-        timer_freq = 0.01 # seconds
-        self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
-        self.timer = self.create_timer(timer_freq, self.timer_callback)
+        # max_queue = 10
+        # timer_freq = 0.01 # seconds
+        # self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
+        # self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
+        # self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
+        # self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
+        # self.timer = self.create_timer(timer_freq, self.timer_callback)
 
     def listener_callback(self, msg):
-        #self.get_logger().info('I heard: "%s"' % msg.data)
-        # Parse message for data
-        # NOTE: Assuming "vesc_id COMMAND value value_type"
-        can_msg = msg.data.split(' ')
-        vesc_id = int(can_msg[0])
-        command = can_msg[1]
-        # Process value
-        value_type = can_msg[3]
-        if value_type == 'float':
-            value = float(can_msg[2])
-        elif value_type == 'int':
-            value = int(can_msg[2])
-        elif value_type == 'string':
-            value = can_msg[2]
-        else:
-            raise TypeError(f"Type {value_type} not known/used.")
+            # Split into individual CAN command lines
+        lines = msg.data.strip().split('\n')
 
-        # Build message
-        compiled_msg, is_status = build_msg(command=command, value=value, vesc_id=vesc_id)
+        for line in lines:
 
-        # TODO: Add capability to synchronize message consumption
-        # Send message
-        send_msg(compiled_msg=compiled_msg)
+            if not line.strip():
+                continue  # skip empty lines
 
-        # TODO if someone needs to manually send status commands, deal with that here
+            # Split single CAN message
+            can_msg = line.split(' ')
+
+            if len(can_msg) < 4:
+                self.get_logger().error(f"Malformed CAN message: {line}")
+                continue
+
+            try:
+                #self.get_logger().info(f"Process line '{line}")
+                vesc_id = int(can_msg[0])
+                command = can_msg[1]
+                value_type = can_msg[3]
+
+                # Parse value
+                if value_type == 'float':
+                    value = float(can_msg[2])
+                elif value_type == 'int':
+                    value = int(can_msg[2])
+                elif value_type == 'string':
+                    value = can_msg[2]
+                else:
+                    raise TypeError(f"Type {value_type} not known/used.")
+
+                # Build message
+                compiled_msg, is_status = build_msg(
+                    command=command,
+                    value=value,
+                    vesc_id=vesc_id
+                )
+
+                # Send message
+                send_msg(compiled_msg=compiled_msg)
+
+            except Exception as e:
+                self.get_logger().error(f"Failed to process line '{line}': {e}")
 
     def carousel_publish(self, car_pid_msg: Float32):
         self.pid_publisher.publish(car_pid_msg)
