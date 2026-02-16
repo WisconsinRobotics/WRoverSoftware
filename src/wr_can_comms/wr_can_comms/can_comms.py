@@ -59,9 +59,12 @@ class CANSubscriber(Node):
         # TODO if someone needs to manually send status commands, deal with that here
 
     def timer_callback(self):
-        receive_canbus(2)
+        receive_canbus(2, carousel_publish_fun = self.carousel_publish)
 
-def receive_canbus(self, num_messages: int, infty: bool = False):
+    def carousel_publish(self, car_pid_msg: Float32):
+        self.pid_publisher.publish(car_pid_msg)
+
+def receive_canbus(num_messages: int, infty: bool = False, carousel_publish_func = None):
     """
     Queries the canbus for data. 
 
@@ -117,8 +120,9 @@ def receive_canbus(self, num_messages: int, infty: bool = False):
                     pid_pos_deg = pid_pos_raw / 50
                     car_pid_msg = Float32()
                     car_pid_msg.data = pid_pos_deg
-                    if(vesc_id == CAROUSEL_VESC):
-                        self.pid_publisher.publish(car_pid_msg)
+                    if carousel_publish_func is not None:
+                        if(vesc_id == CAROUSEL_VESC):
+                            carousel_publish_func(car_pid_msg)
                     #print(f"PID Position: {pid_pos_deg} degrees")
 
                 # case 28:
