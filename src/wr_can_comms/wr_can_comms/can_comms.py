@@ -58,11 +58,11 @@ class CANSubscriber(Node):
 
         # TODO if someone needs to manually send status commands, deal with that here
 
-    def timer_callback(self):
-        receive_canbus(2, carousel_publish_fun = self.carousel_publish)
-
     def carousel_publish(self, car_pid_msg: Float32):
         self.pid_publisher.publish(car_pid_msg)
+    
+    def timer_callback(self):
+        receive_canbus(2, carousel_publish_fun = self.carousel_publish)
 
 def receive_canbus(num_messages: int, infty: bool = False, carousel_publish_func = None):
     """
