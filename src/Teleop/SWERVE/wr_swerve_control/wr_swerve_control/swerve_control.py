@@ -8,6 +8,8 @@ class SwerveControlSubsrciber(Node):
 
     def __init__(self):
         super().__init__('swerve_control')
+        #Even is drive
+        #Odd is swerve
         self.vesc_ids = {"FL":["70","71"],
                          "FR":["72","73"],
                          "BL":["74","75"],
