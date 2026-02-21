@@ -12,7 +12,7 @@ class XboxPublisher(Node):
 
     def __init__(self):
         super().__init__('xbox_publisher')
-        self.swerve_publisher_ = self.create_publisher(Float32MultiArray, 'swerve', 10)
+        self.swerve_publisher_ = self.create_publisher(Float32MultiArray, 'tank', 10)
         # NOTE: This might need to be tuned
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
@@ -24,15 +24,14 @@ class XboxPublisher(Node):
         if len(self.joysticks) > 0:
             # Index 0 is left stick x-axis, 1 is right stick x-axis, 2 is right stick x-axis
             motion = [-self.joysticks[0].get_axis(1),
-                        -self.joysticks[0].get_axis(3),
-                        self.joysticks[0].get_axis(2),
-                        self.joysticks[0].get_axis(5) ]
+                        -self.joysticks[0].get_axis(4),
+                             ]
             # Ignore jitter in sticks
             for i in range(len(motion)):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
 
-            #self.get_logger().info("Pressed: " + str(motion))
+            self.get_logger().info("Pressed: " + str(motion))
             # Publish to topic swerve
             swerve_command = Float32MultiArray()
             swerve_command.data = motion

@@ -27,6 +27,7 @@ setup(
             'drive_controller = wr_xbox_controller.drive_controller:main',
             'rail_gripper_controller = wr_xbox_controller.rail_gripper_controller:main',
             'arm_xbox_ik = wr_xbox_controller.drive_arm_test:main',
+            'drive_tank_controller = wr_xbox_controller.drive_tank_controller:main',
         ],
     },
 )

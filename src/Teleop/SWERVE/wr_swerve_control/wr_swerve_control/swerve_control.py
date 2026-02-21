@@ -65,7 +65,7 @@ class SwerveControlSubsrciber(Node):
         rpm = msg.data[0] * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        #self.get_logger().info('Publishing RPM FL: "%s"' % can_msg_rpm)
+        self.get_logger().info('Publishing RPM FL: "%s"' % can_msg_rpm)
 
     def swerve_listener_FR(self, msg):
         can_msg_rpm = String()
