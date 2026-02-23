@@ -10,10 +10,10 @@ class SwerveControlSubsrciber(Node):
         super().__init__('swerve_control')
         #Even is drive
         #Odd is swerve
-        self.vesc_ids = {"FL":["70"],
-                         "FR":["72"],
-                         "BL":["74"],
-                         "BR":["76"]
+        self.vesc_ids = {"FL":["70","71"],
+                         "FR":["72","73"],
+                         "BL":["74","75"],
+                         "BR":["76","77"]
                         }
         self.max_rpm = 6000
         self.limit_rotation = 0
@@ -25,13 +25,16 @@ class SwerveControlSubsrciber(Node):
         
         self.motion = [0.0, 0.0] #Tank input
 
-        # Timer to publish periodically
-        self.publisher_timer_FR = self.create_timer(0.01, self.publish_FR)
-        self.publisher_timer_FL = self.create_timer(0.01, self.publish_FL)
-        self.publisher_timer_BR = self.create_timer(0.01, self.publish_BR)
-        self.publisher_timer_BL = self.create_timer(0.01, self.publish_BL)
+        self.pos_comp = 10
+        self.neg_comp = -10
 
-        self.publisher_ = self.create_publisher(String, 'can_msg', 10)
+        # Timer to publish periodically
+        self.publisher_timer_FR = self.create_timer(0.1, self.publish_FR)
+        self.publisher_timer_FL = self.create_timer(0.1, self.publish_FL)
+        self.publisher_timer_BR = self.create_timer(0.1, self.publish_BR)
+        self.publisher_timer_BL = self.create_timer(0.1, self.publish_BL)
+
+        self.publisher_ = self.create_publisher(String, 'can_msg', 1)
 
 
     def listener_callback(self, msg):
@@ -40,13 +43,33 @@ class SwerveControlSubsrciber(Node):
     
 
     def publish_FR(self):
+        # Backlash Compensation first
+        compensate_msg = String()
+        if (self.motion[1] > 0.0):
+            turn_amount = (0/4 + 180)
+        else:
+            turn_amount = (0/4 + 180)
+        
+        compensate_msg.data = self.vesc_ids["FR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+        #self.publisher_.publish(compensate_msg)
+
         can_msg_rpm = String()
         rpm = self.motion[1] * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
+        #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     def publish_FL(self):
+        # Backlash Compensation first
+        compensate_msg = String()
+        if (self.motion[1] > 0.0):
+            turn_amount = (0/4 + 180)
+        else:
+            turn_amount = (0/4 + 180)
+        
+        compensate_msg.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+        #self.publisher_.publish(compensate_msg)
+        
         can_msg_rpm = String()
         rpm = self.motion[0] * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
@@ -54,18 +77,38 @@ class SwerveControlSubsrciber(Node):
         self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     def publish_BR(self):
+        # Backlash Compensation first
+        compensate_msg = String()
+        if (self.motion[1] > 0.0):
+            turn_amount = (0/4 + 180)
+        else:
+            turn_amount = (0/4 + 180)
+        
+        compensate_msg.data = self.vesc_ids["BR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+        #self.publisher_.publish(compensate_msg)
+        
         can_msg_rpm = String()
         rpm = self.motion[1] * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
+        #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     def publish_BL(self):
+        # Backlash Compensation first
+        compensate_msg = String()
+        if (self.motion[1] > 0.0):
+            turn_amount = (0/4 + 180)
+        else:
+            turn_amount = (0/4 + 180)
+        
+        compensate_msg.data = self.vesc_ids["BL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+        #self.publisher_.publish(compensate_msg)
+        
         can_msg_rpm = String()
         rpm = self.motion[0] * self.max_rpm
         can_msg_rpm.data = self.vesc_ids["BL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         self.publisher_.publish(can_msg_rpm)
-        self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
+        #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     
 
