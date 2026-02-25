@@ -41,12 +41,7 @@ class SwerveControlSubsrciber(Node):
             self.swerve_listener_BR,
             10)
 
-
-        self.publisher_timer_BL = self.create_timer(0.1, self.publish_BL)
-        self.publisher_timer_BR = self.create_timer(0.1, self.publish_BR)
-        self.publisher_timer_FL = self.create_timer(0.1, self.publish_FL)
-        self.publisher_timer_FR = self.create_timer(0.1, self.publish_FR)
-
+        self.publisher_timer = self.create_timer(0.05, self.publish)
 
         self.publisher_ = self.create_publisher(String, 'can_msg', 10)
 
@@ -78,21 +73,23 @@ class SwerveControlSubsrciber(Node):
         self.get_logger().info("Started SWERVE NODE")
 
 
-    def publish_FL(self):
-        self.publisher_.publish(self.can_msg_rpm_FL)  
-        self.publisher_.publish(self.can_msg_angle_FL)
+    def publish(self):
+        
+        combined_msg = "\n".join([
+        self.can_msg_rpm_FL.data,
+        self.can_msg_rpm_FR.data,
+        self.can_msg_rpm_BL.data,
+        self.can_msg_rpm_BR.data,
+        self.can_msg_angle_FL.data,
+        self.can_msg_angle_FR.data,
+        self.can_msg_angle_BL.data,
+        self.can_msg_angle_BR.data
+        ])
 
-    def publish_FR(self):
-        self.publisher_.publish(self.can_msg_rpm_FR)
-        self.publisher_.publish(self.can_msg_angle_FR)
+        msg = String()
+        msg.data = combined_msg
 
-    def publish_BL(self):
-        self.publisher_.publish(self.can_msg_rpm_BL)
-        self.publisher_.publish(self.can_msg_angle_BL)
-
-    def publish_BR(self):
-        self.publisher_.publish(self.can_msg_rpm_BR)
-        self.publisher_.publish(self.can_msg_angle_BR)
+        self.publisher_.publish(msg)
 
 
     def swerve_listener_FL(self, msg):
@@ -104,12 +101,11 @@ class SwerveControlSubsrciber(Node):
         else:
             self.can_msg_angle_FL.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
-            #self.get_logger().info('Publishing Angle BR: "%s"' % can_msg_angle)
+            #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
         self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-        #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
-
+        #self.get_logger().info('Publishing RPM FL: "%s"' % self.can_msg_rpm_FL)
 
     def swerve_listener_FR(self, msg):
 
@@ -119,12 +115,11 @@ class SwerveControlSubsrciber(Node):
         else:
             self.can_msg_angle_FR.data = self.vesc_ids["FR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
             #74 is id; CAN_PACKET_SET_POS is command; turn_amount is angle to turn to divide by 4; float is value to convert to
-            #self.get_logger().info('Publishing Angle BR: "%s"' % can_msg_angle)
+            #self.get_logger().info('Publishing Angle FR: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
         self.can_msg_rpm_FR.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-        #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
-
+        #self.get_logger().info('Publishing RPM FR: "%s"' % can_msg_rpm)
 
     def swerve_listener_BL(self, msg):
 

@@ -86,56 +86,56 @@ class SwerveControlSubsrciber(Node):
 
     def publish_FR(self):
         # Backlash Compensation first
-        if (self.motion[1] > 0.0):
-            turn_amount = (0/4 + 180)
-        else:
-            turn_amount = (0/4 + 180)
-        
-        self.can_msg_angle_FR.data = self.vesc_ids["FR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
-
         rpm = self.motion[1] * self.max_rpm
-        self.can_msg_rpm_FR.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        if (self.motion[1] * self.motion[0] >= 0.0):
+            turn_amount = 180.0
+            self.can_msg_angle_FR.data = self.vesc_ids["FR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"   
+            self.can_msg_rpm_FR.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        else:
+            turn_amount = (-45/4 + 180)
+            self.can_msg_angle_FR.data = self.vesc_ids["FR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_FR.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        
         #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     def publish_FL(self):
         # Backlash Compensation first
-        if (self.motion[1] > 0.0):
-            turn_amount = (0/4 + 180)
-        else:
-            turn_amount = (0/4 + 180)
-        
-        self.can_msg_angle_FL.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
-        
         rpm = self.motion[0] * self.max_rpm
-        self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        if (self.motion[1] * self.motion[0] >= 0.0):
+            turn_amount = 180.0
+            self.can_msg_angle_FL.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        else:
+            turn_amount = (45/4 + 180)
+            self.can_msg_angle_FL.data = self.vesc_ids["FL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     def publish_BR(self):
-        # Backlash Compensation first
-        if (self.motion[1] > 0.0):
-            turn_amount = (0/4 + 180)
-        else:
-            turn_amount = (0/4 + 180)
-        
-        self.can_msg_angle_BR.data = self.vesc_ids["BR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
-        
+         # Backlash Compensation first
         rpm = self.motion[1] * self.max_rpm
-        self.can_msg_rpm_BR.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        if (self.motion[1] * self.motion[0] >= 0.0):
+            turn_amount = 180.0
+            self.can_msg_angle_BR.data = self.vesc_ids["BR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_BR.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        else:
+            turn_amount = (45/4 + 180)
+            self.can_msg_angle_BR.data = self.vesc_ids["BR"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_BR.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
 
     def publish_BL(self):
-        # Backlash Compensation first
-        if (self.motion[1] > 0.0):
-            turn_amount = (0/4 + 180)
-        else:
-            turn_amount = (0/4 + 180)
-        
-        self.can_msg_angle_BL.data = self.vesc_ids["BL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
-        
+         # Backlash Compensation first
         rpm = self.motion[0] * self.max_rpm
-        self.can_msg_rpm_BL.data = self.vesc_ids["BL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        if (self.motion[1] * self.motion[0] >= 0.0):
+            turn_amount = 180.0
+            self.can_msg_angle_BL.data = self.vesc_ids["BL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_BL.data = self.vesc_ids["BL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
+        else:
+            turn_amount = (-45/4 + 180)
+            self.can_msg_angle_BL.data = self.vesc_ids["BL"][1] + " CAN_PACKET_SET_POS " + str(turn_amount) +" float"
+            self.can_msg_rpm_BL.data = self.vesc_ids["BL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
         #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
-
     
 
 def main(args=None):

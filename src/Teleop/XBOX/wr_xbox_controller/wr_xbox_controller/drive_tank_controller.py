@@ -31,7 +31,7 @@ class XboxPublisher(Node):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
 
-            self.get_logger().info("Pressed: " + str(motion))
+            #self.get_logger().info("Pressed: " + str(motion))
             # Publish to topic swerve
             swerve_command = Float32MultiArray()
             swerve_command.data = motion
