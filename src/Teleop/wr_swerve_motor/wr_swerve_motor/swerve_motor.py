@@ -3,6 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
 import math
+from custom_msgs_srvs.msg import SwervePrevAngle
 
 def get_wheel_vectors(vehicle_translation, rotational_velocity):
     # x component is vehicle_translation +/- rot_vel*body_width/2
@@ -62,6 +63,11 @@ class SwerveSubscriber(Node):
             'swerve',
             self.listener_callback,
             10)
+        self.prev_pid_subscription = self.create_subscription(
+            SwervePrevAngle,
+            'prev_pid',
+            self.prev_pid_listener_callback,
+            10)
 
         self.swerve_publisher_FL = self.create_publisher(Float32MultiArray, 'swerve_FL', 10)
         self.swerve_publisher_FR = self.create_publisher(Float32MultiArray, 'swerve_FR', 10)
@@ -70,21 +76,25 @@ class SwerveSubscriber(Node):
 
         self.subscription  # prevent unused variable warning
 
+    def prev_pid_listener_callback(self,msg):
+        pass
+        #self.get_logger().info('VESC ID: "%d", CURRENT PID Angle: "%d"' % (msg.vesc_id, msg.pid_angle))
+
     def listener_callback(self, msg):
         #self.get_logger().info('I heard: "%s"' % msg.data)
         motion = msg.data
         wheel_vectors = get_wheel_vectors([motion[1],motion[0]],[motion[2], motion[3]])
         wheel_speeds  = get_wheel_speeds(wheel_vectors)
         wheel_angles  = get_wheel_angles(wheel_vectors)
-        print("Wheel Speeds", wheel_speeds)
-        print("Wheel Angles", wheel_angles)
         for i in range (0, 4):
             if wheel_angles[i] < -90.0:
                 wheel_angles[i] += 180.0
                 wheel_speeds[i] *= -1.0
-            elif wheel_angles[i] > 90.0: 
+            elif wheel_angles[i] >= 90.0: 
                 wheel_angles[i] -= 180.0
                 wheel_speeds[i] *= -1.0
+        #self.get_logger().info('Wheel Speeds "%s"' % wheel_speeds)
+        #self.get_logger().info('Wheel Angles "%s"' % wheel_angles)
 
 
         # TODO: Make this more abstract for actual control

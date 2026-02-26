@@ -3,6 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import String, Float32
 import can
 import time
+from custom_msgs_srvs.msg import SwervePrevAngle
 
 # See https://github.com/vedderb/bldc/blob/master/documentation/comm_can.md
 class CANSubscriber(Node):
@@ -23,7 +24,9 @@ class CANSubscriber(Node):
         self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
         self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
         self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
+        
+        self.prev_pid_publisher = self.create_publisher(SwervePrevAngle, 'prev_pid', max_queue)
+        
         self.timer = self.create_timer(timer_freq, self.timer_callback)
 
     def listener_callback(self, msg):
@@ -54,9 +57,9 @@ class CANSubscriber(Node):
         # TODO if someone needs to manually send status commands, deal with that here
 
     def timer_callback(self):
-        receive_canbus(2)
+        receive_canbus(self,2)
 
-def receive_canbus(num_messages: int, infty: bool = False):
+def receive_canbus(self,num_messages: int, infty: bool = False):
     """
     Queries the canbus for data. 
 
@@ -91,25 +94,30 @@ def receive_canbus(num_messages: int, infty: bool = False):
                     temp_fet_bits = data[0:16]
                     temp_fet_raw = int(temp_fet_bits, 2)
                     temp_fet_degc = temp_fet_raw / 10
-                    #print(f"Temperature FET: {temp_fet_degc} °C")
+                    print(f"Temperature FET: {temp_fet_degc} °C")
 
                     # B2-B3: Temp Motor in DegC (scale factor 10)
                     temp_motor_bits = data[16:32]
                     temp_motor_raw = int(temp_motor_bits, 2)
                     temp_motor_degc = temp_motor_raw / 10
-                    #print(f"Temperature Motor: {temp_motor_degc} °C")
+                    print(f"Temperature Motor: {temp_motor_degc} °C")
 
                     # B4-B5: Current In A (scale factor 10)
                     current_bits = data[32:48]
                     current_raw = int(current_bits, 2)
                     current_amps = current_raw / 10
-                    #print(f"Current: {current_amps} A")
+                    print(f"Current: {current_amps} A")
 
                     # B6-B7: PID Pos Deg (scale factor 50)
                     pid_pos_bits = data[48:64]
                     pid_pos_raw = int(pid_pos_bits, 2)
                     pid_pos_deg = pid_pos_raw / 50
-                    #print(f"PID Position: {pid_pos_deg} degrees")
+                    if vesc_id in [70,72,74,76]:
+                        prev_pid_msg = SwervePrevAngle()
+                        prev_pid_msg.vesc_id = vesc_id
+                        prev_pid_msg.pid_angle = pid_pos_deg
+                        self.prev_pid_publisher.publish(prev_pid_msg)
+                    print(f"PID Position: {pid_pos_deg} degrees")
 
                 # case 28:
                 #     # B0-B1: ADC1 in V (scale factor 1000)

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(custom_msgs_srvs)
+project(wr_imu_compass)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,23 +7,29 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(Threads REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(phoenix6 REQUIRED) # Ensure this is the correct package name
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-find_package(rosidl_default_generators REQUIRED)
+add_executable(compass src/compass.cpp)
+ament_target_dependencies(compass rclcpp std_msgs phoenix6)
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "action/Navigation.action"
-  "action/ObjectDetection.action"
-  "srv/LED.srv"
-  "msg/Detection.msg"
-  "msg/VisionTarget.msg"
-  "msg/SwervePrevAngle.msg"
-  DEPENDENCIES  # Add packages that above messages depend on, in this case geometry_msgs for Sphere.msg
-)
 
-rosidl_get_typesupport_target(cpp_typesupport_target "${PROJECT_NAME}" "rosidl_typesupport_cpp")
+target_include_directories(compass PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_features(compass PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+install(TARGETS compass
+  DESTINATION lib/${PROJECT_NAME})
+
+  # Link against the correct libraries
+target_link_libraries(compass phoenix6 Threads::Threads ${SDL2_LIBRARIES})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

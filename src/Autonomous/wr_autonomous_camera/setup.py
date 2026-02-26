@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'object_detection'
+package_name = 'wr_autonomous_camera'
 
 setup(
     name=package_name,
@@ -10,27 +10,17 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name, ['model.pt'])
     ],
-    install_requires=[
-      'setuptools',
-      'rosidl_runtime_py',
-      'ultralytics',
-      'torch',
-      'opencv-python',
-      'zmq',
-      'numpy'
-    ],
+    install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='balabalu',
+    maintainer='wiscrobo',
     maintainer_email='nicolasdittmarg1@gmail.com',
     description='TODO: Package description',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'object_detection = object_detection.object_detection:main',
-            'yolo_detection = object_detection.yolo_detection:main',
+            'camera_data = wr_autonomous_camera.camera_data:main'
         ],
     },
 )

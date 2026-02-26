@@ -1,7 +1,6 @@
 import rclpy
 from rclpy.node import Node
 from multiprocessing import get_context
-import keyboard 
 from random import sample
 from pyparsing import removeQuotes
 from statemachine import StateMachine, State
@@ -51,9 +50,9 @@ class AutonomousStateMachine(StateMachine):
     lookForTag = Check_Point.to(Search)
     failTag = Search.to(Search)
     retryOp = Search.to(Navigation)
-    DriveToAruco = Search.to(DriveToTag, cond = "isAruco")
-    success = DriveToTag.to(BlinkLights, cond="successCondition")
-    failure = DriveToTag.to(Navigation, cond="!successCondition")
+    DriveToAruco = Search.to(DriveToTag)
+    success = DriveToTag.to(BlinkLights)
+    failure = DriveToTag.to(Navigation)
     keepGoing = BlinkLights.to(UserInput)
     continueMission = UserInput.to(Navigation)
     abortMission = UserInput.to(Stop)
@@ -88,25 +87,25 @@ class AutonomousStateMachine(StateMachine):
         self.timeElapsed = 0
 
         # need to parametrize once we have the parameters
-        self.pointDict = {"GNSS" : (38.44079858,-110.7782071,1377.88), "Aruco" : (53.1231312, 12.592134123, 1123.94), "object" : (123.123123, 53.24123, 400.41)} #pointDictInput, currently values only put for testing
         self.path = []#pathInput
         
 
     # Define the State actions
     @Start.enter
     def loadPoint(self):
-        self.command_timeout = 15
+        self.command_timeout = 60
         self.model.declare_parameter('led_mode', "mock")
         self.led_mode = self.model.get_parameter('led_mode').get_parameter_value().string_value
         self.model.get_logger().info('LED Mode: ' + str(self.led_mode))
         self.led_cli = self.model.create_client(LED, 'change_LED')
         self.led_req = LED.Request()
+        self.flashing = True
         
-        self.model.get_logger().info("Updated Picture")
-        imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
-        graph = DotGraphMachine(AutonomousStateMachine)
-        dot = graph()
-        dot.write_png(imgPath)
+        # self.model.get_logger().info("Updated Picture")
+        # imgPath = "/home/balabalu/WRoverSoftware/src/Autonomous/state_machine/state_machine/autonomous_state_machine.png"
+        # graph = DotGraphMachine(AutonomousStateMachine)
+        # dot = graph()
+        # dot.write_png(imgPath)
 
         #Wait for user input 
         self.command_received = False
@@ -180,11 +179,11 @@ class AutonomousStateMachine(StateMachine):
 
     def navigate_feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.model.get_logger().info(
-        f"Distance Away: {feedback.distance_away:.2f}\n"
-        f"Current GPS: {list(feedback.current_gps)}\n"
-        f"Target GPS: {list(feedback.target_gps)}\n"
-        )
+        # self.model.get_logger().info(
+        # f"Distance Away: {feedback.distance_away:.2f}\n"
+        # f"Current GPS: {list(feedback.current_gps)}\n"
+        # f"Target GPS: {list(feedback.target_gps)}\n"
+        #)
     
 
     @Navigation.exit
@@ -192,9 +191,8 @@ class AutonomousStateMachine(StateMachine):
         """
         Uses the rover's GPS to get its current point, and heading
         """
-        self.target_indx += 1
-        self.target_gps = self.targets[self.target_indx][:2]
-        self.target_type = self.targets[self.target_indx][2]
+        self.model.get_logger().info("-----------EXTING NAVIGATION------------------------------------------")
+
 
     # Checks what kind of point we have reached.
     @Check_Point.enter
@@ -202,7 +200,6 @@ class AutonomousStateMachine(StateMachine):
         """
         Accesses current point
         """
-        
         if self.target_type == 0:
             self.GNSS()
         else:
@@ -244,22 +241,25 @@ class AutonomousStateMachine(StateMachine):
             self.DriveToAruco()
         else:
             self.model.get_logger().warn("Object/tag arrival failed!")
-            self.Search()
+            self.lookForTag()
 
     def obj_det_feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        self.model.get_logger().info(
-        f"Have we found object/tag: {feedback.found_tag}\n"
-        )
+        # self.model.get_logger().info(
+        # f"Have we found object/tag: {feedback.found_tag}\n"
+        # )
     
     @DriveToTag.enter
     def driveToTag(self):
         """All implemented on previous one (no search algorithm has been implemented)"""
+        self.model.get_logger().info("Skipping drive to tag")
+
         self.success()
 
     @BlinkLights.enter
     def blinkLights(self):
         """Makes the lights green or smtg, depending on reqs"""
+        self.model.get_logger().info("Blinking Lights")
         print("Lights are blinking green yay") # replace with actual code to make lights blink
         self.blinkLightColor("GREEN")
         self.keepGoing()
@@ -287,6 +287,10 @@ class AutonomousStateMachine(StateMachine):
     @UserInput.exit
     def resetCommandReceived(self):
         self.command_received = False
+        #Go to next target as well
+        self.target_indx += 1
+        self.target_gps = self.targets[self.target_indx][:2]
+        self.target_type = self.targets[self.target_indx][2]
         
     @BackonPath.enter
     def tryAndRouteToPath(self, roverGPSReading):
@@ -386,14 +390,17 @@ class AutonomousStateMachine(StateMachine):
         if self.led_mode == "real":
             while not self.led_cli.wait_for_service(timeout_sec=1.0):
                 self.model.get_logger().info('service not available, waiting again...')
-
+            self.flashing = not self.flashing
             if color == "RED":
                 self.led_req.red = 255
                 self.led_req.green = 0
                 self.led_req.blue = 0
             elif color == "GREEN":
                 self.led_req.red = 0
-                self.led_req.green = 255
+                if (self.flashing):
+                    self.led_req.green = 255
+                else:
+                    self.led_req.green = 0
                 self.led_req.blue = 0
             elif color == "BLUE":
                 self.led_req.red = 0

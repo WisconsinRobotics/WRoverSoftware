@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'aruco_detection = auto_implementation.aruco_detection:main',
             'driving_logic = auto_implementation.driving_logic:main',
             'finding_aruco_tag = auto_implementation.finding_aruco_tag:main',
             'finding_object = auto_implementation.finding_object:main',
