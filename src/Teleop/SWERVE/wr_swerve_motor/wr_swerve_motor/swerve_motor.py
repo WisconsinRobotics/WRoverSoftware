@@ -118,10 +118,10 @@ class SwerveSubscriber(Node):
             self.msg_BL.data = [wheel_speeds[2],wheel_angles[2]]  
             self.msg_BR.data = [wheel_speeds[3],wheel_angles[3]]
         else:
-            self.msg_FL.data = [0.0,0.0]
-            self.msg_FR.data = [0.0,0.0]
-            self.msg_BL.data = [0.0,0.0]
-            self.msg_BR.data = [0.0,0.0]
+            self.msg_FL.data = [0.0,wheel_angles[0]]
+            self.msg_FR.data = [0.0,wheel_angles[1]]
+            self.msg_BL.data = [0.0,wheel_angles[2]]
+            self.msg_BR.data = [0.0,wheel_angles[3]]
 
             #can_msg_angle = String()
             #can_msg_angle.data = f"74 CAN_PACKET_SET_POS {wheel_speeds[0]} int"
