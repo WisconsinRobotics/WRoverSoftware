@@ -10,78 +10,31 @@ class CANSubscriber(Node):
     def __init__(self):
         super().__init__('can_subscriber')
         # Subscriber for CAN requests
-        self.subscription = self.create_subscription(
-            String,
-            'can_msg',
-            self.listener_callback,
-            10)
 
-        # self.pid_publisher = self.create_publisher(
-        #     Float32,
-        #     'carousel_pid',
-        #     10)
+
+        self.pid_publisher = self.create_publisher(
+            Float32,
+            'pid',
+            10)
         
         # Publishers for canbus data
         # NOTE: This may need to be tuned
         max_queue = 10
-        # timer_freq = 0.01 # seconds
+        timer_freq = 0.01 # seconds
         # self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
         # self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
         # self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
         self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
-        # self.timer = self.create_timer(timer_freq, self.timer_callback)
+        self.timer = self.create_timer(timer_freq, self.timer_callback)
         self.bus = can.Bus(channel='can0', interface='socketcan')
 
-    def listener_callback(self, msg):
-            # Split into individual CAN command lines
-        lines = msg.data.strip().split('\n')
-
-        for line in lines:
-
-            if not line.strip():
-                continue  # skip empty lines
-
-            # Split single CAN message
-            can_msg = line.split(' ')
-            self.get_logger().info(f"Process line '{line}")
-            if len(can_msg) == 4:
-                # self.get_logger().error(f"Malformed CAN message: {line}")
-                # continue
-
-        #try:
-                
-                vesc_id = int(can_msg[0])
-                command = can_msg[1]
-                value_type = can_msg[3]
-
-                # Parse value
-                if value_type == 'float':
-                    value = float(can_msg[2])
-                elif value_type == 'int':
-                    value = int(can_msg[2])
-                elif value_type == 'string':
-                    value = can_msg[2]
-                else:
-                    raise TypeError(f"Type {value_type} not known/used.")
-
-                # Build message
-                compiled_msg, is_status = self.build_msg(
-                    command=command,
-                    value=value,
-                    vesc_id=vesc_id
-                )
-
-                # Send message
-                self.send_msg(compiled_msg=compiled_msg)
-
-            # except Exception as e:
-            #     self.get_logger().error(f"Failed to process line '{line}': {e}")
+   
 
     def carousel_publish(self, car_pid_msg: Float32):
         self.pid_publisher.publish(car_pid_msg)
     
     def timer_callback(self):
-        receive_canbus(2, carousel_publish_fun = self.carousel_publish)
+        self.receive_canbus(2, carousel_publish_func = self.carousel_publish)
 
     def receive_canbus(self, num_messages: int, infty: bool = False, carousel_publish_func = None):
         """
@@ -97,78 +50,34 @@ class CANSubscriber(Node):
             # the canbus publishes more messages than you can parse
             i = 0
             CAROUSEL_VESC = 80
-            for msg in bus:
+            for msg in self.bus:
                 if i == num_messages and not infty:
                     break
+                arb_id = msg.arbitration_id
+                command_id = (arb_id >> 8) & 0xFF
+                vesc_id = arb_id & 0xFF
 
-                # Parse arbitration id
-                arbitration_id = bin(msg.arbitration_id)[2:].zfill(29)
-                command_id = int(arbitration_id[13:21], 2)
-                vesc_id = int(arbitration_id[21:], 2)
-                # TODO for now, the values are strangely off by ~1-2, and sometimes 58 instead of 28.
-                # Not sure why, might need to investigate electrical. 
-                self.get_logger().info(f"Command id {command_id} with vesc id {vesc_id}")
+                #self.get_logger().info(f"Command id {command_id} with vesc id {vesc_id}")
 
-                # Data
-                # NOTE this is hacky but it works
-                data = bin(int.from_bytes(msg.data, 'big', signed=True))[2:].zfill(64)
+                b = msg.data
 
                 match command_id:
                     case 16:
-                        # B0-B1: Temp FET in DegC (scale factor 10)
-                        temp_fet_bits = data[0:16]
-                        temp_fet_raw = int(temp_fet_bits, 2)
-                        temp_fet_degc = temp_fet_raw / 10
-                        #print(f"Temperature FET: {temp_fet_degc} °C")
-
-                        # B2-B3: Temp Motor in DegC (scale factor 10)
-                        temp_motor_bits = data[16:32]
-                        temp_motor_raw = int(temp_motor_bits, 2)
-                        temp_motor_degc = temp_motor_raw / 10
-                        #print(f"Temperature Motor: {temp_motor_degc} °C")
-
-                        # B4-B5: Current In A (scale factor 10)
-                        current_bits = data[32:48]
-                        current_raw = int(current_bits, 2)
-                        current_amps = current_raw / 10
-                        #print(f"Current: {current_amps} A")
-
-                        # B6-B7: PID Pos Deg (scale factor 50)
-                        pid_pos_bits = data[48:64]
-                        pid_pos_raw = int(pid_pos_bits, 2)
-                        pid_pos_deg = pid_pos_raw / 50
+                        temp_fet = int.from_bytes(b[0:2], 'big', signed=True) / 10
+                        temp_motor = int.from_bytes(b[2:4], 'big', signed=True) / 10
+                        current = int.from_bytes(b[4:6], 'big', signed=True) / 10
+                        pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
+                        self.get_logger().info(f"Temp fet:  {temp_fet}, temp mot:  {temp_motor}, current:  {current}, pid_pos:  {pid_pos}, ")
                         car_pid_msg = Float32()
-                        car_pid_msg.data = pid_pos_deg
-                        if carousel_publish_func is not None:
-                            if(vesc_id == CAROUSEL_VESC):
-                                carousel_publish_func(car_pid_msg)
-                        #print(f"PID Position: {pid_pos_deg} degrees")
+                        car_pid_msg.data = pid_pos
 
-                    # case 28:
-                    #     # B0-B1: ADC1 in V (scale factor 1000)
-                    #     adc1_bits = data[0:16]
-                    #     adc1_raw = int(adc1_bits, 2)
-                    #     adc1_v = adc1_raw / 1000
-                    #     print(f"ADC1: {adc1_v} V")
-                        
-                    #     # B2-B3: ADC2 in V (scale factor 1000)
-                    #     adc2_bits = data[16:32]
-                    #     adc2_raw = int(adc2_bits, 2)
-                    #     adc2_v = adc2_raw / 1000
-                    #     print(f"ADC2: {adc2_v} V")
-                        
-                    #     # B4-B5: ADC3 in V (scale factor 1000)
-                    #     adc3_bits = data[32:48]
-                    #     adc3_raw = int(adc3_bits, 2)
-                    #     adc3_v = adc3_raw / 1000
-                    #     print(f"ADC3: {adc3_v} V")
-                        
-                    #     # B6-B7: PPM % / 100 (scale factor 1000)
-                    #     ppm_bits = data[48:64]
-                    #     ppm_raw = int(ppm_bits, 2)
-                    #     ppm_percent = ppm_raw / 1000
-                    #     print(f"PPM: {ppm_percent} %")
-
+                        if carousel_publish_func and vesc_id == CAROUSEL_VESC:
+                            carousel_publish_func(car_pid_msg)
+                            self.get_logger().info(f"Car_pid_msg {car_pid_msg} with vesc id {vesc_id}")
+                    case 9:
+                        #self.get_logger().info(f"Bytes:  {b}")
+                        current = int.from_bytes(b[4:6], 'big', signed=True) / 10
+                        #self.get_logger().info(f"Current {current} with vesc id {vesc_id}")
                 i += 1
 
     def send_msg(self, compiled_msg: can.message.Message):
