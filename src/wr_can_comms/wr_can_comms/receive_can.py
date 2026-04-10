@@ -67,7 +67,7 @@ class CANSubscriber(Node):
                         temp_motor = int.from_bytes(b[2:4], 'big', signed=True) / 10
                         current = int.from_bytes(b[4:6], 'big', signed=True) / 10
                         pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
-                        self.get_logger().info(f"Temp fet:  {temp_fet}, temp mot:  {temp_motor}, current:  {current}, pid_pos:  {pid_pos}, ")
+                        #self.get_logger().info(f"Temp fet:  {temp_fet}, temp mot:  {temp_motor}, current:  {current}, pid_pos:  {pid_pos}, ")
                         car_pid_msg = Float32()
                         car_pid_msg.data = pid_pos
 
