@@ -4,6 +4,8 @@ from std_msgs.msg import String, Float32, Bool
 import can
 import time
 
+CAROUSEL_VESC = 80
+IN_OUT_VESC = 82
 # See https://github.com/vedderb/bldc/blob/master/documentation/comm_can.md
 class CANSubscriber(Node):
 
@@ -24,7 +26,6 @@ class CANSubscriber(Node):
         # self.temp_fet_publisher = self.create_publisher(Float32, 'temp_fet', max_queue)
         # self.temp_fet_publisher = self.create_publisher(Float32, 'temp_motor', max_queue)
         # self.temp_fet_publisher = self.create_publisher(Float32, 'current_in', max_queue)
-        self.temp_fet_publisher = self.create_publisher(Float32, 'pid_position', max_queue)
         self.current_side_publisher = self.create_publisher(Bool, 'current_side_to_side',max_queue)
         self.current_side_msg = Bool()
         self.current_side_msg.data = True
@@ -52,7 +53,7 @@ class CANSubscriber(Node):
             # if you try to query for all messages in the canbus,
             # the canbus publishes more messages than you can parse
             i = 0
-            CAROUSEL_VESC = 80
+            
             for msg in self.bus:
                 if i == num_messages and not infty:
                     break
@@ -77,15 +78,25 @@ class CANSubscriber(Node):
                         if carousel_publish_func and vesc_id == CAROUSEL_VESC:
                             carousel_publish_func(car_pid_msg)
                             #self.get_logger().info(f"Car_pid_msg {car_pid_msg} with vesc id {vesc_id}")
+                        elif vesc_id == IN_OUT_VESC:
+                            current = int.from_bytes(b[4:6], 'big', signed=True) / 10
+                            self.get_logger().info(f"Current {current} with vesc id {vesc_id}")
+
+
                     case 9:
-                        #self.get_logger().info(f"Bytes:  {b}")
-                        current = int.from_bytes(b[4:6], 'big', signed=True) / 10
-                        if(current > 19):
-                            self.current_side_msg.data = False
-                        else:
-                            self.current_side_msg.data = True
-                        self.current_side_publisher.publish(self.current_side_msg)
-                        #self.get_logger().info(f"Current {current} with vesc id {vesc_id}")
+                        if vesc_id == CAROUSEL_VESC:
+                            #self.get_logger().info(f"Bytes:  {b}")
+                            current = int.from_bytes(b[4:6], 'big', signed=True) / 10
+                            if(current > 19):
+                                self.current_side_msg.data = False
+                            else:
+                                self.current_side_msg.data = True
+                            self.current_side_publisher.publish(self.current_side_msg)
+                            #self.get_logger().info(f"Current {current} with vesc id {vesc_id}")
+                        elif vesc_id == IN_OUT_VESC:
+                            current = int.from_bytes(b[4:6], 'big', signed=True) / 10
+                           # self.get_logger().info(f"Current {current} with vesc id {vesc_id}")
+
                 i += 1
 
     def send_msg(self, compiled_msg: can.message.Message):
