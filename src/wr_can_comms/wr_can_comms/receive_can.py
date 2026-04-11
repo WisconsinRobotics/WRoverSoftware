@@ -14,13 +14,13 @@ import can
 
 CAROUSEL_VESC = 80
 IN_OUT_VESC = 82
+FR_SWERVE_VESC = 73
 
 
 class CANSubscriber(Node):
 
     def __init__(self):
         super().__init__('can_subscriber')
-
         # Publishers
         self.pid_publisher = self.create_publisher(Float32, 'pid', 10)
         self.current_side_publisher = self.create_publisher(Bool, 'current_side_to_side', 10)
@@ -43,6 +43,7 @@ class CANSubscriber(Node):
             can_filters=[
                 {"can_id": CAROUSEL_VESC, "can_mask": 0xFF, "extended": True},
                 {"can_id": IN_OUT_VESC, "can_mask": 0xFF, "extended": True},
+                {"can_id": FR_SWERVE_VESC, "can_mask": 0xFF, "extended": True},
             ]
         )
 
@@ -64,6 +65,8 @@ class CANSubscriber(Node):
         command_id = (arb_id >> 8) & 0xFF
         vesc_id = arb_id & 0xFF
         b = msg.data
+        
+    
 
         # STATUS_4
         if command_id == 16:
@@ -86,6 +89,10 @@ class CANSubscriber(Node):
                 # Optional debug:
                 # self.get_logger().info(f"IN_OUT Current: {current}")
                 pass
+         # STATUS
+        elif command_id == 58:
+            adc = int.from_bytes(b[2:4], 'big', signed=True)
+            self.get_logger().info(f"ADC: {adc}")
 
     def send_msg(self, compiled_msg: can.Message):
         self.bus.send(compiled_msg)
@@ -134,7 +141,6 @@ def main(args=None):
 
     can_subscriber = CANSubscriber()
 
-    print("Starting CAN subscriber...")
     rclpy.spin(can_subscriber)
 
     can_subscriber.destroy_node()
