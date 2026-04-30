@@ -13,11 +13,11 @@ def generate_launch_description():
             executable='swerve_motor',
             name='swerve_motor'
         ),
-        #Node(
-        #    package='wr_xbox_controller',
-        #    executable='drive_controller',
-        #    name='drive_controller'
-        #),
+        Node(
+           package='wr_xbox_controller',
+           executable='drive_controller',
+           name='drive_controller'
+        ),
         # Node(
         #     package='wr_xbox_controller',
         #     executable='arm_xbox_ik',
