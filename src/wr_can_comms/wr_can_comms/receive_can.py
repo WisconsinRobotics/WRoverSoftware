@@ -1,6 +1,10 @@
 import rclpy
 from rclpy.node import Node
+<<<<<<< HEAD
 from std_msgs.msg import String, Float32, Bool
+=======
+from std_msgs.msg import String, Float32
+>>>>>>> 76a8d3727477b7d0c45c3973aaadd89eca38adbe
 import can
 import time
 
@@ -86,6 +90,7 @@ class CANSubscriber(Node):
                             self.current_side_msg.data = True
                         self.current_side_publisher.publish(self.current_side_msg)
                         self.get_logger().info(f"Current {current} with vesc id {vesc_id}")
+                            self.get_logger().info(f"Car_pid_msg {car_pid_msg} with vesc id {vesc_id}")
                 i += 1
 
     def send_msg(self, compiled_msg: can.message.Message):
@@ -288,4 +293,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
