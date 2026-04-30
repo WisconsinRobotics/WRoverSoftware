@@ -19,7 +19,7 @@ class CANSubscriber(Node):
         # NOTE: This may need to be tuned
         max_queue = 10
         timer_freq = 0.01 # seconds
-        self.timer = self.create_timer(timer_freq, self.timer_callback)
+        #self.timer = self.create_timer(timer_freq, self.timer_callback)
 
         # Publishers for canbus data
         # NOTE These will be in format [VALUE, VESC_ID]
@@ -174,12 +174,13 @@ class CANSubscriber(Node):
 
 
     def timer_callback(self):
-        self.receive_canbus(self, 2)
+        self.get_logger().info("Running can...")
+        #self.receive_canbus(self, 2)
 
 def send_msg(compiled_msg: can.message.Message):
     """Immediately send a compiled CAN message"""
     channel = 'can0'
-    #print(f"Sending {compiled_msg.arbitration_id} with {compiled_msg.data}")
+    #self.get_logger().info(f"Sending {compiled_msg.arbitration_id} with {compiled_msg.data}")
     with can.Bus(channel=channel, interface='socketcan') as bus:
         bus.send(compiled_msg)
 
@@ -376,3 +377,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+

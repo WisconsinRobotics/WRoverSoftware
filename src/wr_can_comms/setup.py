@@ -20,7 +20,8 @@ setup(
     tests_require=[],
     entry_points={
         'console_scripts': [
-            'can_comms = wr_can_comms.can_comms:main'
+            'can_comms = wr_can_comms.can_comms:main',
+            'receive_can = wr_can_comms.receive_can:main',
         ],
     },
 )
