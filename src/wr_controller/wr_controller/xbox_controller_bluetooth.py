@@ -75,9 +75,9 @@ class XboxPublisher(Node):
                         self.buttons[4] = 0
                     elif event.button == 1:  # B button
                         self.buttons[5] = 0
-                    elif event.button == 2: # X Button
+                    elif event.button == 3: # X Button
                         self.buttons[6] = 0
-                    elif event.button == 3: # Y Button
+                    elif event.button == 4: # Y Button
                         self.buttons[7] = 0
                 #print(self.buttons)
                 buttons_command = Int16MultiArray()

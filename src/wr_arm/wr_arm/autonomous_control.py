@@ -70,13 +70,10 @@ class ArmLogic(Node):
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
         timer_period = 0.01  # seconds
-        #self.timer_wrist = self.create_timer(timer_period, self.timer_update_wrist)
+        self.timer_wrist = self.create_timer(timer_period, self.timer_update_wrist)
 
         #Define Postion of left and right position of wrist
-        self.kohler_shift = 135.0
         self.D_PAD = [0,0,0,0,0,0] #Array to keep track of which buttons are pressed
-        self.absolute_wrist = self.kohler_shift#Start at zero
-        self.wrist_positions = [0.0 + self.absolute_wrist ,0.0 + self.absolute_wrist] #[lef,right]
  
         #Set autonmous flag
         self.autonomous = False
@@ -99,13 +96,13 @@ class ArmLogic(Node):
         self.msg_forwards_and_backwards.data = 0.0
 
         self.msg_wrist_left = Float64()
-        self.msg_wrist_left.data = self.absolute_wrist 
+        self.msg_wrist_left.data = 0.0
 
         self.msg_wrist_right = Float64()
-        self.msg_wrist_right.data = self.absolute_wrist 
+        self.msg_wrist_right.data = 0.0
 
         self.msg_gripper = Float64()
-        self.msg_gripper.data = 0.
+        self.msg_gripper.data = 0.0
         
         self.going_down = 0
         self.modifier = 1
@@ -130,9 +127,9 @@ class ArmLogic(Node):
             self.arm_publisher_up_and_down.publish(self.msg_up_and_down_zero)
 
         self.arm_publisher_forwards_and_bacwards.publish(self.msg_forwards_and_backwards)
-        # self.arm_publisher_wrist_left.publish(self.msg_wrist_left)
-        # self.arm_publisher_wrist_right.publish(self.msg_wrist_right)
-        # self.arm_publisher_gripper.publish(self.msg_gripper)
+        self.arm_publisher_wrist_left.publish(self.msg_wrist_left)
+        self.arm_publisher_wrist_right.publish(self.msg_wrist_right)
+        self.arm_publisher_gripper.publish(self.msg_gripper)
 
 
     def get_linear_rail_speed(self, left, right) -> Float64:
@@ -230,7 +227,7 @@ class ArmLogic(Node):
             self.msg_up_and_down.data = motion[0]
 
             #Expecting (right y joystick)
-            self.msg_forwards_and_backwards.data = motion[1]  
+            self.msg_forwards_and_backwards.data = -motion[1]  
 
             #Publishing
             self.msg_side_to_side.data = linear_rail_speed
@@ -240,7 +237,7 @@ class ArmLogic(Node):
         
         #Expecting D-Pad
         self.D_PAD = [buttons[0], buttons[1], buttons[2], buttons[3], buttons[6],buttons[7]] # up, down, left, right, x, y
-        
+        #self.get_logger().info('I heard: "%s"' % self.D_PAD)
         #Expecting A and B buttons
         gripper_speed = self.get_gripper_speed(buttons[4], buttons[5])
 
@@ -269,6 +266,7 @@ class ArmLogic(Node):
                     self.msg_up_and_down.data = 1.0
                 else:
                     self.msg_up_and_down.data = -1.0
+            self.get_logger().info("x: " + str(x) + " y: " + str(y) + " centered: " + str(self.centered))
 
     def listener_callback_key_positions(self, msg):
         #msg should be [x away,  y away] from target
