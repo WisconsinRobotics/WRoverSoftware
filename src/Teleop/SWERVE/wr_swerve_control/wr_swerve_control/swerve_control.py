@@ -86,7 +86,7 @@ class SwerveControlSubsrciber(Node):
         combined_msg = "\n".join([
         self.can_msg_rpm_FL.data,
         self.can_msg_rpm_FR.data,
-        self.can_msg_rpm_BL.data,
+        self.can_msg_rpm_BL.data,    
         self.can_msg_rpm_BR.data,
         self.can_msg_angle_FL.data,
         self.can_msg_angle_FR.data,
@@ -111,10 +111,14 @@ class SwerveControlSubsrciber(Node):
             #self.get_logger().info('Publishing Angle FL: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
-        if(abs(self.prev_rpm_FL - rpm) < self.max_rpm_change):
-            self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-            self.prev_rpm_FL = rpm
-            #self.get_logger().info('Publishing RPM FL: "%s"' % self.can_msg_rpm_FL)
+        delta = rpm - self.prev_rpm_FL
+        if abs(delta) > self.max_rpm_change:
+            delta = math.copysign(self.max_rpm_change, delta)
+
+        rpm = self.prev_rpm_FL + delta
+        
+        self.prev_rpm_FL = rpm
+        self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
 
     def swerve_listener_FR(self, msg):
 
@@ -127,10 +131,14 @@ class SwerveControlSubsrciber(Node):
             #self.get_logger().info('Publishing Angle FR: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
-        if(abs(self.prev_rpm_FR - rpm) < self.max_rpm_change):
-            self.can_msg_rpm_FR.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-            self.prev_rpm_FR = rpm
-            #self.get_logger().info('Publishing RPM FR: "%s"' % can_msg_rpm)
+        delta = rpm - self.prev_rpm_FR
+        if abs(delta) > self.max_rpm_change:
+            delta = math.copysign(self.max_rpm_change, delta)
+
+        rpm = self.prev_rpm_FR + delta
+
+        self.prev_rpm_FR = rpm
+        self.can_msg_rpm_FR.data = self.vesc_ids["FR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
 
     def swerve_listener_BL(self, msg):
 
@@ -143,10 +151,14 @@ class SwerveControlSubsrciber(Node):
             #self.get_logger().info('Publishing Angle BL: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
-        if(abs(self.prev_rpm_BL - rpm) < self.max_rpm_change):
-            self.can_msg_rpm_BL.data = self.vesc_ids["BL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-            self.prev_rpm_BL = rpm
-            #self.get_logger().info('Publishing RPM BL: "%s"' % can_msg_rpm)
+        delta = rpm - self.prev_rpm_BL
+        if abs(delta) > self.max_rpm_change:
+            delta = math.copysign(self.max_rpm_change, delta)
+
+        rpm = self.prev_rpm_BL + delta
+
+        self.prev_rpm_BL = rpm
+        self.can_msg_rpm_BL.data = self.vesc_ids["BL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
 
     def swerve_listener_BR(self, msg):
  
@@ -159,10 +171,14 @@ class SwerveControlSubsrciber(Node):
             #self.get_logger().info('Publishing Angle BR: "%s"' % can_msg_angle)
         
         rpm = msg.data[0] * self.max_rpm
-        if(abs(self.prev_rpm_BR - rpm) < self.max_rpm_change):
-            self.can_msg_rpm_BR.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
-            self.prev_rpm_BR = rpm
-            #self.get_logger().info('Publishing RPM BR: "%s"' % can_msg_rpm)
+        delta = rpm - self.prev_rpm_BR
+        if abs(delta) > self.max_rpm_change:
+            delta = math.copysign(self.max_rpm_change, delta)
+        
+        rpm = self.prev_rpm_BR + delta
+
+        self.prev_rpm_BR = rpm
+        self.can_msg_rpm_BR.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
 
 
 def main(args=None):
