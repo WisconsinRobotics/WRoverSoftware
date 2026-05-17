@@ -101,24 +101,27 @@ class CANSubscriber(Node):
 
     def _listener_callback(self, msg: String):
         try:
-            parts = msg.data.split()
-            if len(parts) != 4:
-                raise ValueError(f"Expected 4 fields, got {len(parts)}: '{msg.data}'")
+            lines = msg.data.strip().splitlines()
 
-            vesc_id   = int(parts[0])
-            command   = parts[1]
-            raw_value = parts[2]
-            vtype     = parts[3]
+            for line in lines:
+                parts = line.split()
+                if len(parts) != 4:
+                    raise ValueError(f"Expected 4 fields, got {len(parts)}: '{msg.data}'")
 
-            value = _parse_value(raw_value, vtype)
-            can_msg, is_status = build_msg(command=command, value=value, vesc_id=vesc_id)
+                vesc_id   = int(parts[0])
+                command   = parts[1]
+                raw_value = parts[2]
+                vtype     = parts[3]
 
-            # TODO: handle status commands if manual status requests are needed
-            if not is_status:
-                key = (vesc_id, command)
-                with self._pending_lock:
-                    self._pending[key] = can_msg
-                self._pending_event.set()  # wake sender
+                value = _parse_value(raw_value, vtype)
+                can_msg, is_status = build_msg(command=command, value=value, vesc_id=vesc_id)
+
+                # TODO: handle status commands if manual status requests are needed
+                if not is_status:
+                    key = (vesc_id, command)
+                    with self._pending_lock:
+                        self._pending[key] = can_msg
+                    self._pending_event.set()  # wake sender
 
         except Exception as e:
             self.get_logger().error(f"Failed to process message '{msg.data}': {e}")
