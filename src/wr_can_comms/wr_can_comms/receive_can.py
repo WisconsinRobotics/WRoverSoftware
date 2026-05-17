@@ -1,3 +1,4 @@
+# Initial Coder: AREN. Optimized with chat and Claude
 # Key performance fixes:
 # 1. DO NOT reopen can.Bus inside receive_canbus() every timer cycle
 # 2. Use bus.recv(timeout=0.0) instead of iterating self.bus
@@ -15,6 +16,10 @@ import can
 CAROUSEL_VESC = 80
 IN_OUT_VESC = 82
 
+FL_VESC = 70
+FR_VESC = 72
+BL_VESC = 74
+BR_VESC = 76
 
 class CANSubscriber(Node):
 
@@ -22,7 +27,11 @@ class CANSubscriber(Node):
         super().__init__('can_subscriber')
 
         # Publishers
-        self.pid_publisher = self.create_publisher(Float32, 'pid', 10)
+        self.pid_publisher = self.create_publisher(Float32, 'pid_CAROUSEL', 10)
+        self.pid_FL_publisher = self.create_publisher(Float32, 'pid_FL', 10)
+        self.pid_FR_publisher = self.create_publisher(Float32, 'pid_FR', 10)
+        self.pid_BL_publisher = self.create_publisher(Float32, 'pid_BL', 10)
+        self.pid_BR_publisher = self.create_publisher(Float32, 'pid_BR', 10)
         self.current_side_publisher = self.create_publisher(Bool, 'current_side_to_side', 10)
         self.current_in_out_publisher = self.create_publisher(Bool, 'current_in_out', 10)
 
@@ -41,8 +50,16 @@ class CANSubscriber(Node):
             channel='can0',
             interface='socketcan',
             can_filters=[
-                {"can_id": CAROUSEL_VESC, "can_mask": 0xFF, "extended": True},
-                {"can_id": IN_OUT_VESC, "can_mask": 0xFF, "extended": True},
+                # STATUS (cmd 9) for CAROUSEL and IN_OUT only (the only ones handled)
+                {"can_id": (9 << 8) | CAROUSEL_VESC, "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (9 << 8) | IN_OUT_VESC,   "can_mask": 0xFFFF, "extended": True},
+
+                # STATUS_4 (cmd 16) for all wheel VESCs and CAROUSEL
+                {"can_id": (16 << 8) | CAROUSEL_VESC, "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | FL_VESC,       "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | FR_VESC,       "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | BL_VESC,       "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | BR_VESC,       "can_mask": 0xFFFF, "extended": True},
             ]
         )
 
@@ -50,6 +67,23 @@ class CANSubscriber(Node):
         msg = Float32()
         msg.data = pid_value
         self.pid_publisher.publish(msg)
+    
+    def FL_publish(self, pid_value: float):
+        msg = Float32()
+        msg.data = pid_value
+        self.pid_FL_publisher.publish(msg)
+    def FR_publish(self, pid_value: float):
+        msg = Float32()
+        msg.data = pid_value
+        self.pid_FR_publisher.publish(msg)
+    def BL_publish(self, pid_value: float):
+        msg = Float32()
+        msg.data = pid_value
+        self.pid_BL_publisher.publish(msg)
+    def BR_publish(self, pid_value: float):
+        msg = Float32()
+        msg.data = pid_value
+        self.pid_BR_publisher.publish(msg)
 
     def timer_callback(self):
         # Drain all available messages quickly
@@ -70,6 +104,18 @@ class CANSubscriber(Node):
             if vesc_id == CAROUSEL_VESC:
                 pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
                 self.carousel_publish(pid_pos)
+            elif vesc_id == FL_VESC:
+                pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
+                self.FL_publish(pid_pos)
+            elif vesc_id == FR_VESC:
+                pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
+                self.FR_publish(pid_pos)
+            elif vesc_id == BL_VESC:
+                pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
+                self.BL_publish(pid_pos)
+            elif vesc_id == BR_VESC:
+                pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
+                self.BR_publish(pid_pos)
 
         # STATUS
         elif command_id == 9:
@@ -85,49 +131,11 @@ class CANSubscriber(Node):
                 self.current_in_out_publisher.publish(self.current_in_out_msg)
                 # Optional debug:
                 # self.get_logger().info(f"IN_OUT Current: {current}")
-                pass
 
     def send_msg(self, compiled_msg: can.Message):
         self.bus.send(compiled_msg)
 
-    def build_msg(self, command: str, value: int, vesc_id: int, raw: bool = False):
-        command_map = {
-            "CAN_PACKET_SET_DUTY": (0, 100000, False),
-            "CAN_PACKET_SET_CURRENT": (1, 1000, False),
-            "CAN_PACKET_SET_CURRENT_BRAKE": (2, 1000, False),
-            "CAN_PACKET_SET_RPM": (3, 1, False),
-            "CAN_PACKET_SET_POS": (4, 1000000, False),
-            "CAN_PACKET_SET_CURRENT_REL": (10, 100000, False),
-            "CAN_PACKET_SET_CURRENT_BRAKE_REL": (11, 100000, False),
-            "CAN_PACKET_SET_CURRENT_HANDBRAKE": (12, 1000, False),
-            "CAN_PACKET_SET_CURRENT_HANDBRAKE_REL": (13, 100000, False),
-            "CAN_PACKET_STATUS": (9, 0, True),
-            "CAN_PACKET_STATUS_2": (14, 0, True),
-            "CAN_PACKET_STATUS_3": (15, 0, True),
-            "CAN_PACKET_STATUS_4": (16, 0, True),
-            "CAN_PACKET_STATUS_5": (27, 0, True),
-            "CAN_PACKET_STATUS_6": (28, 0, True),
-        }
-
-        if command not in command_map:
-            raise Exception(f"{command} with value {value} not known.")
-
-        command_id, scaling, is_status = command_map[command]
-
-        int_id = (command_id << 8) | vesc_id
-
-        int_data = int(value * scaling)
-        data = int_data.to_bytes(4, byteorder='big', signed=True)
-
-        if raw:
-            return bin(int_id), data
-
-        return can.Message(
-            arbitration_id=int_id,
-            data=data,
-            is_extended_id=True
-        ), is_status
-
+    
 
 def main(args=None):
     rclpy.init(args=args)
