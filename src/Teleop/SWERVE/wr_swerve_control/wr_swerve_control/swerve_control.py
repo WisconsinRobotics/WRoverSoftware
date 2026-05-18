@@ -1,7 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import String
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import String, Float32MultiArray, Float32
 import math
 
 class SwerveControlSubsrciber(Node):
@@ -18,6 +17,8 @@ class SwerveControlSubsrciber(Node):
         self.max_rpm = 14000
         self.max_rpm_change = 180
         self.limit_rotation = 0
+        self.wheels_straight_angle = 180
+        self.angle_error_threshold = 3
         self.subscription_FL = self.create_subscription(
             Float32MultiArray,
             'swerve_FL',
@@ -40,6 +41,31 @@ class SwerveControlSubsrciber(Node):
             Float32MultiArray,
             'swerve_BR',
             self.swerve_listener_BR,
+            10)
+        
+        # Encoder position subscriptions
+        self.subscription_pid_FL = self.create_subscription(
+            Float32,
+            'pid_FL',
+            self.encoder_correction_FL,
+            10)
+        
+        self.subscription_pid_FR = self.create_subscription(
+            Float32,
+            'pid_FR',
+            self.encoder_correction_FR,
+            10)
+        
+        self.subscription_pid_BL = self.create_subscription(
+            Float32,
+            'pid_BL',
+            self.encoder_correction_BL,
+            10)
+        
+        self.subscription_pid_BR = self.create_subscription(
+            Float32,
+            'pid_BR',
+            self.encoder_correction_BR,
             10)
 
         self.publisher_timer = self.create_timer(0.05, self.publish)
@@ -66,6 +92,29 @@ class SwerveControlSubsrciber(Node):
         self.can_msg_angle_BR = String()
         self.can_msg_angle_BR.data = self.vesc_ids["BR"][1] + " CAN_PACKET_SET_POS " + str(0.0) +" float"
 
+        # Encoder corrections
+        self.enc_corr_FL = 0.0
+        self.enc_corr_FR = 0.0
+        self.enc_corr_BL = 0.0
+        self.enc_corr_BR = 0.0
+
+        # Encoder corrections collection flags
+        self.collected_FL = False
+        self.collected_FR = False
+        self.collected_BL = False
+        self.collected_BR = False
+
+        # Latest raw encoder readings
+        self.current_enc_FL = 0.0
+        self.current_enc_FR = 0.0
+        self.current_enc_BL = 0.0
+        self.current_enc_BR = 0.0
+
+        # Motor errors
+        self.error_FL = 0.0
+        self.error_FR = 0.0
+        self.error_BL = 0.0
+        self.error_BR = 0.0
 
         # Previous published RPMs
         self.prev_rpm_FL = 0.0
@@ -79,7 +128,29 @@ class SwerveControlSubsrciber(Node):
         self.subscription_BR
         self.get_logger().info("Started SWERVE NODE")
 
+    def encoder_correction_FL(self, msg):
+        if not self.collected_FL:
+            self.enc_corr_FL = self.wheels_straight_angle - msg.data
+            self.collected_FL = True
+        self.current_enc_FL = msg.data + self.enc_corr_FL
 
+    def encoder_correction_FR(self, msg):
+        if not self.collected_FR:
+            self.enc_corr_FR = self.wheels_straight_angle - msg.data
+            self.collected_FR = True
+        self.current_enc_FR = msg.data + self.enc_corr_FR
+
+    def encoder_correction_BL(self, msg):
+        if not self.collected_BL:
+            self.enc_corr_BL = self.wheels_straight_angle - msg.data
+            self.collected_BL = True
+        self.current_enc_BL = msg.data + self.enc_corr_BL
+
+    def encoder_correction_BR(self, msg):
+        if not self.collected_BR:
+            self.enc_corr_BR = self.wheels_straight_angle - msg.data
+            self.collected_BR = True
+        self.current_enc_BR = msg.data + self.enc_corr_BR
 
     def publish(self):
         
@@ -101,8 +172,14 @@ class SwerveControlSubsrciber(Node):
 
     def swerve_listener_FL(self, msg):
         
-        
         turn_amount = (msg.data[1]/4 + 180)
+
+        # When driving straight, use corrected encoder reading to fix any drift
+        if self.collected_FL and turn_amount == self.wheels_straight_angle:
+            if abs(self.wheels_straight_angle - self.current_enc_FL) > self.angle_error_threshold:
+                self.error_FL += self.wheels_straight_angle - self.current_enc_FL
+                turn_amount += self.error_FL
+
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
             self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
@@ -123,6 +200,13 @@ class SwerveControlSubsrciber(Node):
     def swerve_listener_FR(self, msg):
 
         turn_amount = (msg.data[1]/4 + 180)
+
+        # When driving straight, use corrected encoder reading to fix any drift
+        if self.collected_FR and turn_amount == self.wheels_straight_angle:
+            if abs(self.wheels_straight_angle - self.current_enc_FR) > self.angle_error_threshold:
+                self.error_FR += self.wheels_straight_angle - self.current_enc_FR
+                turn_amount += self.error_FR
+
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
             self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
@@ -143,6 +227,13 @@ class SwerveControlSubsrciber(Node):
     def swerve_listener_BL(self, msg):
 
         turn_amount = (msg.data[1]/4 + 180)
+
+        # When driving straight, use corrected encoder reading to fix any drift
+        if self.collected_BL and turn_amount == self.wheels_straight_angle:
+            if abs(self.wheels_straight_angle - self.current_enc_BL) > self.angle_error_threshold:
+                self.error_BL += self.wheels_straight_angle - self.current_enc_BL
+                turn_amount += self.error_BL
+
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
             self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
@@ -163,6 +254,13 @@ class SwerveControlSubsrciber(Node):
     def swerve_listener_BR(self, msg):
  
         turn_amount = (msg.data[1]/4 + 180)
+
+        # When driving straight, use corrected encoder reading to fix any drift
+        if self.collected_BR and turn_amount == self.wheels_straight_angle:
+            if abs(self.wheels_straight_angle - self.current_enc_BR) > self.angle_error_threshold:
+                self.error_BR += self.wheels_straight_angle - self.current_enc_BR
+                turn_amount += self.error_BR
+
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
             self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
