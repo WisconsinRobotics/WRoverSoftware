@@ -14,6 +14,11 @@ def generate_launch_description():
             executable='science_controller',
             name='science_controller'
         ),
+        Node(
+            package='wr_collect_data',
+            executable='collect_data',
+            name='collect_data'
+        ),
          #Node(
          #    package='wr_xbox_controller',
          #    executable='arm_xbox_ik',
