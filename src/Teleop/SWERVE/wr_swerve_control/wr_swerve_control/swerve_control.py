@@ -15,8 +15,8 @@ class SwerveControlSubsrciber(Node):
                          "BL":["74","75"],
                          "BR":["76","77"]
                         }
-        self.max_rpm = 10000
-        self.max_rpm_change = 1000
+        self.max_rpm = 14000
+        self.max_rpm_change = 180
         self.limit_rotation = 0
         self.subscription_FL = self.create_subscription(
             Float32MultiArray,
@@ -112,11 +112,11 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_FL
-        if abs(delta) > self.max_rpm_change:
+        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_FL) <= 2000.0:
             delta = math.copysign(self.max_rpm_change, delta)
 
         rpm = self.prev_rpm_FL + delta
-        
+
         self.prev_rpm_FL = rpm
         self.can_msg_rpm_FL.data = self.vesc_ids["FL"][0] + " CAN_PACKET_SET_RPM " + str(rpm) + " float"
 
@@ -132,7 +132,7 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_FR
-        if abs(delta) > self.max_rpm_change:
+        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_FR) <= 2000.0:
             delta = math.copysign(self.max_rpm_change, delta)
 
         rpm = self.prev_rpm_FR + delta
@@ -152,7 +152,7 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_BL
-        if abs(delta) > self.max_rpm_change:
+        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_BL) <= 2000.0:
             delta = math.copysign(self.max_rpm_change, delta)
 
         rpm = self.prev_rpm_BL + delta
@@ -172,7 +172,7 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_BR
-        if abs(delta) > self.max_rpm_change:
+        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_BR) <= 2000.0:
             delta = math.copysign(self.max_rpm_change, delta)
         
         rpm = self.prev_rpm_BR + delta
