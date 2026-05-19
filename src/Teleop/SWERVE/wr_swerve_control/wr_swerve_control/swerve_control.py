@@ -179,7 +179,7 @@ class SwerveControlSubsrciber(Node):
         if self.collected_FL and turn_amount == self.wheels_straight_angle:
             if abs(self.wheels_straight_angle - self.current_enc_FL) > self.angle_error_threshold:
                 self.error_FL += (self.wheels_straight_angle - self.current_enc_FL) / self.kI
-                self.error_FL = math.copysign(self.error_FL,min(abs(self.error_FL, 10)))
+                self.error_FL = math.copysign(self.error_FL,min(abs(self.error_FL), 10))
         turn_amount += self.error_FL
 
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
@@ -207,7 +207,7 @@ class SwerveControlSubsrciber(Node):
         if self.collected_FR and turn_amount == self.wheels_straight_angle:
             if abs(self.wheels_straight_angle - self.current_enc_FR) > self.angle_error_threshold:
                 self.error_FR += (self.wheels_straight_angle - self.current_enc_FR) / self.kI
-                self.error_FR = math.copysign(self.error_FR,min(abs(self.error_FR, 10)))
+                self.error_FR = math.copysign(self.error_FR,min(abs(self.error_FR), 10))
 
         turn_amount += self.error_FR
 
@@ -236,7 +236,7 @@ class SwerveControlSubsrciber(Node):
         if self.collected_BL and turn_amount == self.wheels_straight_angle:
             if abs(self.wheels_straight_angle - self.current_enc_BL) > self.angle_error_threshold:
                 self.error_BL += (self.wheels_straight_angle - self.current_enc_BL) / self.kI
-                self.error_BL = math.copysign(self.error_BL,min(abs(self.error_BL, 10)))
+                self.error_BL = math.copysign(self.error_BL,min(abs(self.error_BL), 10))
         turn_amount += self.error_BL
 
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
@@ -264,7 +264,7 @@ class SwerveControlSubsrciber(Node):
         if self.collected_BR and turn_amount == self.wheels_straight_angle:
             if abs(self.wheels_straight_angle - self.current_enc_BR) > self.angle_error_threshold:
                 self.error_BR += (self.wheels_straight_angle - self.current_enc_BR) / self.kI
-                self.error_BR = math.copysign(self.error_BR,min(abs(self.error_BR, 10)))
+                self.error_BR = math.copysign(self.error_BR,min(abs(self.error_BR), 10))
         turn_amount += self.error_BR
 
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
