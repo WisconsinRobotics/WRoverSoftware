@@ -130,40 +130,72 @@ class SwerveControlSubsrciber(Node):
         self.get_logger().info("Started SWERVE NODE")
 
     def encoder_correction_FL(self, msg):
+        # Convert encoder so forward(180) becomes 0
+        msg_angle = msg.data - 180
+
+        # Initial calibration
         if not self.collected_FL:
-            self.enc_corr_FL = self.wheels_straight_angle - msg.data
+            self.enc_corr_FL = self.wheels_straight_angle - msg_angle
             self.collected_FL = True
-        self.current_enc_FL = msg.data + self.enc_corr_FL
+
+        corrected = msg_angle + self.enc_corr_FL
+
+        # 0 to 360 such that 180 is forward
+        self.current_enc_FL = ((corrected + 180) % 360)
 
     def encoder_correction_FR(self, msg):
+        # Convert encoder so forward(180) becomes 0
+        msg_angle = msg.data - 180
+
+        # Initial calibration
         if not self.collected_FR:
-            self.enc_corr_FR = self.wheels_straight_angle - msg.data
+            self.enc_corr_FR = self.wheels_straight_angle - msg_angle
             self.collected_FR = True
-        self.current_enc_FR = msg.data + self.enc_corr_FR
+
+        corrected = msg_angle + self.enc_corr_FR
+
+        # 0 to 360 such that 180 is forward
+        self.current_enc_FR = ((corrected + 180) % 360)
 
     def encoder_correction_BL(self, msg):
+        # Convert encoder so forward(180) becomes 0
+        msg_angle = msg.data - 180
+
+        # Initial calibration
         if not self.collected_BL:
-            self.enc_corr_BL = self.wheels_straight_angle - msg.data
+            self.enc_corr_BL = self.wheels_straight_angle - msg_angle
             self.collected_BL = True
-        self.current_enc_BL = msg.data + self.enc_corr_BL
+
+        corrected = msg_angle + self.enc_corr_BL
+
+        # 0 to 360 such that 180 is forward
+        self.current_enc_BL = ((corrected + 180) % 360)
 
     def encoder_correction_BR(self, msg):
+        # Convert encoder so forward(180) becomes 0
+        msg_angle = msg.data - 180
+
+        # Initial calibration
         if not self.collected_BR:
-            self.enc_corr_BR = self.wheels_straight_angle - msg.data
+            self.enc_corr_BR = self.wheels_straight_angle - msg_angle
             self.collected_BR = True
-        self.current_enc_BR = msg.data + self.enc_corr_BR
+
+        corrected = msg_angle + self.enc_corr_BR
+
+        # 0 to 360 such that 180 is forward
+        self.current_enc_BR = ((corrected + 180) % 360)
 
     def publish(self):
         
         combined_msg = "\n".join([
-        self.can_msg_rpm_FL.data,
-        self.can_msg_rpm_FR.data,
-        self.can_msg_rpm_BL.data,    
-        self.can_msg_rpm_BR.data,
         self.can_msg_angle_FL.data,
         self.can_msg_angle_FR.data,
         self.can_msg_angle_BL.data,
-        self.can_msg_angle_BR.data
+        self.can_msg_angle_BR.data,
+        self.can_msg_rpm_FL.data,
+        self.can_msg_rpm_FR.data,
+        self.can_msg_rpm_BL.data,    
+        self.can_msg_rpm_BR.data
         ])
 
         msg = String()
