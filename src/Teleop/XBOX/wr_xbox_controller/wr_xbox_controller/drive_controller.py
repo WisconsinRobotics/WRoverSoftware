@@ -3,6 +3,7 @@ from rclpy.node import Node
 import pygame
 from std_msgs.msg import String
 from std_msgs.msg import Float32MultiArray
+import math
 
 # NOTE: This might cause problems if called multiple times
 pygame.init()
@@ -17,14 +18,14 @@ class XboxPublisher(Node):
         timer_period = 0.05  # seconds
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.joysticks = {}
-        self.AXIS_BOUNDARY = 0.1
+        self.AXIS_BOUNDARY = 0.05
     
     def timer_callback(self):
         # No button capability, but doesn't sound like we need it. 
         if len(self.joysticks) > 0:
             # Index 0 is left stick x-axis, 1 is right stick x-axis, 2 is right stick x-axis
-            motion = [-self.joysticks[0].get_axis(1),
-                        self.joysticks[0].get_axis(3),
+            motion = [-(math.copysign((self.joysticks[0].get_axis(1)**2),self.joysticks[0].get_axis(1))),
+                        (math.copysign((self.joysticks[0].get_axis(3)**2),self.joysticks[0].get_axis(3))),
                         self.joysticks[0].get_axis(2),
                         self.joysticks[0].get_axis(5) ]
             # Ignore jitter in sticks
@@ -32,7 +33,7 @@ class XboxPublisher(Node):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
                     motion[i] = 0.0
 
-            #self.get_logger().info("Pressed: " + str(motion))
+            # self.get_logger().info("Pressed: " + str(motion))
             # Publish to topic swerve
             swerve_command = Float32MultiArray()
             swerve_command.data = motion
