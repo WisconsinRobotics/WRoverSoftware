@@ -54,8 +54,8 @@ class SensorsRawNode(Node):
                     arduino_message.data = line
                     self.pub_arduino.publish(arduino_message)
                     self.ser.write("\n".encode()) # send the arduino a newline character so it moves on (hopefully)
-                elif len(vals) == 9: # evaluates to true if we're seeing a fluorometer reading
-                    self.fluoro_vals.data[1,:] = [int(val.split(":")[1]) for val in vals]
+                elif len(vals) == 2 and vals[0].startswith("fluoro"):
+                    self.fluoro_vals.data = [int(val.split(":")[1]) for val in vals]
                     self.pub_fluoro.publish(self.fluoro_vals)
                 else: # evaluates to true if we're seeing a soil temp/moisture reading
                     self.soil_vals.data = [int(val.split(":")[1]) for val in vals]
