@@ -33,8 +33,6 @@ class SensorsRawNode(Node):
 
         # initialize empty soil sensor message
         self.soil_vals = Int16MultiArray()
-        self.soil_vals.layout.label[0] = "measurements"
-        self.soil_vals.layout.size[0] = 2
         self.soil_vals.data = [0,0]
 
         
