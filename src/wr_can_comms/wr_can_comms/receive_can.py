@@ -13,9 +13,10 @@ from rclpy.node import Node
 from std_msgs.msg import Float32, Bool
 import can
 
-CAROUSEL_VESC = 80
+SIDE_TO_SIDE_VESC = 80
 IN_OUT_VESC = 82
 FR_SWERVE_VESC = 73
+UP_DOWN_VESC = 81
 
 FL_VESC = 70
 FR_VESC = 72
@@ -34,12 +35,16 @@ class CANSubscriber(Node):
         self.pid_BR_publisher = self.create_publisher(Float32, 'pid_BR', 10)
         self.current_side_publisher = self.create_publisher(Bool, 'current_side_to_side', 10)
         self.current_in_out_publisher = self.create_publisher(Bool, 'current_in_out', 10)
+        self.current_up_down_publisher = self.create_publisher(Bool, 'current_up_down', 10)
 
         self.current_side_msg = Bool()
         self.current_side_msg.data = True
 
         self.current_in_out_msg = Bool()
         self.current_in_out_msg.data = True
+
+        self.current_up_down_msg = Bool()
+        self.current_up_down_msg.data = True
 
         # Faster timer for lower latency
         timer_freq = 0.002  # 2 ms instead of 10 ms
@@ -51,11 +56,12 @@ class CANSubscriber(Node):
             interface='socketcan',
             can_filters=[
                 # STATUS (cmd 9) for CAROUSEL and IN_OUT only (the only ones handled)
-                {"can_id": (9 << 8) | CAROUSEL_VESC, "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (9 << 8) | SIDE_TO_SIDE_VESC, "can_mask": 0xFFFF, "extended": True},
                 {"can_id": (9 << 8) | IN_OUT_VESC,   "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (9 << 8) | UP_DOWN_VESC,   "can_mask": 0xFFFF, "extended": True},
 
                 # STATUS_4 (cmd 16) for all wheel VESCs and CAROUSEL
-                {"can_id": (16 << 8) | CAROUSEL_VESC, "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | SIDE_TO_SIDE_VESC, "can_mask": 0xFFFF, "extended": True},
                 {"can_id": (16 << 8) | FL_VESC,       "can_mask": 0xFFFF, "extended": True},
                 {"can_id": (16 << 8) | FR_VESC,       "can_mask": 0xFFFF, "extended": True},
                 {"can_id": (16 << 8) | BL_VESC,       "can_mask": 0xFFFF, "extended": True},
@@ -63,11 +69,6 @@ class CANSubscriber(Node):
             ]
         )
 
-    def carousel_publish(self, pid_value: float):
-        msg = Float32()
-        msg.data = pid_value
-        self.pid_publisher.publish(msg)
-    
     def FL_publish(self, pid_value: float):
         msg = Float32()
         msg.data = pid_value
@@ -103,10 +104,8 @@ class CANSubscriber(Node):
 
         # STATUS_4
         if command_id == 16:
-            if vesc_id == CAROUSEL_VESC:
-                pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
-                self.carousel_publish(pid_pos)
-            elif vesc_id == FL_VESC:
+
+            if vesc_id == FL_VESC:
                 pid_pos = int.from_bytes(b[6:8], 'big', signed=True) / 50
                 self.FL_publish(pid_pos)
             elif vesc_id == FR_VESC:
@@ -123,9 +122,10 @@ class CANSubscriber(Node):
         elif command_id == 9:
             current = int.from_bytes(b[4:6], 'big', signed=True) / 10
 
-            if vesc_id == CAROUSEL_VESC:
+            if vesc_id == SIDE_TO_SIDE_VESC:
                 self.current_side_msg.data = current <= 19
                 self.current_side_publisher.publish(self.current_side_msg)
+                #self.get_logger().info(f"SIDE_TO_SIDE Current: {current}")
 
             elif vesc_id == IN_OUT_VESC:
                 # Fast current access here
@@ -133,6 +133,12 @@ class CANSubscriber(Node):
                 self.current_in_out_publisher.publish(self.current_in_out_msg)
                 # Optional debug:
                 # self.get_logger().info(f"IN_OUT Current: {current}")
+            elif vesc_id == UP_DOWN_VESC:
+                # Fast current access here
+                self.current_up_down_msg.data = current <= 19
+                self.current_up_down_publisher.publish(self.current_up_down_msg)
+                # Optional debug:
+                #self.get_logger().info(f"UP_DOWN Current: {current}")
 
     def send_msg(self, compiled_msg: can.Message):
         self.bus.send(compiled_msg)
