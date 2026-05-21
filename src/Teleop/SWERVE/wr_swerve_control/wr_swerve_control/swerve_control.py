@@ -19,6 +19,7 @@ class SwerveControlSubsrciber(Node):
                         }
         self.max_rpm = 14000
         self.max_rpm_change = 180
+        self.max_rpm_drop = 1000
         self.acceleration_ceil = 2000.0
         self.limit_rotation = -10
         self.wheels_straight_angle = 180
@@ -224,8 +225,18 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_FL
-        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_FL) <= self.acceleration_ceil:
-            delta = math.copysign(self.max_rpm_change, delta)
+        # Determine if we are accelerating or decelerating
+        # Moving further away from 0 = accelerating, moving toward 0 = decelerating
+        is_accelerating = abs(rpm) > abs(self.prev_rpm_FL)
+
+        if is_accelerating:
+            # Apply acceleration limit
+            if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_FL) <= self.acceleration_ceil:
+                delta = math.copysign(self.max_rpm_change, delta)
+        else:
+            # Apply deceleration limit (stops it from immediately dropping to 0)
+            if abs(delta) > self.max_rpm_drop:
+                delta = math.copysign(self.max_rpm_drop, delta)
 
         rpm = self.prev_rpm_FL + delta
 
@@ -241,11 +252,15 @@ class SwerveControlSubsrciber(Node):
             self.counter_FR += 1
             if(self.counter_FR > COUNTER_MAX):
                 if abs(self.wheels_straight_angle - self.current_enc_FR) > self.angle_error_threshold:
-                    self.error_FR -= (self.wheels_straight_angle - self.current_enc_FR) / self.kI
+                    self.error_FR += (self.wheels_straight_angle - self.current_enc_FR) / self.kI
                     self.error_FR = math.copysign(min(abs(self.error_FR), 10), self.error_FR)
         else:
             self.counter_FR = 0
         turn_amount += self.error_FR
+
+        # self.get_logger().error("Current " + str(self.current_enc_FR))
+        # self.get_logger().error("turn_amount " + str(turn_amount))
+        # self.get_logger().error("ERROR " + str(self.error_FR))
 
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
             self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
@@ -256,8 +271,18 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_FR
-        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_FR) <= self.acceleration_ceil:
-            delta = math.copysign(self.max_rpm_change, delta)
+        # Determine if we are accelerating or decelerating
+        # Moving further away from 0 = accelerating, moving toward 0 = decelerating
+        is_accelerating = abs(rpm) > abs(self.prev_rpm_FR)
+
+        if is_accelerating:
+            # Apply acceleration limit
+            if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_FR) <= self.acceleration_ceil:
+                delta = math.copysign(self.max_rpm_change, delta)
+        else:
+            # Apply deceleration limit (stops it from immediately dropping to 0)
+            if abs(delta) > self.max_rpm_drop:
+                delta = math.copysign(self.max_rpm_drop, delta)
 
         rpm = self.prev_rpm_FR + delta
 
@@ -288,8 +313,19 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_BL
-        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_BL) <= self.acceleration_ceil:
-            delta = math.copysign(self.max_rpm_change, delta)
+
+        # Determine if we are accelerating or decelerating
+        # Moving further away from 0 = accelerating, moving toward 0 = decelerating
+        is_accelerating = abs(rpm) > abs(self.prev_rpm_BL)
+
+        if is_accelerating:
+            # Apply acceleration limit
+            if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_BL) <= self.acceleration_ceil:
+                delta = math.copysign(self.max_rpm_change, delta)
+        else:
+            # Apply deceleration limit (stops it from immediately dropping to 0)
+            if abs(delta) > self.max_rpm_drop:
+                delta = math.copysign(self.max_rpm_drop, delta)
 
         rpm = self.prev_rpm_BL + delta
 
@@ -310,9 +346,7 @@ class SwerveControlSubsrciber(Node):
         else:
             self.counter_BR = 0
         turn_amount += self.error_BR
-        self.get_logger().error("Current " + str(self.current_enc_BR))
-        self.get_logger().error("turn_amount " + str(turn_amount))
-        self.get_logger().error("ERROR " + str(self.error_BR))
+
         if turn_amount < 135 + self.limit_rotation or turn_amount > 225 - self.limit_rotation:
             self.get_logger().error("SENT INCORRECT ANGLE OF " + str(turn_amount) + ". Has to be between 135-225")
         else:
@@ -322,14 +356,24 @@ class SwerveControlSubsrciber(Node):
         
         rpm = msg.data[0] * self.max_rpm
         delta = rpm - self.prev_rpm_BR
-        if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_BR) <= self.acceleration_ceil:
-            delta = math.copysign(self.max_rpm_change, delta)
-        
+
+        # Determine if we are accelerating or decelerating
+        # Moving further away from 0 = accelerating, moving toward 0 = decelerating
+        is_accelerating = abs(rpm) > abs(self.prev_rpm_BR)
+
+        if is_accelerating:
+            # Apply acceleration limit
+            if abs(delta) > self.max_rpm_change and abs(self.prev_rpm_BR) <= self.acceleration_ceil:
+                delta = math.copysign(self.max_rpm_change, delta)
+        else:
+            # Apply deceleration limit (stops it from immediately dropping to 0)
+            if abs(delta) > self.max_rpm_drop:
+                delta = math.copysign(self.max_rpm_drop, delta)
+
         rpm = self.prev_rpm_BR + delta
 
         self.prev_rpm_BR = rpm
         self.can_msg_rpm_BR.data = self.vesc_ids["BR"][0] + " CAN_PACKET_SET_DUTY " + str(rpm/self.max_rpm) + " float"
-
 
 def main(args=None):
     rclpy.init(args=args)
