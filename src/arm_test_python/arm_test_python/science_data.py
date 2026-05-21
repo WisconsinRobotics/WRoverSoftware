@@ -7,6 +7,8 @@ import numpy as np
 import serial
 import traceback 
 
+FLUORO_WAVELENGTHS = [515, 590]
+
 class SensorsRawNode(Node):
     def __init__(self):
         super().__init__('sensors_raw')
@@ -26,12 +28,8 @@ class SensorsRawNode(Node):
 
         # initialize empty fluorometer message
         self.fluoro_vals = Int16MultiArray()
-        self.fluoro_vals.layout.label[0] = "colors"
-        self.fluoro_vals.layout.size[0] = 9
-        self.fluoro_vals.layout.label[1] = "wavelength, reading"
-        self.fluoro_vals.layout.size[1] = 2
-        self.fluoro_vals.data = np.array([[415,445,480,515,555,590,630,680,0],
-                                          [0,  0,  0,  0,  0,  0,  0,  0,  0]])
+        # Index 0 = 515nm, Index 1 = 590nm
+        self.fluoro_vals.data = [0] * 2
 
         # initialize empty soil sensor message
         self.soil_vals = Int16MultiArray()
