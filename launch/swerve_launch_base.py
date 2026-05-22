@@ -14,9 +14,9 @@ def generate_launch_description():
             name='swerve_motor'
         ),
         Node(
-           package='wr_xbox_controller',
-           executable='drive_controller',
-           name='drive_controller'
+           package='wr_bt_controller',
+           executable='drive_bt_controller',
+           name='drive_bt_controller'
         ),
         # Node(
         #     package='wr_xbox_controller',

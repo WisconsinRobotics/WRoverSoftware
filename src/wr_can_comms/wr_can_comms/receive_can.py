@@ -93,12 +93,45 @@ class CANSubscriber(Node):
         self.pid_BR_publisher.publish(msg)
 
     def timer_callback(self):
-        # Drain all available messages quickly
-        while True:
-            msg = self.bus.recv(timeout=0.0)  # Non-blocking
-            if msg is None:
-                break
-            self.process_can_message(msg)
+        try:
+            while True:
+                msg = self.bus.recv(timeout=0.0)
+                if msg is None:
+                    break
+                self.process_can_message(msg)
+
+        except can.CanOperationError as e:
+            self.get_logger().warn(f"CAN error: {e}")
+
+            # Try to recover bus instead of crashing node
+            try:
+                self.bus.shutdown()
+            except Exception:
+                pass
+
+            self.reinit_bus()
+    
+    def reinit_bus(self):
+        self.get_logger().warn("Reinitializing CAN bus...")
+
+        self.bus = can.Bus(
+            channel='can0',
+            interface='socketcan',
+            can_filters=[
+                # STATUS (cmd 9) for CAROUSEL and IN_OUT only (the only ones handled)
+                {"can_id": (9 << 8) | SIDE_TO_SIDE_VESC, "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (9 << 8) | IN_OUT_VESC,   "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (9 << 8) | UP_DOWN_VESC,   "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (9 << 8) | GRIPPER_VESC,   "can_mask": 0xFFFF, "extended": True},
+
+                # STATUS_4 (cmd 16) for all wheel VESCs and CAROUSEL
+                {"can_id": (16 << 8) | SIDE_TO_SIDE_VESC, "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | FL_VESC,       "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | FR_VESC,       "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | BL_VESC,       "can_mask": 0xFFFF, "extended": True},
+                {"can_id": (16 << 8) | BR_VESC,       "can_mask": 0xFFFF, "extended": True},
+            ]
+        )
 
     def process_can_message(self, msg):
         arb_id = msg.arbitration_id

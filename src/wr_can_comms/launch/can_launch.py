@@ -16,7 +16,21 @@ def generate_launch_description():
             executable='receive_can',
             name='receive_can'
         ),
-
+        Node(
+            package='wr_swerve_control',
+            executable='swerve_control',
+            name='swerve_control'
+        ),
+        Node(
+            package='wr_swerve_motor',
+            executable='swerve_motor',
+            name='swerve_motor'
+        ),
+        Node(
+           package='wr_bt_controller',
+           executable='drive_bt_controller',
+           name='drive_bt_controller'
+        ),
 
     ])
     

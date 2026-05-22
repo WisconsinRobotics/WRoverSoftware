@@ -24,10 +24,14 @@ class XboxPublisher(Node):
         # No button capability, but doesn't sound like we need it. 
         if len(self.joysticks) > 0:
             # Index 0 is left stick x-axis, 1 is right stick x-axis, 2 is right stick x-axis
-            motion = [-(math.copysign((self.joysticks[0].get_axis(1)**2),self.joysticks[0].get_axis(1))),
-                        (math.copysign((self.joysticks[0].get_axis(3)**2),self.joysticks[0].get_axis(3))),
-                        self.joysticks[0].get_axis(5),
-                        self.joysticks[0].get_axis(4) ]
+            motion = [
+                -math.copysign(self.joysticks[0].get_axis(1)**2,
+                            self.joysticks[0].get_axis(1)),
+                math.copysign(self.joysticks[0].get_axis(3)**2,
+                            self.joysticks[0].get_axis(3)),
+                -1.0 if self.joysticks[0].get_axis(2) < -0.95 else self.joysticks[0].get_axis(2),
+                -1.0 if self.joysticks[0].get_axis(5) < -0.95 else self.joysticks[0].get_axis(5),
+            ]
             # Ignore jitter in sticks
             for i in range(len(motion)):
                 if abs(motion[i]) < self.AXIS_BOUNDARY:
