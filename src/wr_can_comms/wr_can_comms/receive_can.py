@@ -150,7 +150,7 @@ class CANSubscriber(Node):
                 self.current_gripper_msg.data = current <= 19
                 self.current_gripper_publisher.publish(self.current_gripper_msg)
                 # Optional debug:
-                #self.get_logger().info(f"UP_DOWN Current: {current}")
+                #self.get_logger().info(f"Gripper Current: {current}")
 
     def send_msg(self, compiled_msg: can.Message):
         self.bus.send(compiled_msg)
